@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import AuthBase from '../../layouts/AuthBase';
 
 const textInputs = [
   { name: 'firstName', label: 'First Name', type: 'text' },
@@ -9,7 +10,7 @@ const textInputs = [
 ];
 
 const Register = () => {
-  const [input, setInput] = useState({
+  const [inputs, setInputs] = useState({
     firstName: '',
     lastName: '',
     email: '',
@@ -17,24 +18,34 @@ const Register = () => {
   });
 
   return (
-    <Form>
-      {textInputs.map((input) => {
-        return (
-          <Form.Group>
-            <Form.Label>{input.label}</Form.Label>
-            <Form.Control
-              name={input.name}
-              type={input.type}
-              placeholder={input.label}
-              onChange={(e) =>
-                setInput({ ...input, [e.target.name]: e.target.value })
-              }
-            />
-          </Form.Group>
-        );
-      })}
-      <Button>Submit</Button>
-    </Form>
+    <div>
+      <AuthBase>
+        <h1 className='my-3'>Register</h1>
+        <Form>
+          {textInputs.map((input) => {
+            return (
+              <Form.Group>
+                <Form.Label>{input.label}</Form.Label>
+                <Form.Control
+                  name={input.name}
+                  type={input.type}
+                  placeholder={input.label}
+                  onChange={(e) =>
+                    setInputs({ ...inputs, [e.target.name]: e.target.value })
+                  }
+                />
+              </Form.Group>
+            );
+          })}
+          <Button
+            variant='outline-primary'
+            className='btn-block btn-transparent-blue'
+          >
+            Register
+          </Button>
+        </Form>
+      </AuthBase>
+    </div>
   );
 };
 
