@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import { about1, about2, aboutBusiness } from '../../../images/about';
 
 const Welcome = () => (
@@ -41,9 +42,9 @@ const Welcome = () => (
                 aspernatur.
               </li>
             </ul>
-            <a href='#' className='btn btn-transparent-blue'>
+            <Link to='#' className='btn btn-transparent-blue'>
               Learn More
-            </a>
+            </Link>
           </div>
         </div>
       </div>

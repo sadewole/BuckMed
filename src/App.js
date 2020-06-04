@@ -1,14 +1,19 @@
 import React from 'react';
-import { LandingPage } from './components/pages';
+import { LandingPage, AuthPage } from './components/pages';
 import './App.css';
 import NavBar from './components/layouts/NavBar';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className='App'>
+    <Router>
       <NavBar />
-      <LandingPage />
-    </div>
+      <Switch>
+        <Route exact path='/' component={LandingPage} />
+        <Route exact path='/register' component={AuthPage.Register} />
+        <Route exact path='/login' component={AuthPage.Login} />
+      </Switch>
+    </Router>
   );
 }
 
