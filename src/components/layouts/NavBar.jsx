@@ -1,5 +1,6 @@
 import React, { useState, useLayoutEffect } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
+import styled from 'styled-components';
 
 const NavBar = () => {
   const [page, setPage] = useState('');
@@ -20,8 +21,10 @@ const NavBar = () => {
   }, []);
 
   return (
-    <div>
-      <div className={`container-fluid ${page !== 'top' && 'display-none'}`}>
+    <div className='bg-light'>
+      <div
+        className={`container-fluid grey ${page !== 'top' && 'display-none'}`}
+      >
         <Nav className='justify-content-end'>
           <Nav.Link href='#'>
             <i className='far fa-envelope mr-2' /> info@buckman.com

@@ -4,7 +4,7 @@ import { about1, about2, aboutBusiness } from '../../../images/about';
 
 const Welcome = () => (
   <Fragment>
-    <div className='container mx-auto welcome_docmed_area p-4 mt-5'>
+    <div id='about' className='container mx-auto welcome_docmed_area p-4 mt-5'>
       <div className='row mb-4'>
         <div className='col-xl-6 col-lg-6'>
           <div className='welcome_thumb'>

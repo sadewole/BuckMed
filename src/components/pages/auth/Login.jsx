@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import AuthBase from '../../layouts/AuthBase';
 
 const textInputs = [
@@ -42,6 +43,11 @@ const Login = () => {
             Login
           </Button>
         </Form>
+        <div>
+          <p>
+            Already have an account? <Link to='/register'>Register</Link>
+          </p>
+        </div>
       </AuthBase>
     </div>
   );
