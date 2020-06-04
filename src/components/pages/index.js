@@ -4,5 +4,6 @@ import Contact from './Contact'
 
 export {
     LandingPage,
-    AuthPage
+    AuthPage,
+    Contact
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { LandingPage, AuthPage } from './components/pages';
+import { LandingPage, AuthPage, Contact } from './components/pages';
 import './App.css';
 import NavBar from './components/layouts/NavBar';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -10,6 +10,7 @@ function App() {
       <NavBar />
       <Switch>
         <Route exact path='/' component={LandingPage} />
+        <Route exact path='/contact' component={Contact} />
         <Route exact path='/register' component={AuthPage.Register} />
         <Route exact path='/login' component={AuthPage.Login} />
       </Switch>

@@ -1,6 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
-import styled from 'styled-components';
 
 const NavBar = () => {
   const [page, setPage] = useState('');
@@ -21,11 +20,9 @@ const NavBar = () => {
   }, []);
 
   return (
-    <div className='bg-light'>
-      <div
-        className={`container-fluid grey ${page !== 'top' && 'display-none'}`}
-      >
-        <Nav className='justify-content-end'>
+    <div className='bg-light nav-bar'>
+      <div className={` grey ${page !== 'top' && 'display-none'}`}>
+        <Nav className='justify-content-end contactLink'>
           <Nav.Link href='#'>
             <i className='far fa-envelope mr-2' /> info@buckman.com
           </Nav.Link>
@@ -34,16 +31,19 @@ const NavBar = () => {
           </Nav.Link>
         </Nav>
       </div>
-      <Navbar bg='light' variant='light' fixed={page}>
+      <Navbar bg='light' expand='lg' variant='light' fixed={page}>
         <Navbar.Brand href='#home'>BuckMed</Navbar.Brand>
-        <Nav className='ml-auto align-items-center'>
-          <Nav.Link href='/'>Home</Nav.Link>
-          <Nav.Link href='/#about'>About</Nav.Link>
-          <Nav.Link href='/contact'>Contact</Nav.Link>
-          <Nav.Link href='/login'>
-            <button className='btn btn-transparent-blue'>Login</button>
-          </Nav.Link>
-        </Nav>
+        <Navbar.Toggle aria-controls='basic-navbar-nav' />
+        <Navbar.Collapse id='basic-navbar-nav'>
+          <Nav className='ml-auto align-items-center'>
+            <Nav.Link href='/'>Home</Nav.Link>
+            <Nav.Link href='/#about'>About</Nav.Link>
+            <Nav.Link href='/contact'>Contact</Nav.Link>
+            <Nav.Link href='/login'>
+              <button className='btn btn-transparent-blue'>Login</button>
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
       </Navbar>
     </div>
   );

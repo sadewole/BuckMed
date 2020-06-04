@@ -18,9 +18,9 @@ const Login = () => {
       <AuthBase>
         <h1 className='my-3'>Login</h1>
         <Form>
-          {textInputs.map((input) => {
+          {textInputs.map((input, index) => {
             return (
-              <Form.Group>
+              <Form.Group key={index}>
                 <Form.Label>{input.label}</Form.Label>
                 <Form.Control
                   name={input.name}
