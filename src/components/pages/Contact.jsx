@@ -36,7 +36,7 @@ const Contact = () => {
           <div className='col-lg-3 offset-lg-1'>
             <div className='media contact-info'>
               <span className='contact-info__icon'>
-                <i className='ti-home'></i>
+                <i className='fas fa-map-marker-alt'></i>
               </span>
               <div className='media-body'>
                 <h3>Location: </h3>
@@ -45,7 +45,7 @@ const Contact = () => {
             </div>
             <div className='media contact-info'>
               <span className='contact-info__icon'>
-                <i className='ti-tablet'></i>
+                <i className='fas fa-phone-alt'></i>
               </span>
               <div className='media-body'>
                 <h3>Phone:</h3>
@@ -58,7 +58,7 @@ const Contact = () => {
             </div>
             <div className='media contact-info'>
               <span className='contact-info__icon'>
-                <i className='ti-email'></i>
+                <i className='far fa-envelope'></i>
               </span>
               <div className='media-body'>
                 <h3>Email:</h3>
