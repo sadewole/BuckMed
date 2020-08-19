@@ -1,20 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import PlatformBase from './PlatformBase';
 
 const AuthBase = ({ children }) => {
   return (
-    <div className='container mt-5 h-100 d-flex justify-content-center align-items-center'>
-      <AuthWrapper className='mx-auto p-4 my-5'>
-        {children}
-        <Foot>
-          <Link to='/'>
-            <i className='fas fa-arrow-left mr-2' />
-            Go back home
-          </Link>
-        </Foot>
-      </AuthWrapper>
-    </div>
+    <PlatformBase>
+      <div className='container mt-5 h-100 d-flex justify-content-center align-items-center'>
+        <AuthWrapper className='mx-auto p-4 my-5'>
+          {children}
+          <Foot>
+            <Link to='/'>
+              <i className='fas fa-arrow-left mr-2' />
+              Go back home
+            </Link>
+          </Foot>
+        </AuthWrapper>
+      </div>
+    </PlatformBase>
   );
 };
 

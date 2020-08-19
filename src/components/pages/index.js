@@ -1,9 +1,5 @@
-import LandingPage from './landingPage'
-import AuthPage from './auth'
-import Contact from './Contact'
+import LandingPage from './PlatformView';
+import AuthPage from './auth';
+import Contact from './PlatformView/Contact';
 
-export {
-    LandingPage,
-    AuthPage,
-    Contact
-}
+export { LandingPage, AuthPage, Contact };

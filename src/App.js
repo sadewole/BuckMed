@@ -1,7 +1,6 @@
 import React from 'react';
 import { LandingPage, AuthPage, Contact } from './components/pages';
-import './App.css';
-import NavBar from './components/layouts/NavBar';
+import './static/style/App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,7 +8,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   return (
     <Router>
-      <NavBar />
       <Switch>
         <Route exact path='/' component={LandingPage} />
         <Route exact path='/contact' component={Contact} />

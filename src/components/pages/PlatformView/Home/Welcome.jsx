@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { about1, about2, aboutBusiness } from '../../../images/about';
+import { about1, about2, aboutBusiness } from '../../../../static/images/about';
 
 const Welcome = () => (
   <Fragment>
