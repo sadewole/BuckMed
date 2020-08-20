@@ -63,11 +63,12 @@ const MainHeader = styled.div`
 
   .content-wrapper {
     width: calc(100% - 250px);
-    min-height: calc(100vh - calc(3.5rem + 1px) - calc(3.5rem + 1px));
-    margin-top: calc(3.5rem + 1px);
+    min-height: calc(100vh - calc(3.5rem + 9px));
+    margin-top: calc(3.5rem + 9px);
     margin-left: calc(250px);
     transition: all 0.3s ease-in-out;
     padding: 10px;
+    background: #eee;
   }
 
   .content-wrapper.extend {
@@ -84,6 +85,7 @@ const MainHeader = styled.div`
     right: 0;
     top: 0;
     z-index: 1000;
+    background: #fff;
   }
 
   .main-header.navbar {

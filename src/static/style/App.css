@@ -328,3 +328,96 @@ a:hover {
   font-weight: 600;
   margin-bottom: 20px;
 }
+
+.info-box {
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 0.25rem;
+  background: #ffffff;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 1rem;
+  min-height: 80px;
+  padding: 0.5rem;
+  position: relative;
+}
+
+.info-box .info-box-content {
+  -ms-flex: 1;
+  flex: 1;
+  padding: 5px 10px;
+}
+
+.info-box .info-box-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.info-box .info-box-icon {
+  border-radius: 0.25rem;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 1.875rem;
+  -ms-flex-pack: center;
+  justify-content: center;
+  text-align: center;
+  width: 70px;
+}
+
+.info-box .info-box-number {
+  display: block;
+  font-weight: 700;
+}
+
+.elevation-1 {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
+}
+
+.chart {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
+
+.chart-title {
+  padding: 0px 1rem 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.chart-footer {
+  padding: 1rem 1rem 0px;
+}
+
+.chart-footer .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  margin-right: 7px;
+}
+
+.chart-footer p {
+  margin: 0px !important;
+}
+
+.chart-footer .dot.dot-yellow {
+  background-color: #ffce56;
+}
+
+.chart-footer .dot.dot-blue {
+  background: #36a2eb;
+}
+
+.activityChart {
+  max-height: 250px;
+}

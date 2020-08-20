@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const navigate = [
   {
     name: 'Dashboard',
-    link: '/',
+    link: 'dashboard',
     icon: 'fas fa-tachometer-alt',
   },
   {

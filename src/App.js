@@ -13,7 +13,7 @@ function App() {
         <Route exact path='/contact' component={Contact} />
         <Route exact path='/register' component={AuthPage.Register} />
         <Route exact path='/login' component={AuthPage.Login} />
-        <Route exact path='/admin' component={AdminBoard.Dashboard} />
+        <Route exact path='/admin/dashboard' component={AdminBoard.Dashboard} />
         <Route exact path='/admin/patient' component={AdminBoard.Patients} />
         <Route exact path='/admin/doctor' component={AdminBoard.Doctors} />
         <Route
