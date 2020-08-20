@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Avatar = (props) => {
+  const [avatarSize, setAvatarSize] = useState('');
+  const [avatarName, setAvatarName] = useState('');
+  const [avatarColor, setAvatarColor] = useState('');
   let {
     name = '',
     img = '',
@@ -16,7 +19,8 @@ const Avatar = (props) => {
         size
       );
     if (validator) {
-      return 'avatar--' + size;
+      setAvatarSize('avatar--' + size);
+      return;
     }
     return null;
   };
@@ -25,7 +29,9 @@ const Avatar = (props) => {
     if (name) {
       let matches = name.match(/\b(\w)/g);
       let acronym = matches.join('').substring(0, 2);
-      return acronym;
+
+      setAvatarName(acronym);
+      return;
     }
     return null;
   };
@@ -33,33 +39,37 @@ const Avatar = (props) => {
   const avatarTextColor = () => {
     let colors = ['grey', 'yellow', 'purple'];
     if (primary) {
-      return 'avatar-text--yellow';
+      setAvatarColor('avatar-text--yellow');
+      return;
     }
-    return 'avatar-text--' + colors[name.length % 3];
+    setAvatarColor('avatar-text--' + colors[name.length % 3]);
+    return;
   };
+
+  useEffect(() => {
+    avatarTextColor();
+    nameAcronym();
+    sizeClass();
+  });
 
   return (
     <AvatarContainer>
-      <div className={`${sizeClass} avatar`}>
-        {nameAcronym || img ? (
-          <div className={rounded && 'avatar-rounded'}>
-            <div class='avatar-icon'>
-              {img ? (
-                <div
-                  style={{ 'background-image': `url('${img}')` }}
-                  class='avatar-picture'
-                />
-              ) : (
-                <span className={`${avatarTextColor} avatar-text`}>
-                  {nameAcronym}
-                </span>
-              )}
-            </div>
+      <div className={`${avatarSize} avatar`}>
+        {avatarName || img ? (
+          <div className={`avatar-icon ${rounded && 'avatar-rounded'}`}>
+            {img ? (
+              <div
+                style={{ backgroundImage: `url('${img}')` }}
+                className='avatar-picture'
+              />
+            ) : (
+              <span className={`${avatarColor} avatar-text`}>{avatarName}</span>
+            )}
           </div>
         ) : (
           <div
             style={{
-              backgroundImage: `url()`,
+              backgroundImage: `url(../static/images/avatar-icon.png)`,
               backgroundColor: '#ffffff',
               border: 'solid 1px #c6c6c6',
             }}
@@ -103,6 +113,28 @@ const AvatarContainer = styled.div`
     font-style: normal;
     letter-spacing: 0.1px;
     position: relative;
+
+    &-text {
+      width: 100%;
+      height: 100%;
+      display: block;
+      text-transform: uppercase;
+
+      &--purple {
+        background-color: #9013fe;
+        color: #fff;
+      }
+
+      &--yellow {
+        background-color: #f5a623;
+        color: #000;
+      }
+
+      &--grey {
+        background-color: #c9c9c9;
+        color: #000;
+      }
+    }
 
     &--tiny {
       @include set-size(18px);

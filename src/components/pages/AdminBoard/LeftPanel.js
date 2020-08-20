@@ -1,104 +1,71 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-const LeftPanel = () => {
+const navigate = [
+  {
+    name: 'Dashboard',
+    link: '/',
+    icon: 'fas fa-tachometer-alt',
+  },
+  {
+    name: 'Appointment',
+    link: 'appointment',
+    icon: 'far fa-calendar-alt',
+  },
+  {
+    name: 'Patients',
+    link: 'patient',
+    icon: 'fas fa-user-friends',
+  },
+  {
+    name: 'Doctors',
+    link: 'doctor',
+    icon: 'fas fa-user-md',
+  },
+  {
+    name: 'Finance',
+    link: 'finance',
+    icon: 'fas fa-chart-line',
+  },
+  {
+    name: 'History',
+    link: 'history',
+    icon: 'fas fa-th',
+  },
+];
+
+const LeftPanel = (props) => {
+  console.log('props', props);
+  console.log('location', window.location);
   return (
-    <LeftSideBar class='main-sidebar sidebar-dark-primary elevation-4'>
+    <LeftSideBar className='show'>
       {/* Brand Logo*/}
-      <a href='index3.html' class='brand-link'>
-        <img
-          src='dist/img/AdminLTELogo.png'
-          alt='AdminLTE Logo'
-          class='brand-image img-circle elevation-3'
-          style='opacity: .8'
-        />
-        <span class='brand-text font-weight-light'>AdminLTE 3</span>
-      </a>
+      <NavLink to='#' className='brand-link'>
+        <span className='brand-text font-weight-light'>BuckMed</span>
+      </NavLink>
 
       {/* Sidebar*/}
-      <div class='sidebar'>
-        {/* Sidebar user panel (optional)*/}
-        <div class='user-panel mt-3 pb-3 mb-3 d-flex'>
-          <div class='image'>
-            <img
-              src='dist/img/user2-160x160.jpg'
-              class='img-circle elevation-2'
-              alt='User Image'
-            />
-          </div>
-          <div class='info'>
-            <a href='#' class='d-block'>
-              Alexander Pierce
-            </a>
-          </div>
-        </div>
-
+      <div className='sidebar'>
         {/* Sidebar Menu */}
 
-        <nav class='mt-2'>
+        <nav className='mt-2'>
           <ul
-            class='nav nav-pills nav-sidebar flex-column'
+            className='nav nav-pills nav-sidebar flex-column'
             data-widget='treeview'
             role='menu'
             data-accordion='false'
           >
-            {/* Add icons to the links using the .nav-icon class
-                                    with font-awesome or any other icon font library */}
-            <li class='nav-item has-treeview menu-open'>
-              <a href='#' class='nav-link active'>
-                <i class='nav-icon fas fa-tachometer-alt'></i>
-                <p>
-                  Dashboard
-                  <i class='right fas fa-angle-left'></i>
-                </p>
-              </a>
-            </li>
-            <li class='nav-item'>
-              <a href='pages/widgets.html' class='nav-link'>
-                <i class='nav-icon fas fa-th'></i>
-                <p>
-                  Widgets
-                  <span class='right badge badge-danger'>New</span>
-                </p>
-              </a>
-            </li>
-            <li class='nav-item has-treeview'>
-              <a href='#' class='nav-link'>
-                <i class='nav-icon fas fa-copy'></i>
-                <p>
-                  Layout Options
-                  <i class='fas fa-angle-left right'></i>
-                  <span class='badge badge-info right'>6</span>
-                </p>
-              </a>
-            </li>
-            <li class='nav-item has-treeview'>
-              <a href='#' class='nav-link'>
-                <i class='nav-icon fas fa-chart-pie'></i>
-                <p>
-                  Charts
-                  <i class='right fas fa-angle-left'></i>
-                </p>
-              </a>
-            </li>
-            <li class='nav-item has-treeview'>
-              <a href='#' class='nav-link'>
-                <i class='nav-icon fas fa-tree'></i>
-                <p>
-                  UI Elements
-                  <i class='fas fa-angle-left right'></i>
-                </p>
-              </a>
-            </li>
-            <li class='nav-item has-treeview'>
-              <a href='#' class='nav-link'>
-                <i class='nav-icon fas fa-edit'></i>
-                <p>
-                  Forms
-                  <i class='fas fa-angle-left right'></i>
-                </p>
-              </a>
-            </li>
+            {navigate.map((val, index) => {
+              return (
+                <li className='nav-item' key={index}>
+                  <NavLink to={`/admin/${val.link}`} className='nav-link'>
+                    <i className={`nav-icon ${val.icon}`}></i>
+                    <p>{val.name}</p>
+                  </NavLink>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>
@@ -108,11 +75,103 @@ const LeftPanel = () => {
 
 const LeftSideBar = styled.aside`
   position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 250px;
+  top: 0;
+  left: -350px;
   height: 100vh;
-  box-shadow: ;
+  overflow-y: hidden;
+  background-color: #fff;
+  color: #000;
+  z-index: 1038;
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.691);
+  /* display: none; */
+  transition: all 0.3s ease-in-out;
+  width: 250px;
+
+  &::before {
+    transition: all 0.3s ease-in-out;
+    width: 250px;
+  }
+
+  &.show {
+    left: 0;
+  }
+
+  .brand-link {
+    display: block;
+    height: 60px;
+    text-decoration: none;
+  }
+
+  .sidebar {
+    height: calc(100% - (3.5rem + 1px));
+    overflow-y: auto;
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .sidebar::-webkit-scrollbar-thumb {
+    outline: 1px solid slategrey;
+    background-color: darkgray;
+  }
+
+  .nav-pills .nav-link {
+    border-radius: 0px !important;
+  }
+
+  .nav-pills .nav-link.active {
+    border-left: 5px solid #007bff;
+    color: #007bff !important;
+    background: #eee;
+  }
+
+  .nav-sidebar > .nav-item {
+    margin-bottom: 0;
+    transition: all 0.5s ease-in-ease-out;
+  }
+
+  .nav-sidebar .nav-item > .nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.2rem;
+    text-decoration: none;
+    color: inherit;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .nav-sidebar > .nav-item:hover {
+    opacity: 0.75;
+    background: #e3e3e3;
+    padding-left: 5px;
+  }
+
+  .nav-sidebar > .nav-item .nav-icon {
+    margin-left: 0.05rem;
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    text-align: center;
+    width: 1.6rem;
+  }
+
+  .nav-sidebar > .nav-item .nav-icon {
+    font-size: 1.6rem;
+  }
+
+  .nav-sidebar .nav-link > p {
+    margin: 0;
+    font-size: larger;
+  }
+
+  .nav-sidebar .nav-link > p > .right {
+    position: absolute;
+    right: 1rem;
+    top: 0.7rem;
+  }
 `;
 
 export default LeftPanel;
