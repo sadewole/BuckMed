@@ -421,3 +421,19 @@ a:hover {
 .activityChart {
   max-height: 250px;
 }
+
+.admin--welcome-message {
+  background: linear-gradient(45deg, #000, transparent),
+    url(../images/admins/emergency_1.jpg) no-repeat bottom right;
+  height: 300px;
+  color: #fff;
+  background-size: contain;
+  background-blend-mode: darken;
+}
+
+.admin--welcome-message h1 {
+  font-size: 3.5rem;
+}
+.admin--welcome-message p {
+  font-size: 1rem;
+}
