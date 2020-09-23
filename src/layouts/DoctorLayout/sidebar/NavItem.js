@@ -35,7 +35,7 @@ const NavItem = ({
         <Button
           onClick={handleToggle}
           style={classes.button}
-          className='d-flex align-items-center py-2'
+          className='d-flex align-items-center py-2 unfocus'
           variant='link'
         >
           {Icon && <Icon style={classes.icon} size='20' />}
@@ -60,7 +60,11 @@ const NavItem = ({
       key={title}
       className='borderless'
     >
-      <NavLink exact to={href} className='d-flex align-items-center py-2'>
+      <NavLink
+        exact
+        to={href}
+        className='d-flex align-items-center py-2 sidenavItem'
+      >
         {Icon && <Icon style={classes.icon} size='20' />}
         <span style={classes.title}>{title}</span>
         {Info && <Info />}

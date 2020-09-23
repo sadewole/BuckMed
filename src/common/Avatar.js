@@ -140,7 +140,9 @@ const AvatarContainer = styled.div`
     }
 
     &--tiny {
-      @include set-size(18px);
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
       font-size: 7px;
     }
 
@@ -159,16 +161,16 @@ const AvatarContainer = styled.div`
     }
 
     &--medium {
-      width: 35px;
-      height: 35px;
-      line-height: 35px;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
       font-size: 10px;
     }
 
     &--large {
-      width: 55px;
-      height: 55px;
-      line-height: 55px;
+      width: 100px;
+      height: 100px;
+      line-height: 85px;
       font-size: 16px;
     }
 

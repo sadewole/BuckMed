@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2';
 
 const GenderChart = () => {
@@ -13,13 +14,14 @@ const GenderChart = () => {
     ],
   };
   return (
-    <div className='elevation-1 py-3 chart'>
-      <p className='font-weight-bold chart-title'>Patients by Gender</p>
+    <Card className='elevation-1 chart'>
+      <Card.Header>
+        <Card.Title>Patients by Gender</Card.Title>
+      </Card.Header>
       <div className='my-3'>
         <Doughnut data={data} options={{ legend: { display: false } }} />
       </div>
-
-      <div className='chart-footer d-flex'>
+      <Card.Footer className='chart-footer d-flex'>
         <div className='mr-3 d-flex align-items-center'>
           <div className='dot dot-yellow'></div>
           <p>Male</p>
@@ -28,8 +30,8 @@ const GenderChart = () => {
           <div className='dot dot-blue'></div>
           <p>Female</p>
         </div>
-      </div>
-    </div>
+      </Card.Footer>
+    </Card>
   );
 };
 

@@ -69,7 +69,7 @@ const MainBase = styled.div`
     margin-left: calc(250px);
     transition: all 0.3s ease-in-out;
     padding: 10px;
-    background: #eee;
+    background: #e3e3e3;
   }
 
   .content-wrapper.extend {

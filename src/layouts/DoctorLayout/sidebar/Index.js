@@ -197,15 +197,22 @@ const NavIndex = (props) => {
   };
 
   const content = (
-    <Card style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Card
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <div>
         <Card className='p-2 borderless'>
           <Link to='/'>Logo</Link>
         </Card>
         <Card className='p-2'>
-          <Card className='justify-content-center borderless align-items-center'>
+          <Card className='justify-content-center borderless text-center align-items-center'>
             <Link to='/doctor/account'>
-              <Avatar rounded size='extra' img='/static/img/experts/4.png' />
+              <Avatar rounded size='large' img='/static/img/experts/4.png' />
             </Link>
           </Card>
           <Card className='text-center mt-2 borderless'>
@@ -293,6 +300,16 @@ const LeftSideBar = styled.aside`
 
   &.show {
     left: 0;
+  }
+
+  a {
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 `;
 
