@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-// import LeftPanel from './LeftPanel';
-import Avatar from 'src/common/Avatar';
+import Avatar from 'src/components/Avatar';
 import styled from 'styled-components';
 import SideBar from './sidebar';
 

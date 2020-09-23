@@ -23,7 +23,7 @@ import {
 } from 'react-feather';
 import { Card, ListGroup } from 'react-bootstrap';
 import NavItem from './NavItem';
-import Avatar from 'src/common/Avatar';
+import Avatar from 'src/components/Avatar';
 
 const sections = [
   {
@@ -212,7 +212,7 @@ const NavIndex = (props) => {
         <Card className='p-2'>
           <Card className='justify-content-center borderless text-center align-items-center'>
             <Link to='/doctor/account'>
-              <Avatar rounded size='large' img='/static/img/experts/4.png' />
+              <Avatar rounded size='large' img='/static/experts/4.png' />
             </Link>
           </Card>
           <Card className='text-center mt-2 borderless'>
@@ -247,9 +247,9 @@ const NavIndex = (props) => {
 
         <Divider />
         <Card className='p-2 borderless'>
-          <Card className='p-2'>
-            <h6 className='text-primary'>Need Help?</h6>
-            <Link className='text-secondary' to='/docs'>
+          <Card className='p-2 bg-primary text-white'>
+            <h6>Need Help?</h6>
+            <Link to='/docs'>
               <small>Check our docs</small>
             </Link>
           </Card>

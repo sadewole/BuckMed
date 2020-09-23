@@ -72,7 +72,7 @@ const Avatar = (props) => {
         ) : (
           <div
             style={{
-              backgroundImage: `url(../static/images/avatar-icon.png)`,
+              backgroundImage: `url(./static/avatar-icon.png)`,
               backgroundColor: '#ffffff',
               border: 'solid 1px #c6c6c6',
             }}
