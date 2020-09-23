@@ -1,8 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import LeftPanel from './LeftPanel';
+// import LeftPanel from './LeftPanel';
 import Avatar from 'src/common/Avatar';
 import styled from 'styled-components';
+import SideBar from './sidebar';
 
 const base = ({ children }) => {
   return (
@@ -40,7 +41,7 @@ const base = ({ children }) => {
         </ul>
       </nav>
 
-      <LeftPanel />
+      <SideBar />
       <main className='content-wrapper px-3'>{children}</main>
     </MainBase>
   );

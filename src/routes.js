@@ -75,23 +75,28 @@ const routes = [
       },
       {
         exact: true,
-        path: '/doctor/patient',
+        path: '/doctor/management/patients',
         component: lazy(() => import('src/pages/doctorBoard/Patient')),
       },
       {
         exact: true,
-        path: '/doctor/finance',
+        path: '/doctor/management/all',
+        component: lazy(() => import('src/pages/doctorBoard/Doctor')),
+      },
+      {
+        exact: true,
+        path: '/doctor/management/finances',
         component: lazy(() => import('src/pages/doctorBoard/Finance')),
       },
       {
         exact: true,
-        path: '/doctor/history',
-        component: lazy(() => import('src/pages/doctorBoard/History')),
+        path: '/doctor/management/records',
+        component: lazy(() => import('src/pages/doctorBoard/LabRecord')),
       },
       {
         exact: true,
         path: '/doctor',
-        component: () => <Redirect to='/doctor/doctorBoard' />,
+        component: () => <Redirect to='/doctor/dashboard' />,
       },
       {
         component: () => <Redirect to='/404' />,
@@ -119,5 +124,4 @@ const routes = [
   },
 ];
 
-
-export default routes
+export default routes;

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import { Form, FormGroup } from 'react-bootstrap';
-import PlatformBase from '../../layouts/PlatformBase';
 
 const Contact = () => {
   return (
-    <PlatformBase>
+    <Fragment>
       <div className='container mx-auto'>
         <div className='row'>
           <div className='col-12'>
@@ -69,7 +68,7 @@ const Contact = () => {
           </div>
         </div>
       </div>
-    </PlatformBase>
+    </Fragment>
   );
 };
 

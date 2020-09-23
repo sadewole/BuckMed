@@ -20,7 +20,7 @@ const navigate = [
   },
   {
     name: 'Doctors',
-    link: 'doctor',
+    link: 'all',
     icon: 'fas fa-user-md',
   },
   {
@@ -56,7 +56,7 @@ const LeftPanel = () => {
             {navigate.map((val, index) => {
               return (
                 <li className='nav-item' key={index}>
-                  <NavLink to={`/admin/${val.link}`} className='nav-link'>
+                  <NavLink to={`/doctor/${val.link}`} className='nav-link'>
                     <i className={`nav-icon ${val.icon}`}></i>
                     <p>{val.name}</p>
                   </NavLink>

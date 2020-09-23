@@ -8,6 +8,7 @@ const Avatar = (props) => {
   let {
     name = '',
     img = '',
+    imgBackground = '',
     size = null,
     rounded = true,
     primary = true,
@@ -55,13 +56,15 @@ const Avatar = (props) => {
   return (
     <AvatarContainer>
       <div className={`${avatarSize} avatar`}>
-        {avatarName || img ? (
+        {avatarName || img || imgBackground ? (
           <div className={`avatar-icon ${rounded && 'avatar-rounded'}`}>
-            {img ? (
+            {imgBackground ? (
               <div
-                style={{ backgroundImage: `url('${img}')` }}
+                style={{ backgroundImage: `url('${imgBackground}')` }}
                 className='avatar-picture'
               />
+            ) : img ? (
+              <img src={img} alt='' className='avatar-picture' />
             ) : (
               <span className={`${avatarColor} avatar-text`}>{avatarName}</span>
             )}
@@ -172,7 +175,7 @@ const AvatarContainer = styled.div`
     &--extra {
       width: 168px;
       height: 168px;
-      line-height: 168px;
+      line-height: 150px;
       font-size: 48px;
     }
 
