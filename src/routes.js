@@ -81,7 +81,9 @@ const routes = [
       {
         exact: true,
         path: '/doctor/management/all',
-        component: lazy(() => import('src/pages/doctorBoard/Doctor')),
+        component: lazy(() =>
+          import('src/pages/doctorBoard/Doctor/DoctorListView')
+        ),
       },
       {
         exact: true,
