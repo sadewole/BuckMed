@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
-// import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import {
   Tabs,
@@ -14,25 +13,6 @@ import {
 } from 'react-bootstrap';
 import Avatar from 'src/components/Avatar';
 import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
-// import {
-//   Box,
-//   Button,
-//   Card,
-//   Checkbox,
-//   Divider,
-//   IconButton,
-//   InputAdornment,
-//   Link,
-//   SvgIcon,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TablePagination,
-//   TableRow,
-//   TextField,
-//   Typography,
-//   makeStyles,
-// } from '@material-ui/core';
 import {
   Edit as EditIcon,
   ArrowRight as ArrowRightIcon,
@@ -44,7 +24,6 @@ import TableRow from 'src/components/TableRow';
 import TableHead from 'src/components/TableHead';
 import TableBody from 'src/components/TableBody';
 import Checkbox from 'src/components/Checkbox';
-// import getInitials from 'src/utils/getInitials';
 
 const tabs = [
   {
@@ -263,7 +242,7 @@ const Results = ({ className, doctors, ...rest }) => {
       >
         <Card
           style={{ maxWidth: '300px' }}
-          className='flex-row align-items-center border px-2'
+          className='flex-row align-items-center border px-2 m-1'
         >
           <SearchIcon className='text-secondary' />
           <FormControl
@@ -284,6 +263,7 @@ const Results = ({ className, doctors, ...rest }) => {
           style={{ maxWidth: '300px' }}
           as='select'
           custom
+          className='m-1'
         >
           {sortOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -353,10 +333,10 @@ const Results = ({ className, doctors, ...rest }) => {
                     <TableCell>{doctor.email}</TableCell>
                     <TableCell>{doctor.address}</TableCell>
                     <TableCell align='right'>
-                      <Link to='/app/management/customers/1/edit'>
+                      <Link to='/doctor'>
                         <EditIcon fontSize='small' />
                       </Link>
-                      <Link to='/app/management/customers/1'>
+                      <Link to='/doctor'>
                         <ArrowRightIcon fontSize='small' />
                       </Link>
                     </TableCell>
@@ -364,97 +344,6 @@ const Results = ({ className, doctors, ...rest }) => {
                 );
               })}
             </TableBody>
-            {/* <TableHead>
-              <TableRow>
-                <TableCell padding='checkbox'>
-                  <Checkbox
-                    checked={selectedAllCustomers}
-                    indeterminate={selectedSomeCustomers}
-                    onChange={handleSelectAllCustomers}
-                  />
-                </TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Location</TableCell>
-                <TableCell>Orders</TableCell>
-                <TableCell>Spent</TableCell>
-                <TableCell align='right'>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedCustomers.map((customer) => {
-                const isCustomerSelected = selectedCustomers.includes(
-                  customer.id
-                );
-
-                return (
-                  <TableRow
-                    hover
-                    key={customer.id}
-                    selected={isCustomerSelected}
-                  >
-                    <TableCell padding='checkbox'>
-                      <Checkbox
-                        checked={isCustomerSelected}
-                        onChange={(event) =>
-                          handleSelectOneCustomer(event, customer.id)
-                        }
-                        value={isCustomerSelected}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Box display='flex' alignItems='center'>
-                        <Avatar
-                          className={classes.avatar}
-                          src={customer.avatar}
-                        >
-                          {getInitials(customer.name)}
-                        </Avatar>
-                        <div>
-                          <Link
-                            color='inherit'
-                            component={RouterLink}
-                            to='/app/management/customers/1'
-                            variant='h6'
-                          >
-                            {customer.name}
-                          </Link>
-                          <Typography variant='body2' color='textSecondary'>
-                            {customer.email}
-                          </Typography>
-                        </div>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      {`${customer.city}, ${customer.state}, ${customer.country}`}
-                    </TableCell>
-                    <TableCell>{customer.totalOrders}</TableCell>
-                    <TableCell>
-                      {numeral(customer.totalAmountSpent).format(
-                        `${customer.currency}0,0.00`
-                      )}
-                    </TableCell>
-                    <TableCell align='right'>
-                      <IconButton
-                        component={RouterLink}
-                        to='/app/management/customers/1/edit'
-                      >
-                        <SvgIcon fontSize='small'>
-                          <EditIcon />
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton
-                        component={RouterLink}
-                        to='/app/management/customers/1'
-                      >
-                        <SvgIcon fontSize='small'>
-                          <ArrowRightIcon />
-                        </SvgIcon>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody> */}
           </Table>
         </div>
       </HorizontalScrollbar>
@@ -464,11 +353,11 @@ const Results = ({ className, doctors, ...rest }) => {
 
 Results.propTypes = {
   className: PropTypes.string,
-  customers: PropTypes.array.isRequired,
+  doctors: PropTypes.array.isRequired,
 };
 
 Results.defaultProps = {
-  customers: [],
+  doctors: [],
 };
 
 export default Results;

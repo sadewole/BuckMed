@@ -7,12 +7,12 @@ const Header = ({ className, ...rest }) => {
   return (
     <Row className='justify-content-between m-3' {...rest}>
       <Row>
-        <h3 className='text-primary'> All Customers</h3>
+        <h3 className='text-primary'> All Doctors</h3>
       </Row>
       <Row>
         <Button variant='primary'>
           <PlusCircleIcon className='mr-1' />
-          New Customer
+          New Doctor
         </Button>
       </Row>
     </Row>
