@@ -17,7 +17,6 @@ const Cell = styled.div`
   height: calc(1.5em + 0.75rem + 2px);
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
-  font-weight: 400;
   font-stretch: normal;
   font-style: normal;
   line-height: 1.85;

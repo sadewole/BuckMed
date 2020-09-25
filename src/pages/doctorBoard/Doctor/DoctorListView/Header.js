@@ -5,11 +5,11 @@ import { PlusCircle as PlusCircleIcon } from 'react-feather';
 
 const Header = ({ className, ...rest }) => {
   return (
-    <Row className='justify-content-between m-3' container {...rest}>
-      <Row item>
+    <Row className='justify-content-between m-3' {...rest}>
+      <Row>
         <h3 className='text-primary'> All Customers</h3>
       </Row>
-      <Row item>
+      <Row>
         <Button variant='primary'>
           <PlusCircleIcon className='mr-1' />
           New Customer

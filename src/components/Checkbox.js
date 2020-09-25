@@ -20,8 +20,10 @@ const Checkbox = ({
             {...rest}
           />
           <span className='checkbox__control'>
-            <span className={indeterminate && 'indeterminate'}></span>
-            <span className={checked && 'checkmark'}></span>
+            <span
+              className={indeterminate ? 'indeterminate' : undefined}
+            ></span>
+            <span className={checked ? 'checkmark' : undefined}></span>
           </span>
         </span>
       </label>
@@ -90,8 +92,9 @@ const Box = styled.div`
     .indeterminate {
       width: 90%;
       height: 3px;
-      border: 3px solid currentColor;
-      margin: auto;
+      background: currentColor;
+      border: 2px solid currentColor;
+      margin: 5px auto;
     }
   }
 
@@ -125,6 +128,10 @@ const Box = styled.div`
   }
 `;
 
-Checkbox.propTypes = {};
+Checkbox.propTypes = {
+  checked: PropTypes.bool,
+  indeterminate: PropTypes.bool,
+  onChange: PropTypes.func,
+};
 
 export default Checkbox;

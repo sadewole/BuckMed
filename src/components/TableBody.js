@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const TableBody = ({ children }) => {
-  return <Body>{children}</Body>;
+const TableBody = ({ children, fontWeight }) => {
+  return <Body style={{ fontWeight }}>{children}</Body>;
 };
 
 const Body = styled.div`

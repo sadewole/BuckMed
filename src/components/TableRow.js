@@ -7,6 +7,7 @@ const TableRow = ({ children, selected = false, hovered = false }) => {
     <Row
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      className={hover ? 'hover' : undefined}
     >
       {children}
     </Row>
@@ -16,6 +17,10 @@ const TableRow = ({ children, selected = false, hovered = false }) => {
 const Row = styled.div`
   display: table-row;
   border-bottom: 1px solid #eaeaea;
+
+  &.hover {
+    background-color: #ececf6;
+  }
 
   &:last-child {
     border-bottom: none;

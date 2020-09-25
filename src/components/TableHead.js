@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const TableHead = ({ children }) => {
-  return <TableHeader>{children}</TableHeader>;
+const TableHead = ({ children, fontWeight }) => {
+  return <TableHeader style={{ fontWeight }}>{children}</TableHeader>;
 };
 
 const TableHeader = styled.div`
   display: table-header-group;
-  //   color: #bcc2d2;
-  font-weight: 600;
+  color: #000;
   font-size: 14px;
   font-stretch: normal;
   font-style: normal;

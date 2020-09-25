@@ -12,6 +12,7 @@ const Avatar = (props) => {
     size = null,
     rounded = true,
     primary = true,
+    ...rest
   } = props;
 
   const sizeClass = () => {
@@ -54,7 +55,7 @@ const Avatar = (props) => {
   });
 
   return (
-    <AvatarContainer>
+    <AvatarContainer {...rest}>
       <div className={`${avatarSize} avatar`}>
         {avatarName || img || imgBackground ? (
           <div className={`avatar-icon ${rounded && 'avatar-rounded'}`}>
@@ -64,19 +65,17 @@ const Avatar = (props) => {
                 className='avatar-picture'
               />
             ) : img ? (
-              <img src={img} alt='' className='avatar-picture' />
+              <img src={img} className='avatar-picture' />
             ) : (
               <span className={`${avatarColor} avatar-text`}>{avatarName}</span>
             )}
           </div>
         ) : (
-          <div
-            style={{
-              backgroundImage: `url(./static/avatar-icon.png)`,
-              backgroundColor: '#ffffff',
-              border: 'solid 1px #c6c6c6',
-            }}
-            className={`${'avatar-rounded' && rounded}  avatar-fallback`}
+          <img
+            src='/static/avatar-icon.png'
+            className={`${
+              'avatar-rounded' ? rounded : undefined
+            }  avatar-fallback`}
           />
         )}
       </div>

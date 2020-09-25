@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link, Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 // import numeral from 'numeral';
 import PropTypes from 'prop-types';
@@ -12,7 +12,7 @@ import {
   FormCheck,
   Button,
 } from 'react-bootstrap';
-import Avatar from 'src/components/AuthGuard';
+import Avatar from 'src/components/Avatar';
 import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 // import {
 //   Box,
@@ -42,6 +42,7 @@ import Table from 'src/components/Table';
 import TableCell from 'src/components/TableCell';
 import TableRow from 'src/components/TableRow';
 import TableHead from 'src/components/TableHead';
+import TableBody from 'src/components/TableBody';
 import Checkbox from 'src/components/Checkbox';
 // import getInitials from 'src/utils/getInitials';
 
@@ -83,8 +84,8 @@ const sortOptions = [
   },
 ];
 
-const applyFilters = (customers, query, filters) => {
-  return customers.filter((customer) => {
+const applyFilters = (doctors, query, filters) => {
+  return doctors.filter((doctor) => {
     let matches = true;
 
     if (query) {
@@ -92,7 +93,7 @@ const applyFilters = (customers, query, filters) => {
       let containsQuery = false;
 
       properties.forEach((property) => {
-        if (customer[property].toLowerCase().includes(query.toLowerCase())) {
+        if (doctor[property].toLowerCase().includes(query.toLowerCase())) {
           containsQuery = true;
         }
       });
@@ -105,7 +106,7 @@ const applyFilters = (customers, query, filters) => {
     Object.keys(filters).forEach((key) => {
       const value = filters[key];
 
-      if (value && customer[key] !== value) {
+      if (value && doctor[key] !== value) {
         matches = false;
       }
     });
@@ -114,8 +115,8 @@ const applyFilters = (customers, query, filters) => {
   });
 };
 
-const applyPagination = (customers, page, limit) => {
-  return customers.slice(page * limit, page * limit + limit);
+const applyPagination = (doctors, page, limit) => {
+  return doctors.slice(page * limit, page * limit + limit);
 };
 
 const descendingComparator = (a, b, orderBy) => {
@@ -136,10 +137,10 @@ const getComparator = (order, orderBy) => {
     : (a, b) => -descendingComparator(a, b, orderBy);
 };
 
-const applySort = (customers, sort) => {
+const applySort = (doctors, sort) => {
   const [orderBy, order] = sort.split('|');
   const comparator = getComparator(order, orderBy);
-  const stabilizedThis = customers.map((el, index) => [el, index]);
+  const stabilizedThis = doctors.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -172,16 +173,11 @@ const classes = {
   bulkAction: {
     // marginLeft: theme.spacing(2),
   },
-  avatar: {
-    height: 42,
-    width: 42,
-    // marginRight: theme.spacing(1),
-  },
 };
 
-const Results = ({ className, customers, ...rest }) => {
+const Results = ({ className, doctors, ...rest }) => {
   const [currentTab, setCurrentTab] = useState('all');
-  const [selectedCustomers, setSelectedCustomers] = useState([]);
+  const [selectedDoctors, setSelectedDoctors] = useState([]);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState('');
@@ -205,7 +201,7 @@ const Results = ({ className, customers, ...rest }) => {
     }
 
     setFilters(updatedFilters);
-    setSelectedCustomers([]);
+    setSelectedDoctors([]);
     setCurrentTab(value);
   };
 
@@ -219,16 +215,16 @@ const Results = ({ className, customers, ...rest }) => {
     setSort(event.target.value);
   };
 
-  const handleSelectAllCustomers = (event) => {
-    setSelectedCustomers(event ? customers.map((customer) => customer.id) : []);
+  const handleSelectAllDoctors = (event) => {
+    setSelectedDoctors(event ? doctors.map((doctor) => doctor.id) : []);
   };
 
-  const handleSelectOneCustomer = (event, customerId) => {
-    if (!selectedCustomers.includes(customerId)) {
-      setSelectedCustomers((prevSelected) => [...prevSelected, customerId]);
+  const handleSelectOneDoctor = (event, doctorId) => {
+    if (!selectedDoctors.includes(doctorId)) {
+      setSelectedDoctors((prevSelected) => [...prevSelected, doctorId]);
     } else {
-      setSelectedCustomers((prevSelected) =>
-        prevSelected.filter((id) => id !== customerId)
+      setSelectedDoctors((prevSelected) =>
+        prevSelected.filter((id) => id !== doctorId)
       );
     }
   };
@@ -241,16 +237,16 @@ const Results = ({ className, customers, ...rest }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredCustomers = applyFilters(customers, query, filters);
-  const sortedCustomers = applySort(filteredCustomers, sort);
-  const paginatedCustomers = applyPagination(sortedCustomers, page, limit);
-  const enableBulkOperations = selectedCustomers.length > 0;
-  const selectedSomeCustomers =
-    selectedCustomers.length > 0 && selectedCustomers.length < customers.length;
-  const selectedAllCustomers = selectedCustomers.length === customers.length;
+  const filteredDoctors = applyFilters(doctors, query, filters);
+  const sortedDoctors = applySort(filteredDoctors, sort);
+  const paginatedDoctors = applyPagination(sortedDoctors, page, limit);
+  const enableBulkOperations = selectedDoctors.length > 0;
+  const selectedSomeDoctors =
+    selectedDoctors.length > 0 && selectedDoctors.length < doctors.length;
+  const selectedAllDoctors = selectedDoctors.length === doctors.length;
 
   return (
-    <Card className='overflow-hidden'>
+    <Card className='overflow-hidden' style={{ borderRadius: '.5rem' }}>
       <Tabs
         onSelect={handleTabsChange}
         className='text-secondary px-2'
@@ -273,7 +269,7 @@ const Results = ({ className, customers, ...rest }) => {
           <FormControl
             className='borderless unfocus'
             onChange={handleQueryChange}
-            placeholder='Search customers'
+            placeholder='Search doctors'
             value={query}
             variant='outlined'
           />
@@ -296,13 +292,13 @@ const Results = ({ className, customers, ...rest }) => {
           ))}
         </FormControl>
       </div>
-      {enableBulkOperations && (
+      {/*{enableBulkOperations && (
         <div className={classes.bulkOperations}>
           <div className={classes.bulkActions}>
             <Checkbox
-              checked={selectedAllCustomers}
-              indeterminate={selectedSomeCustomers}
-              onChange={handleSelectAllCustomers}
+              checked={selectedAllDoctors}
+              indeterminate={selectedSomeDoctors}
+              onChange={handleSelectAllDoctors}
             />
             <Button variant='outlined' className={classes.bulkAction}>
               Delete
@@ -312,26 +308,62 @@ const Results = ({ className, customers, ...rest }) => {
             </Button>
           </div>
         </div>
-      )}
+      )} */}
       <HorizontalScrollbar>
         <div style={{ minWidth: '700px' }}>
           <Table>
-            <TableHead>
+            <TableHead fontWeight='600'>
               <TableRow>
                 <TableCell padding='checkbox'>
                   <Checkbox
-                    checked={selectedAllCustomers}
-                    indeterminate={selectedSomeCustomers}
-                    onChange={(e) => handleSelectAllCustomers(e)}
+                    checked={selectedAllDoctors}
+                    indeterminate={selectedSomeDoctors}
+                    onChange={(e) => handleSelectAllDoctors(e)}
                   />
                 </TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>Location</TableCell>
-                <TableCell>Orders</TableCell>
-                <TableCell>Spent</TableCell>
+                <TableCell>Gender</TableCell>
+                <TableCell>Specialization</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Address</TableCell>
                 <TableCell align='right'>Actions</TableCell>
               </TableRow>
             </TableHead>
+            <TableBody fontWeight='400'>
+              {paginatedDoctors.map((doctor) => {
+                const isDoctorSelected = selectedDoctors.includes(doctor.id);
+
+                return (
+                  <TableRow hover key={doctor.id} selected={isDoctorSelected}>
+                    <TableCell padding='checkbox'>
+                      <Checkbox
+                        checked={isDoctorSelected}
+                        onChange={(event) =>
+                          handleSelectOneDoctor(event, doctor.id)
+                        }
+                        value={isDoctorSelected}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Avatar img={doctor.avatar} className='mr-2' />
+                      {doctor.firstName} {doctor.lastName}
+                    </TableCell>
+                    <TableCell>{doctor.gender}</TableCell>
+                    <TableCell>{doctor.specialization}</TableCell>
+                    <TableCell>{doctor.email}</TableCell>
+                    <TableCell>{doctor.address}</TableCell>
+                    <TableCell align='right'>
+                      <Link to='/app/management/customers/1/edit'>
+                        <EditIcon fontSize='small' />
+                      </Link>
+                      <Link to='/app/management/customers/1'>
+                        <ArrowRightIcon fontSize='small' />
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
             {/* <TableHead>
               <TableRow>
                 <TableCell padding='checkbox'>
