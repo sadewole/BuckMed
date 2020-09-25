@@ -220,9 +220,7 @@ const Results = ({ className, customers, ...rest }) => {
   };
 
   const handleSelectAllCustomers = (event) => {
-    setSelectedCustomers(
-      event.target.checked ? customers.map((customer) => customer.id) : []
-    );
+    setSelectedCustomers(event ? customers.map((customer) => customer.id) : []);
   };
 
   const handleSelectOneCustomer = (event, customerId) => {
@@ -301,7 +299,7 @@ const Results = ({ className, customers, ...rest }) => {
       {enableBulkOperations && (
         <div className={classes.bulkOperations}>
           <div className={classes.bulkActions}>
-            <FormCheck
+            <Checkbox
               checked={selectedAllCustomers}
               indeterminate={selectedSomeCustomers}
               onChange={handleSelectAllCustomers}
@@ -316,14 +314,16 @@ const Results = ({ className, customers, ...rest }) => {
         </div>
       )}
       <HorizontalScrollbar>
-        <div
-          style={{ minWidth: '700px', background: '#343a40', color: '#fff' }}
-        >
+        <div style={{ minWidth: '700px' }}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell padding='checkbox'>
-                  <Checkbox />
+                  <Checkbox
+                    checked={selectedAllCustomers}
+                    indeterminate={selectedSomeCustomers}
+                    onChange={(e) => handleSelectAllCustomers(e)}
+                  />
                 </TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Location</TableCell>

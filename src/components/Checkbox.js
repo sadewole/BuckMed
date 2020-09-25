@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const Checkbox = ({ checked, indeterminate, value }) => {
+const Checkbox = ({
+  checked = false,
+  indeterminate = false,
+  onChange,
+  ...rest
+}) => {
   return (
     <Box>
       <label className='checkbox'>
@@ -11,23 +16,12 @@ const Checkbox = ({ checked, indeterminate, value }) => {
             type='checkbox'
             name='checkbox'
             checked={checked}
-            value={value}
+            onChange={(e) => onChange(e.target.checked)}
+            {...rest}
           />
-          <span className={indeterminate ? 'checkmark' : 'somechecks'}></span>
           <span className='checkbox__control'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 24 24'
-              aria-hidden='true'
-              focusable='false'
-            >
-              <path
-                fill='none'
-                stroke='currentColor'
-                stroke-width='3'
-                d='M1.73 12.91l6.37 6.37L22.79 4.59'
-              />
-            </svg>
+            <span className={indeterminate && 'indeterminate'}></span>
+            <span className={checked && 'checkmark'}></span>
           </span>
         </span>
       </label>
@@ -71,11 +65,34 @@ const Box = styled.div`
   }
 
   .checkbox__control {
+    position: relative;
     display: inline-grid;
     width: 1em;
     height: 1em;
     border-radius: 0.25em;
     border: 0.1em solid currentColor;
+    cursor: pointer;
+
+    .checkmark {
+      margin-top: -5px;
+      margin-left: 5px;
+      width: 0.5rem;
+      height: 1rem;
+      border: solid currentColor;
+      border-width: 0 3px 3px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+      display: none;
+      transition: all 0.1s ease-in 25ms;
+    }
+
+    .indeterminate {
+      width: 90%;
+      height: 3px;
+      border: 3px solid currentColor;
+      margin: auto;
+    }
   }
 
   .checkbox__input {
@@ -87,22 +104,11 @@ const Box = styled.div`
     }
   }
 
-  // .checkbox__control svg {
-  //   cursor: pointer;
-  //   transition: transform 0.1s ease-in 25ms;
-  //   transform: scale(0);
-  //   transform-origin: bottom left;
-  // }
-
-  .checkbox__input input:checked + .checkbox__control svg {
-    transform: scale(1);
+  .checkbox__input input:checked + .checkbox__control .checkmark {
+    display: block;
   }
 
   .checkbox__input input:focus + .checkbox__control {
-    box-shadow: 0 0 0 0.05em #fff, 0 0 0.15em 0.1em currentColor;
-  }
-
-  .checkbox__input input:focus + .checkmarks {
     box-shadow: 0 0 0 0.05em #fff, 0 0 0.15em 0.1em currentColor;
   }
 
