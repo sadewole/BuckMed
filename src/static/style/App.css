@@ -9,6 +9,20 @@ body {
 }
 
 /* miseac */
+.card-header-tabs {
+  margin-bottom: 1rem !important;
+  border-bottom: 1px solid #dee2e6 !important;
+}
+
+.nav-tabs .nav-link {
+  border: none !important;
+  transition: all 0.5s ease-in-out;
+}
+
+.nav-tabs .nav-link.active {
+  border-bottom: 1px solid #007bff !important;
+}
+
 .btn-link:hover,
 .btn-link:focus {
   text-decoration: none !important;
@@ -44,10 +58,11 @@ body {
 .unfocus:focus {
   outline: none !important;
   text-decoration: none !important;
+  box-shadow: none !important;
 }
 
 .nav-bar {
-  transition: all 1s ease-in-out;
+  transition: all 0.5s ease-in-out;
   box-shadow: 0px 7px 5px rgba(0, 0, 0, 0.12);
 }
 

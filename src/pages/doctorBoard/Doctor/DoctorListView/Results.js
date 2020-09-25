@@ -1,36 +1,49 @@
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
-import numeral from 'numeral';
+// import numeral from 'numeral';
 import PropTypes from 'prop-types';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Table, Tabs, Tab } from 'react-bootstrap';
 import {
-  Avatar,
-  Box,
-  Button,
+  Tabs,
+  Tab,
   Card,
-  Checkbox,
-  Divider,
-  IconButton,
-  InputAdornment,
-  Link,
-  SvgIcon,
-  TableBody,
-  TableCell,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TextField,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
+  Form,
+  FormControl,
+  FormCheck,
+  Button,
+} from 'react-bootstrap';
+import Avatar from 'src/components/AuthGuard';
+import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
+// import {
+//   Box,
+//   Button,
+//   Card,
+//   Checkbox,
+//   Divider,
+//   IconButton,
+//   InputAdornment,
+//   Link,
+//   SvgIcon,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TablePagination,
+//   TableRow,
+//   TextField,
+//   Typography,
+//   makeStyles,
+// } from '@material-ui/core';
 import {
   Edit as EditIcon,
   ArrowRight as ArrowRightIcon,
   Search as SearchIcon,
 } from 'react-feather';
-import getInitials from 'src/utils/getInitials';
+import Table from 'src/components/Table';
+import TableCell from 'src/components/TableCell';
+import TableRow from 'src/components/TableRow';
+import TableHead from 'src/components/TableHead';
+import Checkbox from 'src/components/Checkbox';
+// import getInitials from 'src/utils/getInitials';
 
 const tabs = [
   {
@@ -139,10 +152,10 @@ const applySort = (customers, sort) => {
   return stabilizedThis.map((el) => el[0]);
 };
 
-const useStyles = makeStyles((theme) => ({
+const classes = {
   root: {},
   queryField: {
-    width: 500,
+    width: '500px',
   },
   bulkOperations: {
     position: 'relative',
@@ -154,20 +167,19 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: '100%',
     zIndex: 2,
-    backgroundColor: theme.palette.background.default,
+    // backgroundColor: theme.palette.background.default,
   },
   bulkAction: {
-    marginLeft: theme.spacing(2),
+    // marginLeft: theme.spacing(2),
   },
   avatar: {
     height: 42,
     width: 42,
-    marginRight: theme.spacing(1),
+    // marginRight: theme.spacing(1),
   },
-}));
+};
 
 const Results = ({ className, customers, ...rest }) => {
-  const classes = useStyles();
   const [currentTab, setCurrentTab] = useState('all');
   const [selectedCustomers, setSelectedCustomers] = useState([]);
   const [page, setPage] = useState(0);
@@ -180,7 +192,7 @@ const Results = ({ className, customers, ...rest }) => {
     isReturning: null,
   });
 
-  const handleTabsChange = (event, value) => {
+  const handleTabsChange = (value) => {
     const updatedFilters = {
       ...filters,
       hasAcceptedMarketing: null,
@@ -240,11 +252,10 @@ const Results = ({ className, customers, ...rest }) => {
   const selectedAllCustomers = selectedCustomers.length === customers.length;
 
   return (
-    <Card className={clsx(classes.root, className)} {...rest}>
+    <Card className='overflow-hidden'>
       <Tabs
         onSelect={handleTabsChange}
-        scrollButtons='auto'
-        textColor='secondary'
+        className='text-secondary px-2'
         activeKey={currentTab}
         variant='tabs'
       >
@@ -252,45 +263,45 @@ const Results = ({ className, customers, ...rest }) => {
           <Tab key={tab.value} eventKey={tab.value} title={tab.label} />
         ))}
       </Tabs>
-      <Divider />
-      <Box p={2} minHeight={56} display='flex' alignItems='center'>
-        <TextField
-          className={classes.queryField}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <SvgIcon fontSize='small' color='action'>
-                  <SearchIcon />
-                </SvgIcon>
-              </InputAdornment>
-            ),
-          }}
-          onChange={handleQueryChange}
-          placeholder='Search customers'
-          value={query}
-          variant='outlined'
-        />
-        <Box flexGrow={1} />
-        <TextField
+      <div
+        style={{ minHeight: '56px' }}
+        className='d-flex align-items-center justify-content-between p-2 flex-wrap'
+      >
+        <Card
+          style={{ maxWidth: '300px' }}
+          className='flex-row align-items-center border px-2'
+        >
+          <SearchIcon className='text-secondary' />
+          <FormControl
+            className='borderless unfocus'
+            onChange={handleQueryChange}
+            placeholder='Search customers'
+            value={query}
+            variant='outlined'
+          />
+        </Card>
+
+        <FormControl
           label='Sort By'
           name='sort'
           onChange={handleSortChange}
-          select
-          SelectProps={{ native: true }}
           value={sort}
           variant='outlined'
+          style={{ maxWidth: '300px' }}
+          as='select'
+          custom
         >
           {sortOptions.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
-        </TextField>
-      </Box>
+        </FormControl>
+      </div>
       {enableBulkOperations && (
         <div className={classes.bulkOperations}>
           <div className={classes.bulkActions}>
-            <Checkbox
+            <FormCheck
               checked={selectedAllCustomers}
               indeterminate={selectedSomeCustomers}
               onChange={handleSelectAllCustomers}
@@ -304,10 +315,24 @@ const Results = ({ className, customers, ...rest }) => {
           </div>
         </div>
       )}
-      <PerfectScrollbar>
-        <Box minWidth={700}>
+      <HorizontalScrollbar>
+        <div
+          style={{ minWidth: '700px', background: '#343a40', color: '#fff' }}
+        >
           <Table>
             <TableHead>
+              <TableRow>
+                <TableCell padding='checkbox'>
+                  <Checkbox />
+                </TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Location</TableCell>
+                <TableCell>Orders</TableCell>
+                <TableCell>Spent</TableCell>
+                <TableCell align='right'>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            {/* <TableHead>
               <TableRow>
                 <TableCell padding='checkbox'>
                   <Checkbox
@@ -397,19 +422,10 @@ const Results = ({ className, customers, ...rest }) => {
                   </TableRow>
                 );
               })}
-            </TableBody>
+            </TableBody> */}
           </Table>
-        </Box>
-      </PerfectScrollbar>
-      <TablePagination
-        component='div'
-        count={filteredCustomers.length}
-        onChangePage={handlePageChange}
-        onChangeRowsPerPage={handleLimitChange}
-        page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
+        </div>
+      </HorizontalScrollbar>
     </Card>
   );
 };
