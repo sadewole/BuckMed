@@ -1,23 +1,15 @@
 import React from 'react';
-import { LandingPage, AuthPage, Contact } from './components/pages';
-import './App.css';
-import NavBar from './components/layouts/NavBar';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+// import { createBrowserHistory } from 'history';
+import routes, { renderRoutes } from './routes';
 
+import 'src/static/style/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// const history = createBrowserHistory();
+
 function App() {
-  return (
-    <Router>
-      <NavBar />
-      <Switch>
-        <Route exact path='/' component={LandingPage} />
-        <Route exact path='/contact' component={Contact} />
-        <Route exact path='/register' component={AuthPage.Register} />
-        <Route exact path='/login' component={AuthPage.Login} />
-      </Switch>
-    </Router>
-  );
+  return <Router>{renderRoutes(routes)}</Router>;
 }
 
 export default App;
