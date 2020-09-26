@@ -4,7 +4,7 @@ import Avatar from 'src/components/Avatar';
 import styled from 'styled-components';
 import SideBar from './sidebar';
 
-const base = ({ children }) => {
+const Base = ({ children }) => {
   return (
     <MainBase>
       <nav className='main-header navbar navbar-expand navbar-light'>
@@ -95,4 +95,4 @@ const MainBase = styled.div`
   }
 `;
 
-export default base;
+export default Base;
