@@ -17,6 +17,7 @@ import {
   Edit as EditIcon,
   ArrowRight as ArrowRightIcon,
   Search as SearchIcon,
+  MoreHorizontal as MoreHorizontalIcon,
 } from 'react-feather';
 import Table from 'src/components/Table';
 import TableCell from 'src/components/TableCell';
@@ -338,8 +339,8 @@ const Results = ({ className, doctors, ...rest }) => {
                           Appointment
                         </Button>
                       </Link>
-                      <Link to='/doctor'>
-                        <ArrowRightIcon fontSize='small' />
+                      <Link to='/doctor/management/all'>
+                        <MoreHorizontalIcon fontSize='small' />
                       </Link>
                     </TableCell>
                   </TableRow>

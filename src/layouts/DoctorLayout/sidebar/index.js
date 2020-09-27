@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import clsx from 'clsx';
 import {
   Briefcase as BriefcaseIcon,
@@ -138,7 +137,7 @@ const sections = [
 
 function renderNavItems({ items, pathname, depth = 0 }) {
   return (
-    <ListGroup disablePadding>
+    <ListGroup>
       {items.reduce(
         (acc, item) => reduceChildRoutes({ acc, item, pathname, depth }),
         []
@@ -244,7 +243,7 @@ const NavIndex = ({ show }) => {
             </ListGroup>
           ))}
         </Card>
-
+        <div className='flex-grow-1'></div>
         <Divider />
         <Card className='p-2 borderless'>
           <Card className='p-2 bg-primary text-white'>
@@ -268,6 +267,8 @@ const Divider = styled.hr`
 `;
 
 const Scrollbar = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   overflow-y: auto;
