@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Card, Form, FormControl, Button } from 'react-bootstrap';
+import { Card, FormControl, Button } from 'react-bootstrap';
 import Avatar from 'src/components/Avatar';
 import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 import {
@@ -12,8 +12,6 @@ import {
 import Table from 'src/components/Table';
 import TableCell from 'src/components/TableCell';
 import TableRow from 'src/components/TableRow';
-import TableHead from 'src/components/TableHead';
-import TableBody from 'src/components/TableBody';
 import Checkbox from 'src/components/Checkbox';
 
 const sortOptions = [
@@ -40,7 +38,7 @@ const applyFilters = (patients, query, filters) => {
     let matches = true;
 
     if (query) {
-      const properties = ['email', 'name'];
+      const properties = ['firstName', 'lastName'];
       let containsQuery = false;
 
       properties.forEach((property) => {
@@ -53,14 +51,6 @@ const applyFilters = (patients, query, filters) => {
         matches = false;
       }
     }
-
-    Object.keys(filters).forEach((key) => {
-      const value = filters[key];
-
-      if (value && patient[key] !== value) {
-        matches = false;
-      }
-    });
 
     return matches;
   });
@@ -132,27 +122,16 @@ const Results = ({ className, patients, ...rest }) => {
   const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState(sortOptions[0].value);
-  const [filters, setFilters] = useState({
-    hasAcceptedMarketing: null,
-    isProspect: null,
-    isReturning: null,
-  });
-
-  const handleTabsChange = (value) => {
-    const updatedFilters = {
-      ...filters,
-      hasAcceptedMarketing: null,
-      isProspect: null,
-      isReturning: null,
-    };
-
-    if (value !== 'all') {
-      updatedFilters[value] = true;
-    }
-
-    setFilters(updatedFilters);
-    setSelectedPatients([]);
-  };
+  const header = [
+    'Name',
+    'Gender',
+    'Diagnosis',
+    'Phone',
+    'Address',
+    'Blood',
+    'Date of Birth',
+    '',
+  ];
 
   const handleQueryChange = (event) => {
     event.persist();
@@ -164,11 +143,7 @@ const Results = ({ className, patients, ...rest }) => {
     setSort(event.target.value);
   };
 
-  const handleSelectAllPatients = (event) => {
-    setSelectedPatients(event ? patients.map((patient) => patient.id) : []);
-  };
-
-  const handleSelectOnePatient = (event, patientId) => {
+  const handleSelected = (event, patientId) => {
     if (!selectedPatients.includes(patientId)) {
       setSelectedPatients((prevSelected) => [...prevSelected, patientId]);
     } else {
@@ -186,7 +161,7 @@ const Results = ({ className, patients, ...rest }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredPatients = applyFilters(patients, query, filters);
+  const filteredPatients = applyFilters(patients, query);
   const sortedPatients = applySort(filteredPatients, sort);
   const paginatedPatients = applyPagination(sortedPatients, page, limit);
   const enableBulkOperations = selectedPatients.length > 0;
@@ -232,79 +207,48 @@ const Results = ({ className, patients, ...rest }) => {
           ))}
         </FormControl>
       </div>
-      {/*{enableBulkOperations && (
-        <div className={classes.bulkOperations}>
-          <div className={classes.bulkActions}>
-            <Checkbox
-              checked={selectedAllPatients}
-              indeterminate={selectedSomepatients}
-              onChange={handleSelectAllPatients}
-            />
-            <Button variant='outlined' className={classes.bulkAction}>
-              Delete
-            </Button>
-            <Button variant='outlined' className={classes.bulkAction}>
-              Edit
-            </Button>
-          </div>
-        </div>
-      )} */}
       <HorizontalScrollbar>
         <div style={{ minWidth: '700px' }}>
-          <Table>
-            <TableHead fontWeight='600'>
-              <TableRow>
-                <TableCell padding='checkbox'>
-                  <Checkbox
-                    checked={selectedAllPatients}
-                    indeterminate={selectedSomepatients}
-                    onChange={(e) => handleSelectAllPatients(e)}
-                  />
-                </TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Gender</TableCell>
-                <TableCell>Diagnose</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell>Blood</TableCell>
-                <TableCell>Date of Birth</TableCell>
-                <TableCell align='right'></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody fontWeight='400'>
-              {paginatedPatients.map((doctor) => {
-                const isPatientSelected = selectedPatients.includes(doctor.id);
+          <Table
+            header={header}
+            checkbox
+            selectedSome={selectedSomepatients}
+            selected={(e) =>
+              setSelectedPatients(
+                e ? patients.map((patient) => patient.id) : []
+              )
+            }
+          >
+            {sortedPatients.map((patient) => {
+              const isPatientSelected = selectedPatients.includes(patient.id);
 
-                return (
-                  <TableRow hover key={doctor.id} selected={isPatientSelected}>
-                    <TableCell padding='checkbox'>
-                      <Checkbox
-                        checked={isPatientSelected}
-                        onChange={(event) =>
-                          handleSelectOnePatient(event, doctor.id)
-                        }
-                        value={isPatientSelected}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Avatar img={doctor.avatar} className='mr-2' />
-                      {doctor.firstName} {doctor.lastName}
-                    </TableCell>
-                    <TableCell>{doctor.gender}</TableCell>
-                    <TableCell>{doctor.diagnosis}</TableCell>
-                    <TableCell>{doctor.phone}</TableCell>
-                    <TableCell>{doctor.address}</TableCell>
-                    <TableCell>{doctor.blood}</TableCell>
-                    <TableCell>{doctor.dob}</TableCell>
-                    <TableCell align='right'>
-                      <Link to='/doctor/management/patients'>
-                        <MoreHorizontalIcon fontSize='small' />
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
+              return (
+                <TableRow hover key={patient.id} selected={isPatientSelected}>
+                  <TableCell padding='checkbox'>
+                    <Checkbox
+                      checked={isPatientSelected}
+                      onChange={(event) => handleSelected(event, patient.id)}
+                      value={isPatientSelected}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Avatar img={patient.avatar} className='mr-2' />
+                    {patient.firstName} {patient.lastName}
+                  </TableCell>
+                  <TableCell>{patient.gender}</TableCell>
+                  <TableCell>{patient.diagnosis}</TableCell>
+                  <TableCell>{patient.phone}</TableCell>
+                  <TableCell>{patient.address}</TableCell>
+                  <TableCell>{patient.blood}</TableCell>
+                  <TableCell>{patient.dob}</TableCell>
+                  <TableCell align='right'>
+                    <Link to='/doctor/management/patients'>
+                      <MoreHorizontalIcon fontSize='small' />
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </Table>
         </div>
       </HorizontalScrollbar>

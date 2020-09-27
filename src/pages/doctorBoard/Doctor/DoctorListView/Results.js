@@ -2,28 +2,16 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import {
-  Tabs,
-  Tab,
-  Card,
-  Form,
-  FormControl,
-  FormCheck,
-  Button,
-} from 'react-bootstrap';
+import { Tabs, Tab, Card, FormControl, Button } from 'react-bootstrap';
 import Avatar from 'src/components/Avatar';
 import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 import {
-  Edit as EditIcon,
-  ArrowRight as ArrowRightIcon,
   Search as SearchIcon,
   MoreHorizontal as MoreHorizontalIcon,
 } from 'react-feather';
 import Table from 'src/components/Table';
 import TableCell from 'src/components/TableCell';
 import TableRow from 'src/components/TableRow';
-import TableHead from 'src/components/TableHead';
-import TableBody from 'src/components/TableBody';
 import Checkbox from 'src/components/Checkbox';
 
 const tabs = [
@@ -69,7 +57,7 @@ const applyFilters = (doctors, query, filters) => {
     let matches = true;
 
     if (query) {
-      const properties = ['email', 'name'];
+      const properties = ['email', 'firstName', 'lastName'];
       let containsQuery = false;
 
       properties.forEach((property) => {
@@ -168,6 +156,8 @@ const Results = ({ className, doctors, ...rest }) => {
     isReturning: null,
   });
 
+  const header = ['Name', 'Gender', 'Specialiazation', 'Email', 'Address', ''];
+
   const handleTabsChange = (value) => {
     const updatedFilters = {
       ...filters,
@@ -193,10 +183,6 @@ const Results = ({ className, doctors, ...rest }) => {
   const handleSortChange = (event) => {
     event.persist();
     setSort(event.target.value);
-  };
-
-  const handleSelectAllDoctors = (event) => {
-    setSelectedDoctors(event ? doctors.map((doctor) => doctor.id) : []);
   };
 
   const handleSelectOneDoctor = (event, doctorId) => {
@@ -273,80 +259,51 @@ const Results = ({ className, doctors, ...rest }) => {
           ))}
         </FormControl>
       </div>
-      {/*{enableBulkOperations && (
-        <div className={classes.bulkOperations}>
-          <div className={classes.bulkActions}>
-            <Checkbox
-              checked={selectedAllDoctors}
-              indeterminate={selectedSomeDoctors}
-              onChange={handleSelectAllDoctors}
-            />
-            <Button variant='outlined' className={classes.bulkAction}>
-              Delete
-            </Button>
-            <Button variant='outlined' className={classes.bulkAction}>
-              Edit
-            </Button>
-          </div>
-        </div>
-      )} */}
       <HorizontalScrollbar>
         <div style={{ minWidth: '700px' }}>
-          <Table>
-            <TableHead fontWeight='600'>
-              <TableRow>
-                <TableCell padding='checkbox'>
-                  <Checkbox
-                    checked={selectedAllDoctors}
-                    indeterminate={selectedSomeDoctors}
-                    onChange={(e) => handleSelectAllDoctors(e)}
-                  />
-                </TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Gender</TableCell>
-                <TableCell>Specialization</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell align='right'></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody fontWeight='400'>
-              {paginatedDoctors.map((doctor) => {
-                const isDoctorSelected = selectedDoctors.includes(doctor.id);
+          <Table
+            header={header}
+            checkbox
+            selected={(e) =>
+              setSelectedDoctors(e ? doctors.map((doctor) => doctor.id) : [])
+            }
+            selectedSome={selectedSomeDoctors}
+          >
+            {sortedDoctors.map((doctor) => {
+              const isDoctorSelected = selectedDoctors.includes(doctor.id);
 
-                return (
-                  <TableRow hover key={doctor.id} selected={isDoctorSelected}>
-                    <TableCell padding='checkbox'>
-                      <Checkbox
-                        checked={isDoctorSelected}
-                        onChange={(event) =>
-                          handleSelectOneDoctor(event, doctor.id)
-                        }
-                        value={isDoctorSelected}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Avatar img={doctor.avatar} className='mr-2' />
-                      {doctor.firstName} {doctor.lastName}
-                    </TableCell>
-                    <TableCell>{doctor.gender}</TableCell>
-                    <TableCell>{doctor.specialization}</TableCell>
-                    <TableCell>{doctor.email}</TableCell>
-                    <TableCell>{doctor.address}</TableCell>
-                    <TableCell align='right'>
-                      <Link to='/doctor/management/all'>
-                        <Button variant='primary' className='mr-2'>
-                          Appointment
-                        </Button>
-                      </Link>
-                      <Link to='/doctor/management/all'>
-                        <MoreHorizontalIcon fontSize='small' />
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
+              return (
+                <TableRow hover key={doctor.id} selected={isDoctorSelected}>
+                  <TableCell padding='checkbox'>
+                    <Checkbox
+                      checked={isDoctorSelected}
+                      onChange={(event) =>
+                        handleSelectOneDoctor(event, doctor.id)
+                      }
+                      value={isDoctorSelected}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Avatar img={doctor.avatar} className='mr-2' />
+                    {doctor.firstName} {doctor.lastName}
+                  </TableCell>
+                  <TableCell>{doctor.gender}</TableCell>
+                  <TableCell>{doctor.specialization}</TableCell>
+                  <TableCell>{doctor.email}</TableCell>
+                  <TableCell>{doctor.address}</TableCell>
+                  <TableCell align='right'>
+                    <Link to='/doctor/management/all'>
+                      <Button variant='primary' className='mr-2'>
+                        Appointment
+                      </Button>
+                    </Link>
+                    <Link to='/doctor/management/all'>
+                      <MoreHorizontalIcon fontSize='small' />
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </Table>
         </div>
       </HorizontalScrollbar>
