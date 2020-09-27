@@ -85,35 +85,12 @@ const applySort = (patients, sort) => {
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
-
     if (order !== 0) return order;
 
     return a[1] - b[1];
   });
 
   return stabilizedThis.map((el) => el[0]);
-};
-
-const classes = {
-  root: {},
-  queryField: {
-    width: '500px',
-  },
-  bulkOperations: {
-    position: 'relative',
-  },
-  bulkActions: {
-    paddingLeft: 4,
-    paddingRight: 4,
-    marginTop: 6,
-    position: 'absolute',
-    width: '100%',
-    zIndex: 2,
-    // backgroundColor: theme.palette.background.default,
-  },
-  bulkAction: {
-    marginLeft: 2,
-  },
 };
 
 const Results = ({ className, patients, ...rest }) => {
