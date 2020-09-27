@@ -68,7 +68,9 @@ const Box = styled.div`
 
   .checkbox__control {
     position: relative;
-    display: inline-grid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 1em;
     height: 1em;
     border-radius: 0.25em;
@@ -90,11 +92,11 @@ const Box = styled.div`
     }
 
     .indeterminate {
-      width: 90%;
+      width: 11px;
       height: 3px;
       background: currentColor;
       border: 2px solid currentColor;
-      margin: 5px auto;
+      // margin: 5px auto;
     }
   }
 

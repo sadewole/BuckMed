@@ -54,12 +54,7 @@ const NavItem = ({
   }
 
   return (
-    <ListGroupItem
-      style={classes.itemLeaf}
-      disableGutters
-      key={title}
-      className='borderless'
-    >
+    <ListGroupItem style={classes.itemLeaf} key={title} className='borderless'>
       <NavLink
         exact
         to={href}

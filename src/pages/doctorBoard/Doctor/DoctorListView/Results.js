@@ -17,6 +17,7 @@ import {
   Edit as EditIcon,
   ArrowRight as ArrowRightIcon,
   Search as SearchIcon,
+  MoreHorizontal as MoreHorizontalIcon,
 } from 'react-feather';
 import Table from 'src/components/Table';
 import TableCell from 'src/components/TableCell';
@@ -150,7 +151,7 @@ const classes = {
     // backgroundColor: theme.palette.background.default,
   },
   bulkAction: {
-    // marginLeft: theme.spacing(2),
+    marginLeft: 2,
   },
 };
 
@@ -306,7 +307,7 @@ const Results = ({ className, doctors, ...rest }) => {
                 <TableCell>Specialization</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Address</TableCell>
-                <TableCell align='right'>Actions</TableCell>
+                <TableCell align='right'></TableCell>
               </TableRow>
             </TableHead>
             <TableBody fontWeight='400'>
@@ -333,11 +334,13 @@ const Results = ({ className, doctors, ...rest }) => {
                     <TableCell>{doctor.email}</TableCell>
                     <TableCell>{doctor.address}</TableCell>
                     <TableCell align='right'>
-                      <Link to='/doctor'>
-                        <EditIcon fontSize='small' />
+                      <Link to='/doctor/management/all'>
+                        <Button variant='primary' className='mr-2'>
+                          Appointment
+                        </Button>
                       </Link>
-                      <Link to='/doctor'>
-                        <ArrowRightIcon fontSize='small' />
+                      <Link to='/doctor/management/all'>
+                        <MoreHorizontalIcon fontSize='small' />
                       </Link>
                     </TableCell>
                   </TableRow>

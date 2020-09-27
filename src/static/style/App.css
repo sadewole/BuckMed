@@ -82,6 +82,16 @@ a:hover {
   font-size: 1.5rem !important;
 }
 
+.hide-on-lg {
+  display: none;
+}
+
+@media screen and (max-width: 1058px) {
+  .hide-on-lg {
+    display: block;
+  }
+}
+
 /* ... */
 
 .hero-bg {
