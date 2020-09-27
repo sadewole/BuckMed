@@ -188,7 +188,7 @@ function reduceChildRoutes({ acc, pathname, item, depth }) {
   return acc;
 }
 
-const NavIndex = (props) => {
+const NavIndex = ({ show }) => {
   const location = useLocation();
   const classes = {
     underlineNone: {
@@ -258,7 +258,9 @@ const NavIndex = (props) => {
     </Card>
   );
 
-  return <LeftSideBar className='show'>{content}</LeftSideBar>;
+  return (
+    <LeftSideBar className={show ? 'show' : undefined}>{content}</LeftSideBar>
+  );
 };
 
 const Divider = styled.hr`

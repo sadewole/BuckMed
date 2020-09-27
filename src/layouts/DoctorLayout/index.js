@@ -1,16 +1,62 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Avatar from 'src/components/Avatar';
 import styled from 'styled-components';
 import SideBar from './sidebar';
 
 const Base = ({ children }) => {
+  const [show, setShow] = useState(false);
+
+  let layoutFixed = useRef();
+  let contentWrapper = useRef();
+  let mainNavbar = useRef();
+
+  const handlePushMenu = () => {
+    setShow(true);
+    layoutFixed.current.style.display = 'block';
+  };
+
+  const handleLayoutFixed = () => {
+    layoutFixed.current.style.display = 'none';
+    setShow(false);
+  };
+
+  useLayoutEffect(() => {
+    setShow(true);
+    const resizeQuery = () => {
+      if (window.outerWidth < 810) {
+        setShow(false);
+        contentWrapper.current.style.marginLeft = '0px';
+        contentWrapper.current.classList.add('extend');
+        mainNavbar.current.classList.add('extend');
+      } else {
+        setShow(true);
+        contentWrapper.current.style.marginLeft = '250px';
+        contentWrapper.current.classList.remove('extend');
+        mainNavbar.current.classList.remove('extend');
+      }
+    };
+
+    // init function
+    window.addEventListener('resize', (e) => {
+      resizeQuery();
+    });
+  }, []);
+
   return (
     <MainBase>
-      <nav className='main-header navbar navbar-expand navbar-light'>
+      <div
+        className='layout-fixed'
+        ref={layoutFixed}
+        onClick={handleLayoutFixed}
+      ></div>
+      <nav
+        className='main-header navbar navbar-expand navbar-light'
+        ref={mainNavbar}
+      >
         <ul className='navbar-nav'>
-          <li className='nav-item'>
-            <NavLink className='nav-link hide-on-lg' id='pushmenu' to='#'>
+          <li className='nav-item hide-on-lg' onClick={handlePushMenu}>
+            <NavLink className='nav-link' to='#'>
               <i className='fas fa-bars'></i>
             </NavLink>
           </li>
@@ -40,8 +86,10 @@ const Base = ({ children }) => {
         </ul>
       </nav>
 
-      <SideBar />
-      <main className='content-wrapper px-3'>{children}</main>
+      <SideBar show={show} />
+      <main className='content-wrapper px-3' ref={contentWrapper}>
+        {children}
+      </main>
     </MainBase>
   );
 };
