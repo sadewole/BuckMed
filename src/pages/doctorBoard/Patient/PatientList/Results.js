@@ -2,20 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import {
-  Tabs,
-  Tab,
-  Card,
-  Form,
-  FormControl,
-  FormCheck,
-  Button,
-} from 'react-bootstrap';
+import { Card, Form, FormControl, Button } from 'react-bootstrap';
 import Avatar from 'src/components/Avatar';
 import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 import {
-  Edit as EditIcon,
-  ArrowRight as ArrowRightIcon,
   Search as SearchIcon,
   MoreHorizontal as MoreHorizontalIcon,
 } from 'react-feather';
@@ -25,25 +15,6 @@ import TableRow from 'src/components/TableRow';
 import TableHead from 'src/components/TableHead';
 import TableBody from 'src/components/TableBody';
 import Checkbox from 'src/components/Checkbox';
-
-const tabs = [
-  {
-    value: 'all',
-    label: 'All',
-  },
-  {
-    value: 'hasAcceptedMarketing',
-    label: 'Accepts Marketing',
-  },
-  {
-    value: 'isProspect',
-    label: 'Prospect',
-  },
-  {
-    value: 'isReturning',
-    label: 'Returning',
-  },
-];
 
 const sortOptions = [
   {
@@ -64,8 +35,8 @@ const sortOptions = [
   },
 ];
 
-const applyFilters = (doctors, query, filters) => {
-  return doctors.filter((doctor) => {
+const applyFilters = (patients, query, filters) => {
+  return patients.filter((patient) => {
     let matches = true;
 
     if (query) {
@@ -73,7 +44,7 @@ const applyFilters = (doctors, query, filters) => {
       let containsQuery = false;
 
       properties.forEach((property) => {
-        if (doctor[property].toLowerCase().includes(query.toLowerCase())) {
+        if (patient[property].toLowerCase().includes(query.toLowerCase())) {
           containsQuery = true;
         }
       });
@@ -86,7 +57,7 @@ const applyFilters = (doctors, query, filters) => {
     Object.keys(filters).forEach((key) => {
       const value = filters[key];
 
-      if (value && doctor[key] !== value) {
+      if (value && patient[key] !== value) {
         matches = false;
       }
     });
@@ -95,8 +66,8 @@ const applyFilters = (doctors, query, filters) => {
   });
 };
 
-const applyPagination = (doctors, page, limit) => {
-  return doctors.slice(page * limit, page * limit + limit);
+const applyPagination = (patients, page, limit) => {
+  return patients.slice(page * limit, page * limit + limit);
 };
 
 const descendingComparator = (a, b, orderBy) => {
@@ -117,10 +88,10 @@ const getComparator = (order, orderBy) => {
     : (a, b) => -descendingComparator(a, b, orderBy);
 };
 
-const applySort = (doctors, sort) => {
+const applySort = (patients, sort) => {
   const [orderBy, order] = sort.split('|');
   const comparator = getComparator(order, orderBy);
-  const stabilizedThis = doctors.map((el, index) => [el, index]);
+  const stabilizedThis = patients.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -155,9 +126,8 @@ const classes = {
   },
 };
 
-const Results = ({ className, doctors, ...rest }) => {
-  const [currentTab, setCurrentTab] = useState('all');
-  const [selectedDoctors, setSelectedDoctors] = useState([]);
+const Results = ({ className, patients, ...rest }) => {
+  const [selectedPatients, setSelectedPatients] = useState([]);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState('');
@@ -181,8 +151,7 @@ const Results = ({ className, doctors, ...rest }) => {
     }
 
     setFilters(updatedFilters);
-    setSelectedDoctors([]);
-    setCurrentTab(value);
+    setSelectedPatients([]);
   };
 
   const handleQueryChange = (event) => {
@@ -195,16 +164,16 @@ const Results = ({ className, doctors, ...rest }) => {
     setSort(event.target.value);
   };
 
-  const handleSelectAllDoctors = (event) => {
-    setSelectedDoctors(event ? doctors.map((doctor) => doctor.id) : []);
+  const handleSelectAllPatients = (event) => {
+    setSelectedPatients(event ? patients.map((patient) => patient.id) : []);
   };
 
-  const handleSelectOneDoctor = (event, doctorId) => {
-    if (!selectedDoctors.includes(doctorId)) {
-      setSelectedDoctors((prevSelected) => [...prevSelected, doctorId]);
+  const handleSelectOnePatient = (event, patientId) => {
+    if (!selectedPatients.includes(patientId)) {
+      setSelectedPatients((prevSelected) => [...prevSelected, patientId]);
     } else {
-      setSelectedDoctors((prevSelected) =>
-        prevSelected.filter((id) => id !== doctorId)
+      setSelectedPatients((prevSelected) =>
+        prevSelected.filter((id) => id !== patientId)
       );
     }
   };
@@ -217,26 +186,16 @@ const Results = ({ className, doctors, ...rest }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredDoctors = applyFilters(doctors, query, filters);
-  const sortedDoctors = applySort(filteredDoctors, sort);
-  const paginatedDoctors = applyPagination(sortedDoctors, page, limit);
-  const enableBulkOperations = selectedDoctors.length > 0;
-  const selectedSomeDoctors =
-    selectedDoctors.length > 0 && selectedDoctors.length < doctors.length;
-  const selectedAllDoctors = selectedDoctors.length === doctors.length;
+  const filteredPatients = applyFilters(patients, query, filters);
+  const sortedPatients = applySort(filteredPatients, sort);
+  const paginatedPatients = applyPagination(sortedPatients, page, limit);
+  const enableBulkOperations = selectedPatients.length > 0;
+  const selectedSomepatients =
+    selectedPatients.length > 0 && selectedPatients.length < patients.length;
+  const selectedAllPatients = selectedPatients.length === patients.length;
 
   return (
     <Card className='overflow-hidden' style={{ borderRadius: '.5rem' }}>
-      <Tabs
-        onSelect={handleTabsChange}
-        className='text-secondary px-2'
-        activeKey={currentTab}
-        variant='tabs'
-      >
-        {tabs.map((tab) => (
-          <Tab key={tab.value} eventKey={tab.value} title={tab.label} />
-        ))}
-      </Tabs>
       <div
         style={{ minHeight: '56px' }}
         className='d-flex align-items-center justify-content-between p-2 flex-wrap'
@@ -249,7 +208,7 @@ const Results = ({ className, doctors, ...rest }) => {
           <FormControl
             className='borderless unfocus'
             onChange={handleQueryChange}
-            placeholder='Search doctors'
+            placeholder='Search patients'
             value={query}
             variant='outlined'
           />
@@ -277,9 +236,9 @@ const Results = ({ className, doctors, ...rest }) => {
         <div className={classes.bulkOperations}>
           <div className={classes.bulkActions}>
             <Checkbox
-              checked={selectedAllDoctors}
-              indeterminate={selectedSomeDoctors}
-              onChange={handleSelectAllDoctors}
+              checked={selectedAllPatients}
+              indeterminate={selectedSomepatients}
+              onChange={handleSelectAllPatients}
             />
             <Button variant='outlined' className={classes.bulkAction}>
               Delete
@@ -297,32 +256,34 @@ const Results = ({ className, doctors, ...rest }) => {
               <TableRow>
                 <TableCell padding='checkbox'>
                   <Checkbox
-                    checked={selectedAllDoctors}
-                    indeterminate={selectedSomeDoctors}
-                    onChange={(e) => handleSelectAllDoctors(e)}
+                    checked={selectedAllPatients}
+                    indeterminate={selectedSomepatients}
+                    onChange={(e) => handleSelectAllPatients(e)}
                   />
                 </TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Gender</TableCell>
-                <TableCell>Specialization</TableCell>
-                <TableCell>Email</TableCell>
+                <TableCell>Diagnose</TableCell>
+                <TableCell>Phone</TableCell>
                 <TableCell>Address</TableCell>
+                <TableCell>Blood</TableCell>
+                <TableCell>Date of Birth</TableCell>
                 <TableCell align='right'></TableCell>
               </TableRow>
             </TableHead>
             <TableBody fontWeight='400'>
-              {paginatedDoctors.map((doctor) => {
-                const isDoctorSelected = selectedDoctors.includes(doctor.id);
+              {paginatedPatients.map((doctor) => {
+                const isPatientSelected = selectedPatients.includes(doctor.id);
 
                 return (
-                  <TableRow hover key={doctor.id} selected={isDoctorSelected}>
+                  <TableRow hover key={doctor.id} selected={isPatientSelected}>
                     <TableCell padding='checkbox'>
                       <Checkbox
-                        checked={isDoctorSelected}
+                        checked={isPatientSelected}
                         onChange={(event) =>
-                          handleSelectOneDoctor(event, doctor.id)
+                          handleSelectOnePatient(event, doctor.id)
                         }
-                        value={isDoctorSelected}
+                        value={isPatientSelected}
                       />
                     </TableCell>
                     <TableCell>
@@ -330,16 +291,13 @@ const Results = ({ className, doctors, ...rest }) => {
                       {doctor.firstName} {doctor.lastName}
                     </TableCell>
                     <TableCell>{doctor.gender}</TableCell>
-                    <TableCell>{doctor.specialization}</TableCell>
-                    <TableCell>{doctor.email}</TableCell>
+                    <TableCell>{doctor.diagnosis}</TableCell>
+                    <TableCell>{doctor.phone}</TableCell>
                     <TableCell>{doctor.address}</TableCell>
+                    <TableCell>{doctor.blood}</TableCell>
+                    <TableCell>{doctor.dob}</TableCell>
                     <TableCell align='right'>
-                      <Link to='/doctor/management/all'>
-                        <Button variant='primary' className='mr-2'>
-                          Appointment
-                        </Button>
-                      </Link>
-                      <Link to='/doctor/management/all'>
+                      <Link to='/doctor/management/patients'>
                         <MoreHorizontalIcon fontSize='small' />
                       </Link>
                     </TableCell>
@@ -356,11 +314,11 @@ const Results = ({ className, doctors, ...rest }) => {
 
 Results.propTypes = {
   className: PropTypes.string,
-  doctors: PropTypes.array.isRequired,
+  patients: PropTypes.array.isRequired,
 };
 
 Results.defaultProps = {
-  doctors: [],
+  patients: [],
 };
 
 export default Results;
