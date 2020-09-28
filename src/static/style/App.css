@@ -500,3 +500,34 @@ a:hover {
 .admin--welcome-message p {
   font-size: 1rem;
 }
+
+.not-found {
+  min-height: '100%';
+  display: 'flex';
+  align-items: 'center';
+  padding: 3rem;
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+
+.not-found img {
+  max-width: 100%;
+  width: 560px;
+  max-height: 500px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 600px) {
+  .not-found {
+    padding: 1rem;
+    padding-top: 70px;
+  }
+
+  .not-found h1 {
+    font-size: larger;
+  }
+  .not-found p {
+    font-size: small;
+  }
+}
