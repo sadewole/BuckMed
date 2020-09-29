@@ -76,7 +76,9 @@ const routes = [
       {
         exact: true,
         path: '/doctor/management/patients',
-        component: lazy(() => import('src/pages/doctorBoard/Patient')),
+        component: lazy(() =>
+          import('src/pages/doctorBoard/Patient/PatientList')
+        ),
       },
       {
         exact: true,

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Tabs, Tab, Card, FormControl, Button } from 'react-bootstrap';
+import { Card, FormControl, Button } from 'react-bootstrap';
 import Avatar from 'src/components/Avatar';
 import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 import {
@@ -13,25 +13,6 @@ import Table from 'src/components/Table';
 import TableCell from 'src/components/TableCell';
 import TableRow from 'src/components/TableRow';
 import Checkbox from 'src/components/Checkbox';
-
-const tabs = [
-  {
-    value: 'all',
-    label: 'All',
-  },
-  {
-    value: 'hasAcceptedMarketing',
-    label: 'Accepts Marketing',
-  },
-  {
-    value: 'isProspect',
-    label: 'Prospect',
-  },
-  {
-    value: 'isReturning',
-    label: 'Returning',
-  },
-];
 
 const sortOptions = [
   {
@@ -52,16 +33,16 @@ const sortOptions = [
   },
 ];
 
-const applyFilters = (doctors, query, filters) => {
-  return doctors.filter((doctor) => {
+const applyFilters = (patients, query, filters) => {
+  return patients.filter((patient) => {
     let matches = true;
 
     if (query) {
-      const properties = ['email', 'firstName', 'lastName'];
+      const properties = ['firstName', 'lastName'];
       let containsQuery = false;
 
       properties.forEach((property) => {
-        if (doctor[property].toLowerCase().includes(query.toLowerCase())) {
+        if (patient[property].toLowerCase().includes(query.toLowerCase())) {
           containsQuery = true;
         }
       });
@@ -71,20 +52,12 @@ const applyFilters = (doctors, query, filters) => {
       }
     }
 
-    Object.keys(filters).forEach((key) => {
-      const value = filters[key];
-
-      if (value && doctor[key] !== value) {
-        matches = false;
-      }
-    });
-
     return matches;
   });
 };
 
-const applyPagination = (doctors, page, limit) => {
-  return doctors.slice(page * limit, page * limit + limit);
+const applyPagination = (patients, page, limit) => {
+  return patients.slice(page * limit, page * limit + limit);
 };
 
 const descendingComparator = (a, b, orderBy) => {
@@ -105,14 +78,13 @@ const getComparator = (order, orderBy) => {
     : (a, b) => -descendingComparator(a, b, orderBy);
 };
 
-const applySort = (doctors, sort) => {
+const applySort = (patients, sort) => {
   const [orderBy, order] = sort.split('|');
   const comparator = getComparator(order, orderBy);
-  const stabilizedThis = doctors.map((el, index) => [el, index]);
+  const stabilizedThis = patients.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
-
     if (order !== 0) return order;
 
     return a[1] - b[1];
@@ -121,59 +93,22 @@ const applySort = (doctors, sort) => {
   return stabilizedThis.map((el) => el[0]);
 };
 
-const classes = {
-  root: {},
-  queryField: {
-    width: '500px',
-  },
-  bulkOperations: {
-    position: 'relative',
-  },
-  bulkActions: {
-    paddingLeft: 4,
-    paddingRight: 4,
-    marginTop: 6,
-    position: 'absolute',
-    width: '100%',
-    zIndex: 2,
-    // backgroundColor: theme.palette.background.default,
-  },
-  bulkAction: {
-    marginLeft: 2,
-  },
-};
-
-const Results = ({ className, doctors, ...rest }) => {
-  const [currentTab, setCurrentTab] = useState('all');
-  const [selectedDoctors, setSelectedDoctors] = useState([]);
+const Results = ({ className, patients, ...rest }) => {
+  const [selectedPatients, setSelectedPatients] = useState([]);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState(sortOptions[0].value);
-  const [filters, setFilters] = useState({
-    hasAcceptedMarketing: null,
-    isProspect: null,
-    isReturning: null,
-  });
-
-  const header = ['Name', 'Gender', 'Specialiazation', 'Email', 'Address', ''];
-
-  const handleTabsChange = (value) => {
-    const updatedFilters = {
-      ...filters,
-      hasAcceptedMarketing: null,
-      isProspect: null,
-      isReturning: null,
-    };
-
-    if (value !== 'all') {
-      updatedFilters[value] = true;
-    }
-
-    setFilters(updatedFilters);
-    setSelectedDoctors([]);
-    setCurrentTab(value);
-  };
+  const header = [
+    'Name',
+    'Gender',
+    'Diagnosis',
+    'Phone',
+    'Address',
+    'Blood',
+    'Date of Birth',
+    '',
+  ];
 
   const handleQueryChange = (event) => {
     event.persist();
@@ -185,12 +120,12 @@ const Results = ({ className, doctors, ...rest }) => {
     setSort(event.target.value);
   };
 
-  const handleSelectOneDoctor = (event, doctorId) => {
-    if (!selectedDoctors.includes(doctorId)) {
-      setSelectedDoctors((prevSelected) => [...prevSelected, doctorId]);
+  const handleSelected = (event, patientId) => {
+    if (!selectedPatients.includes(patientId)) {
+      setSelectedPatients((prevSelected) => [...prevSelected, patientId]);
     } else {
-      setSelectedDoctors((prevSelected) =>
-        prevSelected.filter((id) => id !== doctorId)
+      setSelectedPatients((prevSelected) =>
+        prevSelected.filter((id) => id !== patientId)
       );
     }
   };
@@ -203,26 +138,16 @@ const Results = ({ className, doctors, ...rest }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredDoctors = applyFilters(doctors, query, filters);
-  const sortedDoctors = applySort(filteredDoctors, sort);
-  const paginatedDoctors = applyPagination(sortedDoctors, page, limit);
-  const enableBulkOperations = selectedDoctors.length > 0;
-  const selectedSomeDoctors =
-    selectedDoctors.length > 0 && selectedDoctors.length < doctors.length;
-  const selectedAllDoctors = selectedDoctors.length === doctors.length;
+  const filteredPatients = applyFilters(patients, query);
+  const sortedPatients = applySort(filteredPatients, sort);
+  const paginatedPatients = applyPagination(sortedPatients, page, limit);
+  const enableBulkOperations = selectedPatients.length > 0;
+  const selectedSomepatients =
+    selectedPatients.length > 0 && selectedPatients.length < patients.length;
+  const selectedAllPatients = selectedPatients.length === patients.length;
 
   return (
     <Card className='overflow-hidden' style={{ borderRadius: '.5rem' }}>
-      <Tabs
-        onSelect={handleTabsChange}
-        className='text-secondary px-2'
-        activeKey={currentTab}
-        variant='tabs'
-      >
-        {tabs.map((tab) => (
-          <Tab key={tab.value} eventKey={tab.value} title={tab.label} />
-        ))}
-      </Tabs>
       <div
         style={{ minHeight: '56px' }}
         className='d-flex align-items-center justify-content-between p-2 flex-wrap'
@@ -235,7 +160,7 @@ const Results = ({ className, doctors, ...rest }) => {
           <FormControl
             className='borderless unfocus'
             onChange={handleQueryChange}
-            placeholder='Search doctors'
+            placeholder='Search patients'
             value={query}
             variant='outlined'
           />
@@ -264,40 +189,37 @@ const Results = ({ className, doctors, ...rest }) => {
           <Table
             header={header}
             checkbox
+            selectedSome={selectedSomepatients}
             selected={(e) =>
-              setSelectedDoctors(e ? doctors.map((doctor) => doctor.id) : [])
+              setSelectedPatients(
+                e ? patients.map((patient) => patient.id) : []
+              )
             }
-            selectedSome={selectedSomeDoctors}
           >
-            {sortedDoctors.map((doctor) => {
-              const isDoctorSelected = selectedDoctors.includes(doctor.id);
+            {sortedPatients.map((patient) => {
+              const isPatientSelected = selectedPatients.includes(patient.id);
 
               return (
-                <TableRow hover key={doctor.id} selected={isDoctorSelected}>
+                <TableRow hover key={patient.id} selected={isPatientSelected}>
                   <TableCell padding='checkbox'>
                     <Checkbox
-                      checked={isDoctorSelected}
-                      onChange={(event) =>
-                        handleSelectOneDoctor(event, doctor.id)
-                      }
-                      value={isDoctorSelected}
+                      checked={isPatientSelected}
+                      onChange={(event) => handleSelected(event, patient.id)}
+                      value={isPatientSelected}
                     />
                   </TableCell>
                   <TableCell>
-                    <Avatar img={doctor.avatar} className='mr-2' />
-                    {doctor.firstName} {doctor.lastName}
+                    <Avatar img={patient.avatar} className='mr-2' />
+                    {patient.firstName} {patient.lastName}
                   </TableCell>
-                  <TableCell>{doctor.gender}</TableCell>
-                  <TableCell>{doctor.specialization}</TableCell>
-                  <TableCell>{doctor.email}</TableCell>
-                  <TableCell>{doctor.address}</TableCell>
+                  <TableCell>{patient.gender}</TableCell>
+                  <TableCell>{patient.diagnosis}</TableCell>
+                  <TableCell>{patient.phone}</TableCell>
+                  <TableCell>{patient.address}</TableCell>
+                  <TableCell>{patient.blood}</TableCell>
+                  <TableCell>{patient.dob}</TableCell>
                   <TableCell align='right'>
-                    <Link to='/doctor/management/all'>
-                      <Button variant='primary' className='mr-2'>
-                        Appointment
-                      </Button>
-                    </Link>
-                    <Link to='/doctor/management/all'>
+                    <Link to='/doctor/management/patients'>
                       <MoreHorizontalIcon fontSize='small' />
                     </Link>
                   </TableCell>
@@ -313,11 +235,11 @@ const Results = ({ className, doctors, ...rest }) => {
 
 Results.propTypes = {
   className: PropTypes.string,
-  doctors: PropTypes.array.isRequired,
+  patients: PropTypes.array.isRequired,
 };
 
 Results.defaultProps = {
-  doctors: [],
+  patients: [],
 };
 
 export default Results;

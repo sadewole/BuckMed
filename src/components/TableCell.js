@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const TableColumn = ({ children, padding }) => {
+const TableCell = ({ children, padding }) => {
   return padding === 'checkbox' ? (
     <Cell style={{ width: '25px' }}>{children}</Cell>
   ) : (
@@ -28,6 +28,6 @@ const Cell = styled.div`
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 `;
 
-TableColumn.propTypes = {};
+TableCell.propTypes = {};
 
-export default TableColumn;
+export default TableCell;
