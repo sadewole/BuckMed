@@ -138,13 +138,18 @@ const Results = ({ className, patients, ...rest }) => {
     setLimit(parseInt(event.target.value));
   };
 
+  const rowSelection = {
+    selectedSome:
+      selectedPatients.length > 0 && selectedPatients.length < patients.length,
+    selectedAllData: selectedPatients.length === patients.length,
+    onSelect: (e) =>
+      setSelectedPatients(e ? patients.map((patient) => patient.id) : []),
+  };
+
   const filteredPatients = applyFilters(patients, query);
   const sortedPatients = applySort(filteredPatients, sort);
   const paginatedPatients = applyPagination(sortedPatients, page, limit);
   const enableBulkOperations = selectedPatients.length > 0;
-  const selectedSomepatients =
-    selectedPatients.length > 0 && selectedPatients.length < patients.length;
-  const selectedAllPatients = selectedPatients.length === patients.length;
 
   return (
     <Card className='overflow-hidden' style={{ borderRadius: '.5rem' }}>
@@ -186,16 +191,7 @@ const Results = ({ className, patients, ...rest }) => {
       </div>
       <HorizontalScrollbar>
         <div style={{ minWidth: '700px' }}>
-          <Table
-            header={header}
-            checkbox
-            selectedSome={selectedSomepatients}
-            selected={(e) =>
-              setSelectedPatients(
-                e ? patients.map((patient) => patient.id) : []
-              )
-            }
-          >
+          <Table header={header} rowSelection={rowSelection} checkbox>
             {sortedPatients.map((patient) => {
               const isPatientSelected = selectedPatients.includes(patient.id);
 
