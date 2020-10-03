@@ -71,7 +71,9 @@ const routes = [
       {
         exact: true,
         path: '/doctor/appointment',
-        component: lazy(() => import('src/pages/doctorBoard/Appointment')),
+        component: lazy(() =>
+          import('src/pages/doctorBoard/Appointment/Calendar')
+        ),
       },
       {
         exact: true,

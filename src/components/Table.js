@@ -72,6 +72,10 @@ const TableHead = styled.div`
   letter-spacing: 0.09px;
   //   color: #bcbec0;
   text-transform: uppercase;
+
+  div {
+    font-weight: bold;
+  }
 `;
 
 const TableBody = styled.div`

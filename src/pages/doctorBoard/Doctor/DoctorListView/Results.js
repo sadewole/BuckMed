@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Tabs, Tab, Card, FormControl, Button } from 'react-bootstrap';
+import { Card, FormControl, Button } from 'react-bootstrap';
+import { Tabs, Tab, Paper } from '@material-ui/core';
 import Avatar from 'src/components/Avatar';
 import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 import {
@@ -121,28 +122,6 @@ const applySort = (doctors, sort) => {
   return stabilizedThis.map((el) => el[0]);
 };
 
-const classes = {
-  root: {},
-  queryField: {
-    width: '500px',
-  },
-  bulkOperations: {
-    position: 'relative',
-  },
-  bulkActions: {
-    paddingLeft: 4,
-    paddingRight: 4,
-    marginTop: 6,
-    position: 'absolute',
-    width: '100%',
-    zIndex: 2,
-    // backgroundColor: theme.palette.background.default,
-  },
-  bulkAction: {
-    marginLeft: 2,
-  },
-};
-
 const Results = ({ className, doctors, ...rest }) => {
   const [currentTab, setCurrentTab] = useState('all');
   const [selectedDoctors, setSelectedDoctors] = useState([]);
@@ -158,7 +137,7 @@ const Results = ({ className, doctors, ...rest }) => {
 
   const header = ['Name', 'Gender', 'Specialiazation', 'Email', 'Address', ''];
 
-  const handleTabsChange = (value) => {
+  const handleTabsChange = (event, value) => {
     const updatedFilters = {
       ...filters,
       hasAcceptedMarketing: null,
@@ -218,16 +197,20 @@ const Results = ({ className, doctors, ...rest }) => {
 
   return (
     <Card className='overflow-hidden' style={{ borderRadius: '.5rem' }}>
-      <Tabs
-        onSelect={handleTabsChange}
-        className='text-secondary px-2'
-        activeKey={currentTab}
-        variant='tabs'
-      >
-        {tabs.map((tab) => (
-          <Tab key={tab.value} eventKey={tab.value} title={tab.label} />
-        ))}
-      </Tabs>
+      <Paper>
+        <Tabs
+          onChange={handleTabsChange}
+          scrollButtons='auto'
+          indicatorColor='primary'
+          textColor='primary'
+          value={currentTab}
+          variant='scrollable'
+        >
+          {tabs.map((tab) => (
+            <Tab key={tab.value} value={tab.value} label={tab.label} />
+          ))}
+        </Tabs>
+      </Paper>
       <div
         style={{ minHeight: '56px' }}
         className='d-flex align-items-center justify-content-between p-2 flex-wrap'
