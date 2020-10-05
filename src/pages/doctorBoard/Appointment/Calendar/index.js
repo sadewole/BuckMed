@@ -14,6 +14,16 @@ import timelinePlugin from '@fullcalendar/timeline';
 import Page from 'src/components/Page';
 import { Container } from 'react-bootstrap';
 import { Paper, makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import {
+  getEvents,
+  updateEvent,
+  selectEvent,
+  selectRange,
+  openModal,
+  closeModal,
+} from 'src/slices/calendar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -107,22 +117,27 @@ const useStyles = makeStyles((theme) => ({
 
 const Calendar = (props) => {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'));
   const [date, setDate] = useState(moment().toDate());
-  const [view, setView] = useState(
-    mobileDevice ? 'dayGridWeek' : 'dayGridMonth'
-  );
+  const [view, setView] = useState();
   const calendarRef = useRef(null);
   const classes = useStyles();
+  const { events, isModalOpen, selectedRange } = useSelector(
+    (state) => state.calendar
+  );
+
+  useEffect(() => {
+    dispatch(getEvents());
+  }, [dispatch]);
 
   useEffect(() => {
     const calendarEl = calendarRef.current;
-
     if (calendarEl) {
-      //  const calendarApi = calendarEl.getApi();
-      const newView = mobileDevice ? 'dayGridWeek' : 'dayGridMonth';
+      const calendarApi = calendarEl.getApi();
+      const newView = mobileDevice ? 'listWeek' : 'dayGridMonth';
 
-      //  calendarApi.changeView(newView);
+      calendarApi.changeView(newView);
       setView(newView);
     }
   }, [mobileDevice]);
@@ -130,20 +145,11 @@ const Calendar = (props) => {
   return (
     <Page title='Calendar'>
       <Container fluid>
-        {/*  <Toolbar
-          date={date}
-          onDateNext={handleDateNext}
-          onDatePrev={handleDatePrev}
-          onDateToday={handleDateToday}
-          onViewChange={handleViewChange}
-          view={view}
-      /> */}
         <Paper className={classes.calendar}>
           <FullCalendar
             allDayMaintainDuration
             defaultDate={date}
             defaultView={view}
-            initialView='listWeek'
             droppable
             editable
             // eventClick={handleEventSelect}
@@ -151,7 +157,7 @@ const Calendar = (props) => {
             eventLimit
             eventResizableFromStart
             // eventResize={handleEventResize}
-            // events={events}
+            events={events}
             header={false}
             height={800}
             ref={calendarRef}
