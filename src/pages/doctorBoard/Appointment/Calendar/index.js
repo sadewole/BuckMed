@@ -135,7 +135,7 @@ const Calendar = (props) => {
     const calendarEl = calendarRef.current;
     if (calendarEl) {
       const calendarApi = calendarEl.getApi();
-      const newView = mobileDevice ? 'listWeek' : 'dayGridMonth';
+      const newView = mobileDevice ? 'dayGridWeek' : 'dayGridMonth';
 
       calendarApi.changeView(newView);
       setView(newView);

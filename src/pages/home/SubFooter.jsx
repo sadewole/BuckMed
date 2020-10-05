@@ -5,10 +5,10 @@ const SubFooter = () => (
     <div className='testmonial_area'>
       <div className='container-fluid overlay'>
         <div className='row h-100'>
-          <div className='col-xl-10 offset-xl-1'>
+          <div className='col-xl-10 offset-xl-1' data-aos='fade-in'>
             <div className='testmonial_info text-center h-100 d-flex flex-column align-items-center justify-content-center'>
               <div className='quote'>
-                <i className="fas fa-quote-left"></i>
+                <i className='fas fa-quote-left'></i>
               </div>
               <p>
                 Donec imperdiet congue orci consequat mattis. Donec rutrum

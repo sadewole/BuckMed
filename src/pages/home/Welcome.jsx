@@ -6,7 +6,7 @@ const Welcome = () => (
   <Fragment>
     <div id='about' className='container mx-auto welcome_docmed_area p-4 mt-5'>
       <div className='row mb-4'>
-        <div className='col-xl-6 col-lg-6'>
+        <div className='col-xl-6 col-lg-6' data-aos='fade-right'>
           <div className='welcome_thumb'>
             <div className='thumb_1'>
               <img src={about1} alt='' />
@@ -16,7 +16,7 @@ const Welcome = () => (
             </div>
           </div>
         </div>
-        <div className='col-xl-6 col-lg-6'>
+        <div className='col-xl-6 col-lg-6' data-aos='fade-left'>
           <div className='welcome_docmed_info d-flex flex-column justify-content-center'>
             <h2>Welcome to BuckMed</h2>
             <h3>
@@ -48,7 +48,10 @@ const Welcome = () => (
           </div>
         </div>
       </div>
-      <div className='row align-items-center my-4 business_expert_area'>
+      <div
+        className='row align-items-center my-4 business_expert_area'
+        data-aos='fade-up'
+      >
         <div className='col-xl-6 col-md-6'>
           <div className='business_info py-4'>
             <div className='icon'>

@@ -3,9 +3,12 @@ import { NavLink } from 'react-router-dom';
 import Avatar from 'src/components/Avatar';
 import styled from 'styled-components';
 import SideBar from './sidebar';
+import { useTheme, useMediaQuery } from '@material-ui/core';
 
 const Base = ({ children }) => {
   const [show, setShow] = useState(false);
+  const theme = useTheme();
+  const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'));
 
   let layoutFixed = useRef();
   let contentWrapper = useRef();
@@ -22,26 +25,18 @@ const Base = ({ children }) => {
   };
 
   useLayoutEffect(() => {
-    setShow(true);
-    const resizeQuery = () => {
-      if (window.outerWidth < 810) {
-        setShow(false);
-        contentWrapper.current.style.marginLeft = '0px';
-        contentWrapper.current.classList.add('extend');
-        mainNavbar.current.classList.add('extend');
-      } else {
-        setShow(true);
-        contentWrapper.current.style.marginLeft = '250px';
-        contentWrapper.current.classList.remove('extend');
-        mainNavbar.current.classList.remove('extend');
-      }
-    };
-
-    // init function
-    window.addEventListener('resize', (e) => {
-      resizeQuery();
-    });
-  }, []);
+    if (mobileDevice) {
+      setShow(false);
+      contentWrapper.current.style.marginLeft = '0px';
+      contentWrapper.current.classList.add('extend');
+      mainNavbar.current.classList.add('extend');
+    } else {
+      setShow(true);
+      contentWrapper.current.style.marginLeft = '250px';
+      contentWrapper.current.classList.remove('extend');
+      mainNavbar.current.classList.remove('extend');
+    }
+  }, [mobileDevice]);
 
   return (
     <MainBase>
@@ -55,7 +50,10 @@ const Base = ({ children }) => {
         ref={mainNavbar}
       >
         <ul className='navbar-nav'>
-          <li className='nav-item hide-on-lg' onClick={handlePushMenu}>
+          <li
+            className={`nav-item ${!mobileDevice && 'display-none'}`}
+            onClick={handlePushMenu}
+          >
             <NavLink className='nav-link' to='#'>
               <i className='fas fa-bars'></i>
             </NavLink>

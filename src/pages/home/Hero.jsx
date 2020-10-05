@@ -9,7 +9,7 @@ const Hero = () => {
           <div className='container'>
             <div className='row'>
               <div className='col-xl-12'>
-                <div className='hero_text'>
+                <div className='hero_text' data-aos='fade-up'>
                   <span className='text-uppercase  display-4'>
                     the best medical center
                   </span>
