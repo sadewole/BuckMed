@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Row } from 'react-bootstrap';
-import { PlusCircle as PlusCircleIcon } from 'react-feather';
+import { InlineIcon } from '@iconify/react';
+import plusCircle from '@iconify/icons-fa-solid/plus-circle';
 
 const Header = ({ className, ...rest }) => {
   return (
@@ -11,7 +12,7 @@ const Header = ({ className, ...rest }) => {
       </Row>
       <Row>
         <Button variant='primary'>
-          <PlusCircleIcon className='mr-1' />
+          <InlineIcon icon={plusCircle} className='mr-1' />
           New Doctor
         </Button>
       </Row>
