@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Card, FormControl, Button } from 'react-bootstrap';
+import { Card, FormControl, Dropdown, ButtonGroup } from 'react-bootstrap';
+import { Tabs, Tab, Paper } from '@material-ui/core';
 import Avatar from 'src/components/Avatar';
 import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 import {
@@ -13,6 +14,25 @@ import Table from 'src/components/Table';
 import TableCell from 'src/components/TableCell';
 import TableRow from 'src/components/TableRow';
 import Checkbox from 'src/components/Checkbox';
+
+const tabs = [
+  {
+    value: 'all',
+    label: 'All',
+  },
+  {
+    value: 'hasAcceptedMarketing',
+    label: 'Accepts Marketing',
+  },
+  {
+    value: 'isProspect',
+    label: 'Prospect',
+  },
+  {
+    value: 'isReturning',
+    label: 'Returning',
+  },
+];
 
 const sortOptions = [
   {
@@ -51,6 +71,14 @@ const applyFilters = (patients, query, filters) => {
         matches = false;
       }
     }
+
+    Object.keys(filters).forEach((key) => {
+      const value = filters[key];
+
+      if (value && patient[key] !== value) {
+        matches = false;
+      }
+    });
 
     return matches;
   });
@@ -93,12 +121,19 @@ const applySort = (patients, sort) => {
   return stabilizedThis.map((el) => el[0]);
 };
 
-const Results = ({ className, patients, ...rest }) => {
+const Results = ({ className, patients }) => {
+  const [currentTab, setCurrentTab] = useState('all');
   const [selectedPatients, setSelectedPatients] = useState([]);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState(sortOptions[0].value);
+  const [filters, setFilters] = useState({
+    hasAcceptedMarketing: null,
+    isProspect: null,
+    isReturning: null,
+  });
+
   const header = [
     'Name',
     'Gender',
@@ -109,6 +144,23 @@ const Results = ({ className, patients, ...rest }) => {
     'Date of Birth',
     '',
   ];
+
+  const handleTabsChange = (event, value) => {
+    const updatedFilters = {
+      ...filters,
+      hasAcceptedMarketing: null,
+      isProspect: null,
+      isReturning: null,
+    };
+
+    if (value !== 'all') {
+      updatedFilters[value] = true;
+    }
+
+    setFilters(updatedFilters);
+    setSelectedPatients([]);
+    setCurrentTab(value);
+  };
 
   const handleQueryChange = (event) => {
     event.persist();
@@ -138,16 +190,35 @@ const Results = ({ className, patients, ...rest }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredPatients = applyFilters(patients, query);
+  const rowSelection = {
+    selectedSome:
+      selectedPatients.length > 0 && selectedPatients.length < patients.length,
+    selectedAllData: selectedPatients.length === patients.length,
+    onSelect: (e) =>
+      setSelectedPatients(e ? patients.map((patient) => patient.id) : []),
+  };
+
+  const filteredPatients = applyFilters(patients, query, filters);
   const sortedPatients = applySort(filteredPatients, sort);
   const paginatedPatients = applyPagination(sortedPatients, page, limit);
   const enableBulkOperations = selectedPatients.length > 0;
-  const selectedSomepatients =
-    selectedPatients.length > 0 && selectedPatients.length < patients.length;
-  const selectedAllPatients = selectedPatients.length === patients.length;
 
   return (
     <Card className='overflow-hidden' style={{ borderRadius: '.5rem' }}>
+      <Paper>
+        <Tabs
+          onChange={handleTabsChange}
+          scrollButtons='auto'
+          indicatorColor='primary'
+          textColor='primary'
+          value={currentTab}
+          variant='scrollable'
+        >
+          {tabs.map((tab) => (
+            <Tab key={tab.value} value={tab.value} label={tab.label} />
+          ))}
+        </Tabs>
+      </Paper>
       <div
         style={{ minHeight: '56px' }}
         className='d-flex align-items-center justify-content-between p-2 flex-wrap'
@@ -186,16 +257,7 @@ const Results = ({ className, patients, ...rest }) => {
       </div>
       <HorizontalScrollbar>
         <div style={{ minWidth: '700px' }}>
-          <Table
-            header={header}
-            checkbox
-            selectedSome={selectedSomepatients}
-            selected={(e) =>
-              setSelectedPatients(
-                e ? patients.map((patient) => patient.id) : []
-              )
-            }
-          >
+          <Table header={header} rowSelection={rowSelection} checkbox>
             {sortedPatients.map((patient) => {
               const isPatientSelected = selectedPatients.includes(patient.id);
 
@@ -219,9 +281,19 @@ const Results = ({ className, patients, ...rest }) => {
                   <TableCell>{patient.blood}</TableCell>
                   <TableCell>{patient.dob}</TableCell>
                   <TableCell align='right'>
-                    <Link to='/doctor/management/patients'>
-                      <MoreHorizontalIcon fontSize='small' />
-                    </Link>
+                    <Dropdown as={ButtonGroup}>
+                      <Dropdown.Toggle
+                        as={MoreHorizontalIcon}
+                        variant='link'
+                        className='cursor-pointer'
+                      />
+
+                      <Dropdown.Menu>
+                        <Dropdown.Item>View</Dropdown.Item>
+                        <Dropdown.Item>Edit</Dropdown.Item>
+                        <Dropdown.Item>Delete</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </TableCell>
                 </TableRow>
               );

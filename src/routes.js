@@ -71,13 +71,22 @@ const routes = [
       {
         exact: true,
         path: '/doctor/appointment',
-        component: lazy(() => import('src/pages/doctorBoard/Appointment')),
+        component: lazy(() =>
+          import('src/pages/doctorBoard/Appointment/Calendar')
+        ),
       },
       {
         exact: true,
         path: '/doctor/management/patients',
         component: lazy(() =>
           import('src/pages/doctorBoard/Patient/PatientList')
+        ),
+      },
+      {
+        exact: true,
+        path: '/doctor/management/patients/new',
+        component: lazy(() =>
+          import('src/pages/doctorBoard/Patient/PatientForm')
         ),
       },
       {

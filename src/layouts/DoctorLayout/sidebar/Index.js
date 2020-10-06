@@ -3,23 +3,34 @@ import PropTypes from 'prop-types';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import clsx from 'clsx';
-import {
-  Briefcase as BriefcaseIcon,
-  Calendar as CalendarIcon,
-  Folder as FolderIcon,
-  BarChart as BarChartIcon,
-  Lock as LockIcon,
-  UserPlus as UserPlusIcon,
-  AlertCircle as AlertCircleIcon,
-  User as UserIcon,
-  Layout as LayoutIcon,
-  Edit as EditIcon,
-  DollarSign as DollarSignIcon,
-  MessageCircle as MessageCircleIcon,
-  PieChart as PieChartIcon,
-  Share2 as ShareIcon,
-  Users as UsersIcon,
-} from 'react-feather';
+import doctorIcon from '@iconify/icons-fa-solid/user-md';
+import pieChartIcon from '@iconify/icons-fa-solid/chart-pie';
+import messageCircleIcon from '@iconify/icons-fa-solid/comment';
+import briefcaseMedicalIcon from '@iconify/icons-fa-solid/briefcase-medical';
+import calendarIcon from '@iconify/icons-fa-solid/calendar-plus';
+import userIcon from '@iconify/icons-fa-solid/user-alt';
+import priceTagIcon from '@iconify/icons-fa-solid/tags';
+import patientIcon from '@iconify-icons/medical-icon/i-outpatient';
+import labRecordIcon from '@iconify-icons/medical-icon/i-medical-records';
+import fileInvoiceIcon from '@iconify/icons-fa-solid/file-invoice-dollar';
+
+// import {
+//   Briefcase as BriefcaseIcon,
+//   Calendar as CalendarIcon,
+//   Folder as FolderIcon,
+//   BarChart as BarChartIcon,
+//   Lock as LockIcon,
+//   UserPlus as UserPlusIcon,
+//   AlertCircle as AlertCircleIcon,
+//   User as UserIcon,
+//   Layout as LayoutIcon,
+//   Edit as EditIcon,
+//   DollarSign as DollarSignIcon,
+//   MessageCircle as MessageCircleIcon,
+//   PieChart as PieChartIcon,
+//   Share2 as ShareIcon,
+//   Users as UsersIcon,
+// } from 'react-feather';
 import { Card, ListGroup } from 'react-bootstrap';
 import NavItem from './NavItem';
 import Avatar from 'src/components/Avatar';
@@ -30,7 +41,7 @@ const sections = [
     items: [
       {
         title: 'Dashboard',
-        icon: PieChartIcon,
+        icon: pieChartIcon,
         href: '/doctor/dashboard',
       },
     ],
@@ -40,17 +51,17 @@ const sections = [
     items: [
       {
         title: 'Doctors',
-        icon: UsersIcon,
+        icon: doctorIcon,
         href: '/doctor/management/all',
       },
       {
         title: 'Patients',
-        icon: UsersIcon,
+        icon: patientIcon,
         href: '/doctor/management/patients',
       },
       {
         title: 'Lab. Records',
-        icon: FolderIcon,
+        icon: labRecordIcon,
         href: '/doctor/management/records',
         items: [
           {
@@ -65,7 +76,7 @@ const sections = [
       },
       {
         title: 'Finances',
-        icon: FolderIcon,
+        icon: fileInvoiceIcon,
         href: '/doctor/management/finances',
         items: [
           {
@@ -86,7 +97,7 @@ const sections = [
       {
         title: 'Projects',
         href: '/doctor/projects',
-        icon: BriefcaseIcon,
+        icon: briefcaseMedicalIcon,
         items: [
           {
             title: 'Overview',
@@ -109,12 +120,12 @@ const sections = [
       {
         title: 'Chat',
         href: '/doctor/chat',
-        icon: MessageCircleIcon,
+        icon: messageCircleIcon,
       },
       {
         title: 'Appointment',
         href: '/doctor/appointment',
-        icon: CalendarIcon,
+        icon: calendarIcon,
       },
     ],
   },
@@ -124,12 +135,12 @@ const sections = [
       {
         title: 'Account',
         href: '/doctor/account',
-        icon: UserIcon,
+        icon: userIcon,
       },
       {
         title: 'Pricing',
         href: '/pricing',
-        icon: DollarSignIcon,
+        icon: priceTagIcon,
       },
     ],
   },

@@ -1,5 +1,10 @@
 import React from 'react';
 import { Row, Col, Container } from 'react-bootstrap';
+import { Icon } from '@iconify/react';
+import doctorIcon from '@iconify/icons-fa-solid/user-md';
+import intensiveCare from '@iconify-icons/medical-icon/intensive-care';
+import iHealthServices from '@iconify-icons/medical-icon/i-health-services';
+import ambulanceIcon from '@iconify-icons/medical-icon/ambulance';
 
 const SubHeader = () => {
   return (
@@ -8,7 +13,7 @@ const SubHeader = () => {
         <Col xs={12} md={3} sm={6}>
           <div className='info-box'>
             <span className='info-box-icon bg-info elevation-1'>
-              <i className='fas fa-cog'></i>
+              <Icon icon={intensiveCare} />
             </span>
 
             <div className='info-box-content'>
@@ -20,7 +25,7 @@ const SubHeader = () => {
         <Col xs={12} md={3} sm={6}>
           <div className='info-box mb-3'>
             <span className='info-box-icon bg-danger elevation-1'>
-              <i className='fas fa-thumbs-up'></i>
+              <Icon icon={doctorIcon} />
             </span>
 
             <div className='info-box-content'>
@@ -33,7 +38,7 @@ const SubHeader = () => {
         <Col xs={12} md={3} sm={6}>
           <div className='info-box mb-3'>
             <span className='info-box-icon bg-success elevation-1'>
-              <i className='fas fa-shopping-cart'></i>
+              <Icon icon={iHealthServices} />
             </span>
 
             <div className='info-box-content'>
@@ -45,11 +50,11 @@ const SubHeader = () => {
         <Col xs={12} md={3} sm={6}>
           <div className='info-box mb-3'>
             <span className='info-box-icon bg-warning elevation-1'>
-              <i className='fas fa-users'></i>
+              <Icon icon={ambulanceIcon} />
             </span>
 
             <div className='info-box-content'>
-              <span className='info-box-text'>Available cars</span>
+              <span className='info-box-text'>Available Ambulance</span>
               <span className='info-box-number'>56</span>
             </div>
           </div>

@@ -13,17 +13,11 @@ const Table = ({
   bordered = false,
   light = false,
   dark = false,
-  selectedSome,
   checkbox,
   paginate,
-  selected,
+  rowSelection,
 }) => {
-  const [checked, setChecked] = useState(false);
-
-  const handleSelectAll = (event) => {
-    setChecked(!checked);
-    selected(event);
-  };
+  const { selectedSome, selectedAllData, onSelect } = rowSelection;
 
   if ([null, false, undefined].includes(checkbox)) {
     checkbox = false;
@@ -39,9 +33,9 @@ const Table = ({
             {checkbox ? (
               <TableCell padding='checkbox'>
                 <Checkbox
-                  checked={checked}
+                  checked={selectedAllData}
                   indeterminate={selectedSome}
-                  onChange={(e) => handleSelectAll(e)}
+                  onChange={(e) => onSelect(e)}
                 />
               </TableCell>
             ) : null}
@@ -78,6 +72,10 @@ const TableHead = styled.div`
   letter-spacing: 0.09px;
   //   color: #bcbec0;
   text-transform: uppercase;
+
+  div {
+    font-weight: bold;
+  }
 `;
 
 const TableBody = styled.div`

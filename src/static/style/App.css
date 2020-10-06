@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400&display=swap');
+
 * {
   margin: 0px;
   padding: 0px;
@@ -6,27 +8,21 @@
 
 body {
   line-height: 1.2;
+  font-family: 'Roboto', sans-serif !important;
 }
 
 /* miseac */
-.card-header-tabs {
-  margin-bottom: 2rem !important;
-  border-bottom: 1px solid #dee2e6 !important;
-}
-
-.nav-tabs .nav-link {
-  border: none !important;
-  transition: all 0.5s ease-in-out;
-}
-
-.nav-tabs .nav-link.active {
-  border-bottom: 1px solid #007bff !important;
-}
-
 .btn-link:hover,
 .btn-link:focus {
   text-decoration: none !important;
   box-shadow: none !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+.display-block {
+  display: block;
 }
 
 .borderless {
@@ -82,14 +78,8 @@ a:hover {
   font-size: 1.5rem !important;
 }
 
-.hide-on-lg {
+.display-none {
   display: none;
-}
-
-@media screen and (max-width: 1058px) {
-  .hide-on-lg {
-    display: block;
-  }
 }
 
 /* ... */
