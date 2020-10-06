@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Card, FormControl, Button } from 'react-bootstrap';
+import {
+  Card,
+  FormControl,
+  Button,
+  Dropdown,
+  ButtonGroup,
+} from 'react-bootstrap';
 import Avatar from 'src/components/Avatar';
 import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 import {
@@ -215,9 +221,19 @@ const Results = ({ className, patients, ...rest }) => {
                   <TableCell>{patient.blood}</TableCell>
                   <TableCell>{patient.dob}</TableCell>
                   <TableCell align='right'>
-                    <Link to='/doctor/management/patients'>
-                      <MoreHorizontalIcon fontSize='small' />
-                    </Link>
+                    <Dropdown as={ButtonGroup}>
+                      <Dropdown.Toggle
+                        as={MoreHorizontalIcon}
+                        variant='link'
+                        className='cursor-pointer'
+                      />
+
+                      <Dropdown.Menu>
+                        <Dropdown.Item>View</Dropdown.Item>
+                        <Dropdown.Item>Edit</Dropdown.Item>
+                        <Dropdown.Item>Delete</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </TableCell>
                 </TableRow>
               );

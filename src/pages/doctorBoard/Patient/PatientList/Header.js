@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button, Row } from 'react-bootstrap';
 import { PlusCircle as PlusCircleIcon } from 'react-feather';
@@ -10,10 +11,12 @@ const Header = ({ className, ...rest }) => {
         <h3 className='text-primary'>Patients</h3>
       </Row>
       <Row>
-        <Button variant='primary'>
-          <PlusCircleIcon className='mr-1' />
-          New Patient
-        </Button>
+        <Link to='/doctor/management/patients/new'>
+          <Button variant='primary'>
+            <PlusCircleIcon className='mr-1' />
+            New Patient
+          </Button>
+        </Link>
       </Row>
     </Row>
   );

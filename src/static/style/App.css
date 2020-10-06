@@ -15,6 +15,13 @@ body {
   box-shadow: none !important;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+.display-block {
+  display: block;
+}
+
 .borderless {
   border: none !important;
 }
