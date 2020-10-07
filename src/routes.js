@@ -86,7 +86,7 @@ const routes = [
         exact: true,
         path: [
           '/doctor/management/patients/new',
-          '/doctor/management/patients/1/edit',
+          '/doctor/management/patients/:patientId/edit',
         ],
         component: lazy(() =>
           import('src/pages/doctorBoard/Patient/PatientForm')
@@ -94,7 +94,7 @@ const routes = [
       },
       {
         exact: true,
-        path: '/doctor/management/patients/1',
+        path: '/doctor/management/patients/:patientId',
         component: lazy(() =>
           import('src/pages/doctorBoard/Patient/PatientDetails')
         ),

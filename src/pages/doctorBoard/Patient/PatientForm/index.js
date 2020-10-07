@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Container, Form, Button } from 'react-bootstrap';
 import { InlineIcon } from '@iconify/react';
 import plusCircle from '@iconify/icons-fa-solid/plus-circle';
@@ -11,7 +10,7 @@ import Header from './Header';
 import Others from './Patials/Others';
 import MedicHistory from './Patials/MedicHistory';
 
-const NewPatient = (props) => {
+const NewPatient = () => {
   const [showHistory, setShowHistory] = useState(false);
   const [showMorePatient, setShowMorePatient] = useState(false);
 
@@ -59,7 +58,5 @@ const NewPatient = (props) => {
     </Page>
   );
 };
-
-NewPatient.propTypes = {};
 
 export default NewPatient;

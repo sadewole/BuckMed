@@ -45,6 +45,9 @@ const Topbar = ({ user, show, handlePush, ...rest }) => {
   );
 };
 
-Topbar.propTypes = {};
+Topbar.propTypes = {
+  handlePush: PropTypes.func,
+  show: PropTypes.bool,
+};
 
 export default Topbar;

@@ -96,6 +96,7 @@ const Drawer = styled.aside`
 
 Sidebar.propTypes = {
   location: PropTypes.object,
+  show: PropTypes.bool,
 };
 
 export default Sidebar;
