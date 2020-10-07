@@ -38,7 +38,7 @@ const Topbar = ({ user, show, handlePush, ...rest }) => {
           <span className='mx-2'>Sabriana James</span>
         </li>
         <li className='nav-item'>
-          <NavLink to='/doctor/management/patients/new'>Edit</NavLink>
+          <NavLink to={`/doctor/management/patients/${1}/edit`}>Edit</NavLink>
         </li>
       </ul>
     </nav>
