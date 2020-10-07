@@ -13,24 +13,6 @@ import priceTagIcon from '@iconify/icons-fa-solid/tags';
 import patientIcon from '@iconify-icons/medical-icon/i-outpatient';
 import labRecordIcon from '@iconify-icons/medical-icon/i-medical-records';
 import fileInvoiceIcon from '@iconify/icons-fa-solid/file-invoice-dollar';
-
-// import {
-//   Briefcase as BriefcaseIcon,
-//   Calendar as CalendarIcon,
-//   Folder as FolderIcon,
-//   BarChart as BarChartIcon,
-//   Lock as LockIcon,
-//   UserPlus as UserPlusIcon,
-//   AlertCircle as AlertCircleIcon,
-//   User as UserIcon,
-//   Layout as LayoutIcon,
-//   Edit as EditIcon,
-//   DollarSign as DollarSignIcon,
-//   MessageCircle as MessageCircleIcon,
-//   PieChart as PieChartIcon,
-//   Share2 as ShareIcon,
-//   Users as UsersIcon,
-// } from 'react-feather';
 import { Card, ListGroup } from 'react-bootstrap';
 import NavItem from './NavItem';
 import Avatar from 'src/components/Avatar';
@@ -303,7 +285,6 @@ const LeftSideBar = styled.aside`
   color: #343a40;
   z-index: 1038;
   box-shadow: 0 1px 12px rgba(0, 0, 0, 0.691);
-  /* display: none; */
   transition: all 0.3s ease-in-out;
   width: 250px;
 

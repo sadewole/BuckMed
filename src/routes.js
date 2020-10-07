@@ -91,6 +91,13 @@ const routes = [
       },
       {
         exact: true,
+        path: '/doctor/management/patients/1',
+        component: lazy(() =>
+          import('src/pages/doctorBoard/Patient/PatientDetails')
+        ),
+      },
+      {
+        exact: true,
         path: '/doctor/management/all',
         component: lazy(() =>
           import('src/pages/doctorBoard/Doctor/DoctorListView')
