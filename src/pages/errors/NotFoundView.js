@@ -21,7 +21,7 @@ const NotFoundView = () => {
             src='/static/404.png'
           />
         </div>
-        <div mt={6} display='flex' justifyContent='center'>
+        <div className='d-flex justify-content-center mt-4'>
           <Link to='/'>
             <Button variant='primary'>Back to home</Button>
           </Link>

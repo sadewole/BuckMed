@@ -84,9 +84,19 @@ const routes = [
       },
       {
         exact: true,
-        path: '/doctor/management/patients/new',
+        path: [
+          '/doctor/management/patients/new',
+          '/doctor/management/patients/:patientId/edit',
+        ],
         component: lazy(() =>
           import('src/pages/doctorBoard/Patient/PatientForm')
+        ),
+      },
+      {
+        exact: true,
+        path: '/doctor/management/patients/:patientId/:label?',
+        component: lazy(() =>
+          import('src/pages/doctorBoard/Patient/PatientDetails')
         ),
       },
       {

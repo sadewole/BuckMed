@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { colors } from '@material-ui/core';
 import mock from 'src/utils/mock';
 
 mock.onGet('/api/patients').reply(() => {

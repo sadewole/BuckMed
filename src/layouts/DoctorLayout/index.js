@@ -8,7 +8,7 @@ import { useTheme, useMediaQuery } from '@material-ui/core';
 const Base = ({ children }) => {
   const [show, setShow] = useState(false);
   const theme = useTheme();
-  const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'));
+  const mobileDevice = useMediaQuery(theme.breakpoints.down('md'));
 
   let layoutFixed = useRef();
   let contentWrapper = useRef();
@@ -35,6 +35,7 @@ const Base = ({ children }) => {
       contentWrapper.current.style.marginLeft = '250px';
       contentWrapper.current.classList.remove('extend');
       mainNavbar.current.classList.remove('extend');
+      layoutFixed.current.style.display = 'none';
     }
   }, [mobileDevice]);
 

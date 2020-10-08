@@ -17,7 +17,13 @@ const Table = ({
   paginate,
   rowSelection,
 }) => {
-  const { selectedSome, selectedAllData, onSelect } = rowSelection;
+  let selectedSome, selectedAllData, onSelect;
+
+  if (rowSelection) {
+    selectedSome = rowSelection.selectedSome;
+    selectedAllData = rowSelection.selectedAllData;
+    onSelect = rowSelection.onSelect;
+  }
 
   if ([null, false, undefined].includes(checkbox)) {
     checkbox = false;
