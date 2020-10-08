@@ -94,7 +94,7 @@ const routes = [
       },
       {
         exact: true,
-        path: '/doctor/management/patients/:patientId',
+        path: '/doctor/management/patients/:patientId/:label?',
         component: lazy(() =>
           import('src/pages/doctorBoard/Patient/PatientDetails')
         ),

@@ -289,8 +289,16 @@ const Results = ({ className, patients }) => {
                       />
 
                       <Dropdown.Menu>
-                        <Dropdown.Item to={`/doctor/management/patients/${1}`}>View</Dropdown.Item>
-                        <Dropdown.Item>Edit</Dropdown.Item>
+                        <Dropdown.Item
+                          href={`/doctor/management/patients/${1}`}
+                        >
+                          View
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          href={`/doctor/management/patients/${1}/edit`}
+                        >
+                          Edit
+                        </Dropdown.Item>
                         <Dropdown.Item>Delete</Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>

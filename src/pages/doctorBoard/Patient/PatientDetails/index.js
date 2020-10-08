@@ -1,9 +1,15 @@
 import React, { useLayoutEffect, useEffect, useRef, useState } from 'react';
 import Page from 'src/components/Page';
-import { useLocation } from 'react-router-dom';
+import { Redirect, useLocation, useParams } from 'react-router-dom';
 import { useTheme, useMediaQuery, makeStyles, Box } from '@material-ui/core';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
+import { Board } from './Patials/Board';
+import { Forms } from './Patials/Forms';
+import { Prescription } from './Patials/Prescription';
+import { Treatment } from './Patials/Treatment';
+import { Billing } from './Patials/Billing';
+import { Timeline } from './Patials/Timeline';
 
 const useStyle = makeStyles(() => ({
   layoutFixed: {
@@ -29,7 +35,7 @@ const useStyle = makeStyles(() => ({
 const PatientDetails = () => {
   const [show, setShow] = useState(false);
   const classes = useStyle();
-  const location = useLocation();
+  const { label } = useParams();
   const theme = useTheme();
   const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -57,6 +63,25 @@ const PatientDetails = () => {
     }
   }, [mobileDevice]);
 
+  const View = () => {
+    switch (label) {
+      case 'board':
+        return <Board />;
+      case 'timeline':
+        return <Timeline />;
+      case 'forms':
+        return <Forms />;
+      case 'prescription':
+        return <Prescription />;
+      case 'treament_plan':
+        return <Treatment />;
+      case 'billing':
+        return <Billing />;
+      default:
+        return <Redirect to='/404' />;
+    }
+  };
+
   return (
     <Page title='Patient Details' className='h-100 hidden'>
       <Topbar show={show} handlePush={handlePushMenu} />
@@ -66,9 +91,9 @@ const PatientDetails = () => {
           ref={layoutFixed}
           onClick={handleLayoutFixed}
         />
-        <Sidebar location={location} show={show} />
+        <Sidebar show={show} />
         <Box className={classes.contentWrapper} ref={contentWrapper}>
-          <h1>Please show me {show}</h1>
+          {View()}
         </Box>
       </div>
     </Page>

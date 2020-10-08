@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ListGroupItem, ButtonGroup } from 'react-bootstrap';
@@ -40,17 +40,22 @@ const labels = [
   },
 ];
 
-const Sidebar = ({ show, location }) => {
+const Sidebar = ({ show }) => {
+  const { patientId } = useParams();
   return (
     <Drawer className={show ? 'show' : undefined}>
       {labels.map((label) => (
         <ListGroupItem key={label.id} style={{ paddingLeft: 0, border: 0 }}>
-          <ButtonGroup className='sidenavItem'>
-            <Icon icon={Tag} style={{ color: label.color }} className='mr-2' />
-            <NavLink to={`${location.pathname}/${label.id}`}>
+          <NavLink to={`/doctor/management/patients/${patientId}/${label.id}`}>
+            <ButtonGroup className='sidenavItem'>
+              <Icon
+                icon={Tag}
+                style={{ color: label.color }}
+                className='mr-2'
+              />
               {label.name}
-            </NavLink>
-          </ButtonGroup>
+            </ButtonGroup>
+          </NavLink>
         </ListGroupItem>
       ))}
     </Drawer>
@@ -74,6 +79,7 @@ const Drawer = styled.aside`
   }
 
   .btn-group {
+    width: 90%;
     height: 30px;
     color: #000;
     border-top-right-radius: 18px;
@@ -81,16 +87,18 @@ const Drawer = styled.aside`
     padding-right: 18px;
     padding-left: 32px;
     align-items: center;
-    transition: all 0.5s ease-in-out;
+  }
+  a {
+    color: inherit;
+    text-decoration: none !important;
 
-    a {
-      color: inherit;
+    &:hover {
       text-decoration: none !important;
-
-      &:hover {
-        text-decoration: none !important;
-      }
     }
+  }
+
+  .active .sidenavItem {
+    background: #e3e3e3;
   }
 `;
 
