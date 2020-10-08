@@ -6,7 +6,7 @@ import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import { Board } from './Patials/Board';
 import { Forms } from './Patials/Forms';
-import { Prescription } from './Patials/Prescription';
+import Prescription from './Patials/Prescription';
 import { Treatment } from './Patials/Treatment';
 import { Billing } from './Patials/Billing';
 import { Timeline } from './Patials/Timeline';
@@ -22,7 +22,8 @@ const useStyle = makeStyles(() => ({
     background: 'rgba(0, 0, 0, 0.164)',
     zIndex: 800,
   },
-  contentWrapper: {
+  mainWrapper: {
+    width: '100%',
     marginTop: 51,
     marginLeft: 230,
 
@@ -39,7 +40,7 @@ const PatientDetails = () => {
   const theme = useTheme();
   const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const contentWrapper = useRef();
+  const mainWrapper = useRef();
   const layoutFixed = useRef();
 
   const handleLayoutFixed = () => {
@@ -55,10 +56,10 @@ const PatientDetails = () => {
   useLayoutEffect(() => {
     if (mobileDevice) {
       setShow(false);
-      contentWrapper.current.classList.add('extend');
+      mainWrapper.current.classList.add('extend');
     } else {
       setShow(true);
-      contentWrapper.current.classList.remove('extend');
+      mainWrapper.current.classList.remove('extend');
       layoutFixed.current.style.display = 'none';
     }
   }, [mobileDevice]);
@@ -92,7 +93,7 @@ const PatientDetails = () => {
           onClick={handleLayoutFixed}
         />
         <Sidebar show={show} />
-        <Box className={classes.contentWrapper} ref={contentWrapper}>
+        <Box className={classes.mainWrapper} ref={mainWrapper}>
           {View()}
         </Box>
       </div>

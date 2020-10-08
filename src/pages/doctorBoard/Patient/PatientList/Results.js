@@ -290,7 +290,7 @@ const Results = ({ className, patients }) => {
 
                       <Dropdown.Menu>
                         <Dropdown.Item
-                          href={`/doctor/management/patients/${1}`}
+                          href={`/doctor/management/patients/${1}/board`}
                         >
                           View
                         </Dropdown.Item>
