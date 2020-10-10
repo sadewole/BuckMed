@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useMediaQuery, useTheme, Typography } from '@material-ui/core';
 
 const Hero = () => {
+  const theme = useTheme();
+  const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <div className='hero-bg text-white'>
       <div className='overlay w-100 h-100'>
@@ -10,19 +13,23 @@ const Hero = () => {
             <div className='row'>
               <div className='col-xl-12'>
                 <div className='hero_text' data-aos='fade-up'>
-                  <span className='text-uppercase  display-4'>
+                  <Typography
+                    variant={mobileDevice ? 'h4' : 'h2'}
+                    className='text-uppercase text-white mb-2'
+                  >
                     the best medical center
-                  </span>
-                  <h3 className='display-4'>
-                    <span className='font-weight-bold text-capitalize'>
-                      Bringing health
-                    </span>
+                  </Typography>
+                  <Typography
+                    variant={mobileDevice ? 'h5' : 'h3'}
+                    className='font-weight-bold text-capitalize text-white mb-2'
+                  >
+                    Bringing health
                     <br />
                     to life for the whole family.
-                  </h3>
+                  </Typography>
                   <Link
                     to='#'
-                    className='btn btn-transparent-blue font15  p-2 '
+                    className='btn btn-outline-primary btn-transparent-blue font15 p-2 '
                   >
                     Discover More
                   </Link>

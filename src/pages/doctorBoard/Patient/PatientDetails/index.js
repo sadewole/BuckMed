@@ -20,7 +20,7 @@ const useStyle = makeStyles(() => ({
     width: '100%',
     height: '100%',
     background: 'rgba(0, 0, 0, 0.164)',
-    zIndex: 800,
+    zIndex: 80,
   },
   mainWrapper: {
     width: '100%',

@@ -16,6 +16,7 @@ import fileInvoiceIcon from '@iconify/icons-fa-solid/file-invoice-dollar';
 import { Card, ListGroup } from 'react-bootstrap';
 import NavItem from './NavItem';
 import Avatar from 'src/components/Avatar';
+import Logo from 'src/components/Logo';
 
 const sections = [
   {
@@ -198,8 +199,10 @@ const NavIndex = ({ show }) => {
       }}
     >
       <div>
-        <Card className='p-2 borderless'>
-          <Link to='/'>Logo</Link>
+        <Card className='p-2 borderless text-center'>
+          <Link to='/'>
+            <Logo />
+          </Link>
         </Card>
         <Card className='p-2'>
           <Card className='justify-content-center borderless text-center align-items-center'>

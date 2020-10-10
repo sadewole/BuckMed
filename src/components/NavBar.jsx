@@ -1,5 +1,6 @@
 import React, { useState, useLayoutEffect } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
+import Logo from './Logo';
 
 const NavBar = () => {
   const [page, setPage] = useState('');
@@ -27,7 +28,9 @@ const NavBar = () => {
       fixed={page}
       className='nav-bar'
     >
-      <Navbar.Brand href='/'>BuckMed</Navbar.Brand>
+      <Navbar.Brand href='/'>
+        <Logo />
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls='basic-navbar-nav' />
       <Navbar.Collapse id='basic-navbar-nav'>
         <Nav className='ml-auto align-items-center'>
