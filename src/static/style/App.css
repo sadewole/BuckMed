@@ -124,7 +124,7 @@ a:hover {
   font-size: 15px;
   font-weight: 400;
   border: 0;
-  border: 1px solid #5db2ff;
+  border: 1px solid #5db2ff !important;
 }
 
 .btn-transparent-blue:hover {

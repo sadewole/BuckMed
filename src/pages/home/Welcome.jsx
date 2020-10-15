@@ -42,7 +42,10 @@ const Welcome = () => (
                 aspernatur.
               </li>
             </ul>
-            <Link to='#' className='btn btn-transparent-blue'>
+            <Link
+              to='#'
+              className='btn btn-outline-primary btn-transparent-blue'
+            >
               Learn More
             </Link>
           </div>

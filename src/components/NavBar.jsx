@@ -38,7 +38,9 @@ const NavBar = () => {
           <Nav.Link href='/#about'>About</Nav.Link>
           <Nav.Link href='/contact'>Contact</Nav.Link>
           <Nav.Link href='/login'>
-            <button className='btn btn-transparent-blue'>Login</button>
+            <button className='btn  btn-outline-primary  btn-transparent-blue'>
+              Login
+            </button>
           </Nav.Link>
         </Nav>
       </Navbar.Collapse>
