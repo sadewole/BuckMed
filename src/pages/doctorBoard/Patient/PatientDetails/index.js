@@ -8,7 +8,7 @@ import { Board } from './Patials/Board';
 import { Forms } from './Patials/Forms';
 import Prescription from './Patials/Prescription';
 import { Treatment } from './Patials/Treatment';
-import { Billing } from './Patials/Billing';
+import Billing from './Patials/Billing';
 import { Timeline } from './Patials/Timeline';
 
 const useStyle = makeStyles(() => ({
@@ -20,12 +20,13 @@ const useStyle = makeStyles(() => ({
     width: '100%',
     height: '100%',
     background: 'rgba(0, 0, 0, 0.164)',
-    zIndex: 800,
+    zIndex: 80,
   },
   mainWrapper: {
     width: '100%',
     marginTop: 51,
     marginLeft: 230,
+    paddingTop: 10,
 
     '&.extend': {
       marginLeft: 0,

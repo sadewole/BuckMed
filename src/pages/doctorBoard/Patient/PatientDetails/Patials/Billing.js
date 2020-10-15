@@ -1,27 +1,58 @@
-import React from 'react';
-import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
-import Table from 'src/components/Table';
-import TableCell from 'src/components/TableCell';
-import TableRow from 'src/components/TableRow';
-import Checkbox from 'src/components/Checkbox';
+import React, { useState } from 'react';
+import Header from './Billings/Header';
+import {
+  Box,
+  Container,
+  Divider,
+  Tab,
+  Tabs,
+  makeStyles,
+} from '@material-ui/core';
+import General from './Billings/General';
 
-const header = [
-  'Drug group',
-  'Drug Name',
-  'Drug quality',
-  'Dosage',
-  'Start date',
-  'Period',
-  'Note',
-  '',
-];
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.dark,
+    minHeight: '100%',
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
+  },
+}));
 
-export const Billing = () => {
+const Billing = () => {
+  const [currentTab, setCurrentTab] = useState('general');
+
+  const tabs = [
+    { value: 'general', label: 'General' },
+    { value: 'prepaid', label: 'Prepaid' },
+    { value: 'transaction', label: 'Transaction' },
+  ];
+
+  const handleTabsChange = (event, value) => {
+    setCurrentTab(value);
+  };
+
   return (
-    <div>
-      <HorizontalScrollbar>
-        <div style={{ minWidth: '700px' }}></div>
-      </HorizontalScrollbar>
-    </div>
+    <Container maxWidth='lg'>
+      <Header />
+      <Box mt={3}>
+        <Tabs
+          onChange={handleTabsChange}
+          scrollButtons='auto'
+          value={currentTab}
+          variant='scrollable'
+          indicatorColor='primary'
+          textColor='primary'
+        >
+          {tabs.map((tab) => (
+            <Tab key={tab.value} label={tab.label} value={tab.value} />
+          ))}
+        </Tabs>
+      </Box>
+      <Divider />
+      <Box mt={3}>{currentTab === 'general' && <General />}</Box>
+    </Container>
   );
 };
+
+export default Billing;

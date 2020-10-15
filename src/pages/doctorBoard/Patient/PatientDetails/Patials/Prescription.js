@@ -14,7 +14,6 @@ import plusCircle from '@iconify/icons-fa-solid/plus-circle';
 import Table from 'src/components/Table';
 import TableCell from 'src/components/TableCell';
 import TableRow from 'src/components/TableRow';
-import Checkbox from 'src/components/Checkbox';
 
 const header = [
   'Drug Name',

@@ -4,7 +4,7 @@ import Footer from 'src/components/Footer';
 
 export default ({ children }) => {
   return (
-    <div>
+    <div className='overflow-hidden'>
       <NavBar />
       {children}
       <Footer />
