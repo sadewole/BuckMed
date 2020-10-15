@@ -12,6 +12,10 @@ body {
 }
 
 /* miseac */
+.MuiTab-root {
+  font-size: large !important;
+}
+
 .btn-link:hover,
 .btn-link:focus {
   text-decoration: none !important;
