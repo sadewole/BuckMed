@@ -6,9 +6,10 @@ import DoctorLayout from 'src/layouts/DoctorLayout';
 import AuthGuard from 'src/components/AuthGuard';
 import GuestGuard from 'src/components/GuestGuard';
 import HomeView from 'src/pages/home';
+import LoadingScreen from 'src/components/LoadingScreen';
 
 export const renderRoutes = (routes = []) => (
-  <Suspense fallback={<h2>Loading...</h2>}>
+  <Suspense fallback={<LoadingScreen />}>
     <Switch>
       {routes.map((route, i) => {
         const Guard = route.guard || Fragment;
