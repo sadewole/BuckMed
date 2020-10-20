@@ -16,6 +16,7 @@ const Table = ({
   checkbox,
   paginate,
   rowSelection,
+  empty
 }) => {
   let selectedSome, selectedAllData, onSelect;
 

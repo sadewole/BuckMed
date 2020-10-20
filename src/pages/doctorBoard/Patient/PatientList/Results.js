@@ -3,16 +3,14 @@ import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Card, FormControl, Dropdown, ButtonGroup } from 'react-bootstrap';
-import { Tabs, Tab, Paper } from '@material-ui/core';
+import { Tabs, Tab, Paper, TableRow, TableCell } from '@material-ui/core';
 import Avatar from 'src/components/Avatar';
 import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 import {
   Search as SearchIcon,
   MoreHorizontal as MoreHorizontalIcon,
 } from 'react-feather';
-import Table from 'src/components/Table';
-import TableCell from 'src/components/TableCell';
-import TableRow from 'src/components/TableRow';
+import Table from 'src/components/CustomTable';
 import Checkbox from 'src/components/Checkbox';
 
 const tabs = [
@@ -257,7 +255,10 @@ const Results = ({ className, patients }) => {
       </div>
       <HorizontalScrollbar>
         <div style={{ minWidth: '700px' }}>
-          <Table header={header} rowSelection={rowSelection} checkbox>
+          <Table header={header} selectedData={selectedPatients} data={sortedPatients}  onSelect={
+            (e) =>
+      setSelectedPatients(e ? patients.map((patient) => patient.id) : [])} 
+      checkbox>
             {sortedPatients.map((patient) => {
               const isPatientSelected = selectedPatients.includes(patient.id);
 

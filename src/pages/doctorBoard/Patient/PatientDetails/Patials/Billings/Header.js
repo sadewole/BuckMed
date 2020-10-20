@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { colors, Card, makeStyles } from '@material-ui/core';
 import { Button, Row, Col, Popover, OverlayTrigger } from 'react-bootstrap';
 import { Icon, InlineIcon } from '@iconify/react';
@@ -54,15 +53,15 @@ const Header = (props) => {
       <Popover.Content>
         <ul className='list-group'>
           <li className={`list-item ${classes.popover}`}>
-            <Link className='btn' onClick={handleReceiptModal}>
+            <button className='btn' onClick={handleReceiptModal}>
               Add Receipt
-            </Link>
+            </button>
           </li>
           <li className={`list-item ${classes.popover}`}>
-            <Link className='btn '>Add Invoice</Link>
+            <button className='btn '>Add Invoice</button>
           </li>
           <li className={`list-item ${classes.popover}`}>
-            <Link className='btn'>Add Payment</Link>
+            <button className='btn'>Add Payment</button>
           </li>
         </ul>
       </Popover.Content>
@@ -127,7 +126,7 @@ const Header = (props) => {
             </Col>
           </Row>
         </Col>
-        <Col md={4} xs={4} className='text-'>
+        <Col md={4} xs={4} className=''>
           <OverlayTrigger trigger='click' placement='left' overlay={popover}>
             <Button variant='outline-secondary'>
               <InlineIcon icon={PlusCircleIcon} className='mr-1' />

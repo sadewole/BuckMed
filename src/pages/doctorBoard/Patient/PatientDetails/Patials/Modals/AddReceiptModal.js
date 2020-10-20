@@ -15,6 +15,9 @@ import {
 import Icon from '@iconify/react';
 import CloseIcon from '@iconify/icons-fa-solid/times';
 import ItemEditorDialog from './ItemEditor';
+import Table from 'src/components/Table';
+import TableRow from 'src/components/TableRow';
+import TableCell from 'src/components/TableCell';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -37,6 +40,8 @@ export const AddReceiptModal = ({ showModal, setShowModal }) => {
   const [itemEditor, setItemEditor] = useState(false);
   const handleCloseModal = () => setShowModal(false);
   const handleItemEditor = () => setItemEditor(true);
+
+  const header = ['name', 'quantity', 'price', 'type', '-'];
 
   return (
     <Dialog
@@ -104,14 +109,22 @@ export const AddReceiptModal = ({ showModal, setShowModal }) => {
               </Form.Group>
             </Col>
           </Row>
-          <Button
-            variant='outlined-primary'
-            className='btn btn-transparent-blue'
-            onClick={handleItemEditor}
-          >
-            Add Item
-          </Button>
         </Form>
+        <Button
+          variant='outlined-primary'
+          className='btn btn-transparent-blue'
+          onClick={handleItemEditor}
+        >
+          Add Item
+        </Button>
+        <div className="mt-3">
+        
+        <Table header={header}>
+          <TableRow>
+            <TableCell empty>Create new item</TableCell>
+          </TableRow>
+        </Table>
+        </div>
       </Container>
 
       {/** modal */}

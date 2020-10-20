@@ -2,11 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const TableCell = ({ children, padding }) => {
+const TableCell = ({ children, padding, empty }) => {
   return padding === 'checkbox' ? (
     <Cell style={{ width: '25px' }}>{children}</Cell>
   ) : (
-    <Cell>{children}</Cell>
+   empty? (<td >{children}</td>): (<Cell >{children}</Cell>)
   );
 };
 
