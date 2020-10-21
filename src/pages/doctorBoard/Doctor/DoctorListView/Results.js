@@ -9,9 +9,8 @@ import {
   Search as SearchIcon,
   MoreHorizontal as MoreHorizontalIcon,
 } from 'react-feather';
-import Table from 'src/components/Table';
-import TableCell from 'src/components/TableCell';
-import TableRow from 'src/components/TableRow';
+import Table from 'src/components/CustomTable';
+import { TableRow, TableCell } from '@material-ui/core';
 import Checkbox from 'src/components/Checkbox';
 
 const sortOptions = [
@@ -131,14 +130,6 @@ const Results = ({ className, doctors, ...rest }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const rowSelection = {
-    selectedSome:
-      selectedDoctors.length > 0 && selectedDoctors.length < doctors.length,
-    selectedAllData: selectedDoctors.length === doctors.length,
-    onSelect: (e) =>
-      setSelectedDoctors(e ? doctors.map((doctor) => doctor.id) : []),
-  };
-
   const filteredDoctors = applyFilters(doctors, query);
   const sortedDoctors = applySort(filteredDoctors, sort);
   const paginatedDoctors = applyPagination(sortedDoctors, page, limit);
@@ -184,7 +175,15 @@ const Results = ({ className, doctors, ...rest }) => {
       </div>
       <HorizontalScrollbar>
         <div style={{ minWidth: '700px' }}>
-          <Table header={header} checkbox rowSelection={rowSelection}>
+          <Table
+            header={header}
+            checkbox
+            selectedData={selectedDoctors}
+            data={sortedDoctors}
+            onSelect={(e) =>
+              setSelectedDoctors(e ? doctors.map((doctor) => doctor.id) : [])
+            }
+          >
             {sortedDoctors.map((doctor) => {
               const isDoctorSelected = selectedDoctors.includes(doctor.id);
 

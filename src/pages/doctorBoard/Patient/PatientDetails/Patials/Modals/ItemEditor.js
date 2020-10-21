@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   useTheme,
   useMediaQuery,
@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogActions,
   Dialog,
- 
   Divider,
   Typography,
   IconButton,
@@ -19,7 +18,7 @@ import {
   FormControl,
   FormLabel,
   FormGroup,
-   Button,
+  Button,
 } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
 
@@ -36,7 +35,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const options = ['Treatment', 'Laboratory test', 'Consultant', 'Material', 'Drug', 'Surgery related']
+const options = [
+  'Treatment',
+  'Laboratory test',
+  'Consultant',
+  'Material',
+  'Drug',
+  'Surgery related',
+];
 
 export default function ItemEditorDialog({ open, setOpen }) {
   const classes = useStyles();
@@ -46,25 +52,25 @@ export default function ItemEditorDialog({ open, setOpen }) {
     name: '',
     quantity: '',
     price: '',
-    type: ''
-  })
+    type: '',
+  });
 
   const handleClose = () => setOpen(false);
 
-  const reset = ()=>{
+  const reset = () => {
     setState({
       id: Date.now().toString(),
-    name: '',
-    quantity: '',
-    price: '',
-    type: ''
-  })
-  }
-const handleFinish = (e)=>{
-e.preventDefault()
-handleClose()
-reset()
-}
+      name: '',
+      quantity: '',
+      price: '',
+      type: '',
+    });
+  };
+  const handleFinish = (e) => {
+    e.preventDefault();
+    handleClose();
+    reset();
+  };
 
   return (
     <Dialog
@@ -72,7 +78,7 @@ reset()
       open={open}
       onClose={handleClose}
       aria-labelledby='responsive-dialog-title'
-      style={{minWidth: '700px'}}
+      style={{ minWidth: '700px' }}
     >
       <DialogTitle id='responsive-dialog-title'>
         <Typography variant='h6'>Item Editor</Typography>
@@ -91,7 +97,7 @@ reset()
             <FormLabel>Item Name</FormLabel>
             <Typeahead
               onChange={(selected) => {
-                setState({...state, name: selected[0]});
+                setState({ ...state, name: selected[0] });
               }}
               options={options}
               selected={state.name}
@@ -116,11 +122,11 @@ reset()
         </Form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} variant='warning'>
+        <Button onClick={handleClose} variant='primary'>
           Finish
         </Button>
-        <Button onClick={handleClose} variant='primary'>
-         + Add New
+        <Button onClick={handleClose} variant='warning'>
+          + Add New
         </Button>
       </DialogActions>
     </Dialog>

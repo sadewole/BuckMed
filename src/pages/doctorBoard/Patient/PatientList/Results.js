@@ -258,7 +258,8 @@ const Results = ({ className, patients }) => {
           <Table header={header} selectedData={selectedPatients} data={sortedPatients}  onSelect={
             (e) =>
       setSelectedPatients(e ? patients.map((patient) => patient.id) : [])} 
-      checkbox>
+      checkbox
+      >
             {sortedPatients.map((patient) => {
               const isPatientSelected = selectedPatients.includes(patient.id);
 

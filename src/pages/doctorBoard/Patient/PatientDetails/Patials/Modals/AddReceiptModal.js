@@ -10,14 +10,14 @@ import {
   makeStyles,
   IconButton,
   Container,
+  TableRow,
+  TableCell,
   Box,
 } from '@material-ui/core';
 import Icon from '@iconify/react';
 import CloseIcon from '@iconify/icons-fa-solid/times';
 import ItemEditorDialog from './ItemEditor';
-import Table from 'src/components/Table';
-import TableRow from 'src/components/TableRow';
-import TableCell from 'src/components/TableCell';
+import Table from 'src/components/CustomTable';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -117,13 +117,18 @@ export const AddReceiptModal = ({ showModal, setShowModal }) => {
         >
           Add Item
         </Button>
-        <div className="mt-3">
-        
-        <Table header={header}>
-          <TableRow>
-            <TableCell empty>Create new item</TableCell>
-          </TableRow>
-        </Table>
+        <div className='mt-3'>
+          <Table header={header}>
+            <TableRow>
+              <TableCell
+                colSpan='100%'
+                align='center'
+                style={{ color: 'darkgray', padding: '30px' }}
+              >
+                Create new item
+              </TableCell>
+            </TableRow>
+          </Table>
         </div>
       </Container>
 
