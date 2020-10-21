@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Card, FormControl, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { Tabs, Tab, Paper, TableRow, TableCell } from '@material-ui/core';
@@ -255,11 +254,17 @@ const Results = ({ className, patients }) => {
       </div>
       <HorizontalScrollbar>
         <div style={{ minWidth: '700px' }}>
-          <Table header={header} selectedData={selectedPatients} data={sortedPatients}  onSelect={
-            (e) =>
-      setSelectedPatients(e ? patients.map((patient) => patient.id) : [])} 
-      checkbox
-      >
+          <Table
+            header={header}
+            selectedData={selectedPatients}
+            data={sortedPatients}
+            onSelect={(e) =>
+              setSelectedPatients(
+                e ? patients.map((patient) => patient.id) : []
+              )
+            }
+            checkbox
+          >
             {sortedPatients.map((patient) => {
               const isPatientSelected = selectedPatients.includes(patient.id);
 

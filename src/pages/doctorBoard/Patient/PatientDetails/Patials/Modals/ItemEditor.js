@@ -44,7 +44,7 @@ const options = [
   'Surgery related',
 ];
 
-export default function ItemEditorDialog({ open, setOpen }) {
+export default function ItemEditorDialog({ open, setOpen, setItems }) {
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -59,16 +59,29 @@ export default function ItemEditorDialog({ open, setOpen }) {
 
   const reset = () => {
     setState({
-      id: Date.now().toString(),
       name: '',
       quantity: '',
       price: '',
       type: '',
     });
   };
+
   const handleFinish = (e) => {
     e.preventDefault();
+    if (!state.name || !state.price) {
+      return;
+    }
+    setItems((prevState) => ({ ...prevState, state }));
     handleClose();
+    reset();
+  };
+
+  const handleAddMore = (e) => {
+    e.preventDefault();
+    if (!state.name || !state.price) {
+      return;
+    }
+    setItems((prevState) => ({ ...prevState, state }));
     reset();
   };
 
@@ -97,7 +110,8 @@ export default function ItemEditorDialog({ open, setOpen }) {
             <FormLabel>Item Name</FormLabel>
             <Typeahead
               onChange={(selected) => {
-                setState({ ...state, name: selected[0] });
+                let select = selected[0];
+                // setName(select);
               }}
               options={options}
               selected={state.name}
@@ -105,7 +119,10 @@ export default function ItemEditorDialog({ open, setOpen }) {
           </FormGroup>
           <FormGroup>
             <FormLabel>Type</FormLabel>
-            <FormControl as='select'>
+            <FormControl
+              as='select'
+              onChange={(e) => setState({ ...state, type: e.target.value })}
+            >
               <option value='none'>None</option>
               <option value='inventory_item'>Inventory Item</option>
               <option value='service_item'>Service Item</option>
@@ -113,19 +130,27 @@ export default function ItemEditorDialog({ open, setOpen }) {
           </FormGroup>
           <FormGroup>
             <FormLabel>Quantity</FormLabel>
-            <FormControl type='number' />
+            <FormControl
+              type='number'
+              value={state.quantity}
+              onChange={(e) => setState({ ...state, quantity: e.target.value })}
+            />
           </FormGroup>
           <FormGroup>
             <FormLabel>Price</FormLabel>
-            <FormControl type='number' />
+            <FormControl
+              type='number'
+              value={state.price}
+              onChange={(e) => setState({ ...state, price: e.target.value })}
+            />
           </FormGroup>
         </Form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} variant='primary'>
+        <Button onClick={handleFinish} variant='primary'>
           Finish
         </Button>
-        <Button onClick={handleClose} variant='warning'>
+        <Button onClick={handleAddMore} variant='warning'>
           + Add New
         </Button>
       </DialogActions>

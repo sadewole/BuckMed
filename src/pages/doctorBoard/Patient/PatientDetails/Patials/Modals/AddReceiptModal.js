@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Button, Form, FormControl, Row, Col } from 'react-bootstrap';
 import {
   Slide,
@@ -12,12 +11,13 @@ import {
   Container,
   TableRow,
   TableCell,
-  Box,
 } from '@material-ui/core';
 import Icon from '@iconify/react';
 import CloseIcon from '@iconify/icons-fa-solid/times';
+import trashIcon from '@iconify/icons-fa-solid/trash-alt';
 import ItemEditorDialog from './ItemEditor';
 import Table from 'src/components/CustomTable';
+import { currencyFormatter } from 'src/utils/formatter';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -38,10 +38,17 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export const AddReceiptModal = ({ showModal, setShowModal }) => {
   const classes = useStyles();
   const [itemEditor, setItemEditor] = useState(false);
+  const [items, setItems] = useState([]);
   const handleCloseModal = () => setShowModal(false);
   const handleItemEditor = () => setItemEditor(true);
 
   const header = ['name', 'quantity', 'price', 'type', '-'];
+
+  const deleteItem = (id) => {
+    let itemTemp = [...items];
+    let filterItem = itemTemp.filter((temp) => temp.id !== id);
+    setItems(filterItem);
+  };
 
   return (
     <Dialog
@@ -92,7 +99,7 @@ export const AddReceiptModal = ({ showModal, setShowModal }) => {
                 <FormControl type='date' />
               </Form.Group>
               <Form.Group className='mr-1'>
-                <Form.Label>No </Form.Label>
+                <Form.Label>No. </Form.Label>
                 <FormControl type='text' />
               </Form.Group>
               <Form.Group className='mr-1'>
@@ -119,21 +126,41 @@ export const AddReceiptModal = ({ showModal, setShowModal }) => {
         </Button>
         <div className='mt-3'>
           <Table header={header}>
-            <TableRow>
-              <TableCell
-                colSpan='100%'
-                align='center'
-                style={{ color: 'darkgray', padding: '30px' }}
-              >
-                Create new item
-              </TableCell>
-            </TableRow>
+            {items.length > 0 ? (
+              items.map((item) => {
+                return (
+                  <TableRow>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell>{currencyFormatter(item.price)}</TableCell>
+                    <TableCell>{item.type}</TableCell>
+                    <TableCell onClick={() => deleteItem(item.id)}>
+                      <Icon icon={trashIcon} />
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan='100%'
+                  align='center'
+                  style={{ color: 'darkgray', padding: '30px' }}
+                >
+                  Create new item
+                </TableCell>
+              </TableRow>
+            )}
           </Table>
         </div>
       </Container>
 
       {/** modal */}
-      <ItemEditorDialog setOpen={setItemEditor} open={itemEditor} />
+      <ItemEditorDialog
+        setOpen={setItemEditor}
+        open={itemEditor}
+        setItem={setItems}
+      />
     </Dialog>
   );
 };

@@ -50,6 +50,7 @@ const CustomTable = ({
                   checked={matchAll()}
                   indeterminate={matchSome()}
                   onChange={(e) => onSelect(e)}
+                  disabled={data.length < 1}
                 />
               </TableCell>
             ) : null}

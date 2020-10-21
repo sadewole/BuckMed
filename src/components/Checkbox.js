@@ -6,6 +6,7 @@ const Checkbox = ({
   checked = false,
   indeterminate = false,
   onChange,
+  disabled,
   ...rest
 }) => {
   return (
@@ -15,6 +16,7 @@ const Checkbox = ({
           <input
             type='checkbox'
             name='checkbox'
+            disabled={disabled}
             checked={checked}
             onChange={(e) => onChange(e.target.checked)}
             {...rest}
@@ -29,6 +31,13 @@ const Checkbox = ({
       </label>
     </Box>
   );
+};
+
+Checkbox.propTypes = {
+  checked: PropTypes.bool,
+  indeterminate: PropTypes.bool,
+  onChange: PropTypes.func,
+  diabled: PropTypes.bool,
 };
 
 const Box = styled.div`
