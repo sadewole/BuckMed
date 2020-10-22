@@ -8,7 +8,7 @@ import DollarIcon from '@iconify/icons-fa-solid/dollar-sign';
 import CoinsIcon from '@iconify/icons-fa-solid/coins';
 import PlusCircleIcon from '@iconify/icons-fa-solid/plus-circle';
 import { currencyFormatter } from 'src/utils/formatter';
-import { AddReceiptModal } from '../Modals/AddReceiptModal';
+import AddReceiptModal from '../Modals/AddReceiptModal';
 
 const useStyles = makeStyles({
   root: {},
@@ -45,20 +45,36 @@ const useStyles = makeStyles({
 const Header = (props) => {
   const classes = useStyles();
   const [receiptModal, setReceiptModal] = useState(false);
+  const [bill, setBill] = useState('receipt');
+  const billInRec = ['receipt', 'invoice'];
 
-  const handleReceiptModal = () => setReceiptModal(true);
+  const handleReceiptModal = (type) => {
+    const waybill = billInRec.find((i) => i === type);
 
+    if (waybill) {
+      setBill(waybill);
+    }
+    setReceiptModal(true);
+  };
   const popover = (
     <Popover id='popover-basic'>
       <Popover.Content>
         <ul className='list-group'>
           <li className={`list-item ${classes.popover}`}>
-            <button className='btn' onClick={handleReceiptModal}>
+            <button
+              className='btn'
+              onClick={() => handleReceiptModal('receipt')}
+            >
               Add Receipt
             </button>
           </li>
           <li className={`list-item ${classes.popover}`}>
-            <button className='btn '>Add Invoice</button>
+            <button
+              className='btn'
+              onClick={() => handleReceiptModal('invoice')}
+            >
+              Add Invoice
+            </button>
           </li>
           <li className={`list-item ${classes.popover}`}>
             <button className='btn'>Add Payment</button>
@@ -140,6 +156,7 @@ const Header = (props) => {
       <AddReceiptModal
         showModal={receiptModal}
         setShowModal={setReceiptModal}
+        bill={bill}
       />
     </div>
   );

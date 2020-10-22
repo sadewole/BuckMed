@@ -94,7 +94,7 @@ export default function ItemEditorDialog({ open, setOpen, setItems }) {
       style={{ minWidth: '700px' }}
     >
       <DialogTitle id='responsive-dialog-title'>
-        <Typography variant='h6'>Item Editor</Typography>
+        <Typography>Item Editor</Typography>
         <IconButton
           aria-label='close'
           className={classes.closeButton}
@@ -110,6 +110,7 @@ export default function ItemEditorDialog({ open, setOpen, setItems }) {
             <FormLabel>Item Name</FormLabel>
             <Typeahead
               onChange={(selected) => {
+                console.log('changing');
                 let select = selected[0];
                 // setName(select);
               }}

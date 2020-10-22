@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Form, FormControl, Row, Col } from 'react-bootstrap';
 import {
   Slide,
@@ -35,7 +36,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />;
 });
 
-export const AddReceiptModal = ({ showModal, setShowModal }) => {
+export default function AddReceiptModal({ showModal, setShowModal, bill }) {
   const classes = useStyles();
   const [itemEditor, setItemEditor] = useState(false);
   const [items, setItems] = useState([]);
@@ -67,11 +68,14 @@ export const AddReceiptModal = ({ showModal, setShowModal }) => {
           >
             <Icon icon={CloseIcon} />
           </IconButton>
-          <Typography variant='h6' className={classes.title}>
-            Receipt
+          <Typography
+            variant='h6'
+            className={`text-capitalize ${classes.title}`}
+          >
+            {bill}
           </Typography>
           <Button autoFocus color='inherit' onClick={handleCloseModal}>
-            save
+            save {bill}
           </Button>
         </Toolbar>
       </AppBar>
@@ -106,14 +110,16 @@ export const AddReceiptModal = ({ showModal, setShowModal }) => {
                 <Form.Label>Series </Form.Label>
                 <FormControl type='text' />
               </Form.Group>
-              <Form.Group className='mr-1'>
-                <Form.Label>Method</Form.Label>
-                <FormControl as='select'>
-                  <option value='cash'>Cash</option>
-                  <option value='credit_card'>Credit Card</option>
-                  <option value='payment_order'>Payment Order</option>
-                </FormControl>
-              </Form.Group>
+              {bill === 'receipt' && (
+                <Form.Group className='mr-1'>
+                  <Form.Label>Method</Form.Label>
+                  <FormControl as='select'>
+                    <option value='cash'>Cash</option>
+                    <option value='credit_card'>Credit Card</option>
+                    <option value='payment_order'>Payment Order</option>
+                  </FormControl>
+                </Form.Group>
+              )}
             </Col>
           </Row>
         </Form>
@@ -163,4 +169,8 @@ export const AddReceiptModal = ({ showModal, setShowModal }) => {
       />
     </Dialog>
   );
+}
+
+AddReceiptModal.propTypes = {
+  bill: PropTypes.oneOf(['receipt', 'invoice']),
 };
