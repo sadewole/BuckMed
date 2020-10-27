@@ -114,8 +114,33 @@ const routes = [
       },
       {
         exact: true,
+        path: '/doctor/management/finances/:id',
+        component: lazy(() => import('src/pages/errors/PageInView')),
+      },
+      {
+        exact: true,
         path: '/doctor/management/records',
         component: lazy(() => import('src/pages/doctorBoard/LabRecord')),
+      },
+      {
+        exact: true,
+        path: '/doctor/management/records/:id',
+        component: lazy(() => import('src/pages/errors/PageInView')),
+      },
+      {
+        exact: true,
+        path: '/doctor/chat',
+        component: lazy(() => import('src/pages/errors/PageInView')),
+      },
+      {
+        exact: true,
+        path: '/doctor/account',
+        component: lazy(() => import('src/pages/errors/PageInView')),
+      },
+      {
+        exact: true,
+        path: '/pricing',
+        component: lazy(() => import('src/pages/errors/PageInView')),
       },
       {
         exact: true,

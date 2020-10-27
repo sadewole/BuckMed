@@ -20,7 +20,7 @@ import {
   FormGroup,
   Button,
 } from 'react-bootstrap';
-import { Typeahead } from 'react-bootstrap-typeahead';
+import { Typeahead } from 'react-typeahead';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,16 +66,6 @@ export default function ItemEditorDialog({ open, setOpen, setItems }) {
     });
   };
 
-  const handleFinish = (e) => {
-    e.preventDefault();
-    if (!state.name || !state.price) {
-      return;
-    }
-    setItems((prevState) => ({ ...prevState, state }));
-    handleClose();
-    reset();
-  };
-
   const handleAddMore = (e) => {
     e.preventDefault();
     if (!state.name || !state.price) {
@@ -83,6 +73,11 @@ export default function ItemEditorDialog({ open, setOpen, setItems }) {
     }
     setItems((prevState) => ({ ...prevState, state }));
     reset();
+  };
+
+  const handleFinish = () => {
+    handleAddMore();
+    handleClose();
   };
 
   return (
@@ -109,13 +104,11 @@ export default function ItemEditorDialog({ open, setOpen, setItems }) {
           <FormGroup>
             <FormLabel>Item Name</FormLabel>
             <Typeahead
-              onChange={(selected) => {
-                console.log('changing');
-                let select = selected[0];
+              onChange={(e) => {
+                console.log('changing', e.target);
                 // setName(select);
               }}
               options={options}
-              selected={state.name}
             />
           </FormGroup>
           <FormGroup>

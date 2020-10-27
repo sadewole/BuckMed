@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, FormControl, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { Tabs, Tab, Paper, TableRow, TableCell } from '@material-ui/core';
 import Avatar from 'src/components/Avatar';
-import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 import {
   Search as SearchIcon,
   MoreHorizontal as MoreHorizontalIcon,
@@ -19,11 +17,11 @@ const tabs = [
   },
   {
     value: 'hasAcceptedMarketing',
-    label: 'Accepts Marketing',
+    label: 'OutPatients',
   },
   {
     value: 'isProspect',
-    label: 'Prospect',
+    label: 'InPatients',
   },
   {
     value: 'isReturning',
@@ -121,14 +119,18 @@ const applySort = (patients, sort) => {
 const Results = ({ className, patients }) => {
   const [currentTab, setCurrentTab] = useState('all');
   const [selectedPatients, setSelectedPatients] = useState([]);
-  const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState(sortOptions[0].value);
   const [filters, setFilters] = useState({
     hasAcceptedMarketing: null,
     isProspect: null,
     isReturning: null,
+  });
+
+  const [paginate, setPaginate] = useState({
+    page: 0,
+    rowsPerPage: 10,
+    rowsPerPageOptions: [5, 10, 25],
   });
 
   const header = [
@@ -180,25 +182,20 @@ const Results = ({ className, patients }) => {
   };
 
   const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+    setPaginate({ ...paginate, page: newPage });
   };
 
   const handleLimitChange = (event) => {
-    setLimit(parseInt(event.target.value));
-  };
-
-  const rowSelection = {
-    selectedSome:
-      selectedPatients.length > 0 && selectedPatients.length < patients.length,
-    selectedAllData: selectedPatients.length === patients.length,
-    onSelect: (e) =>
-      setSelectedPatients(e ? patients.map((patient) => patient.id) : []),
+    setPaginate({ ...paginate, rowsPerPage: parseInt(event.target.value) });
   };
 
   const filteredPatients = applyFilters(patients, query, filters);
   const sortedPatients = applySort(filteredPatients, sort);
-  const paginatedPatients = applyPagination(sortedPatients, page, limit);
-  const enableBulkOperations = selectedPatients.length > 0;
+  const paginatedPatients = applyPagination(
+    sortedPatients,
+    paginate.page,
+    paginate.rowsPerPage
+  );
 
   return (
     <Card className='overflow-hidden' style={{ borderRadius: '.5rem' }}>
@@ -252,70 +249,68 @@ const Results = ({ className, patients }) => {
           ))}
         </FormControl>
       </div>
-      <HorizontalScrollbar>
-        <div style={{ minWidth: '700px' }}>
-          <Table
-            header={header}
-            selectedData={selectedPatients}
-            data={sortedPatients}
-            onSelect={(e) =>
-              setSelectedPatients(
-                e ? patients.map((patient) => patient.id) : []
-              )
-            }
-            checkbox
-          >
-            {sortedPatients.map((patient) => {
-              const isPatientSelected = selectedPatients.includes(patient.id);
+      <Table
+        header={header}
+        selectedData={selectedPatients}
+        data={sortedPatients}
+        onSelect={(e) =>
+          setSelectedPatients(e ? patients.map((patient) => patient.id) : [])
+        }
+        handlePageChange={handlePageChange}
+        handleLimitChange={handleLimitChange}
+        paginate={paginate}
+        minWidth='1100px'
+        checkbox
+      >
+        {paginatedPatients.map((patient) => {
+          const isPatientSelected = selectedPatients.includes(patient.id);
 
-              return (
-                <TableRow hover key={patient.id} selected={isPatientSelected}>
-                  <TableCell padding='checkbox'>
-                    <Checkbox
-                      checked={isPatientSelected}
-                      onChange={(event) => handleSelected(event, patient.id)}
-                      value={isPatientSelected}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Avatar img={patient.avatar} className='mr-2' />
-                    {patient.firstName} {patient.lastName}
-                  </TableCell>
-                  <TableCell>{patient.gender}</TableCell>
-                  <TableCell>{patient.diagnosis}</TableCell>
-                  <TableCell>{patient.phone}</TableCell>
-                  <TableCell>{patient.address}</TableCell>
-                  <TableCell>{patient.blood}</TableCell>
-                  <TableCell>{patient.dob}</TableCell>
-                  <TableCell align='right'>
-                    <Dropdown as={ButtonGroup}>
-                      <Dropdown.Toggle
-                        as={MoreHorizontalIcon}
-                        variant='link'
-                        className='cursor-pointer'
-                      />
+          return (
+            <TableRow hover key={patient.id} selected={isPatientSelected}>
+              <TableCell padding='checkbox'>
+                <Checkbox
+                  checked={isPatientSelected}
+                  onChange={(event) => handleSelected(event, patient.id)}
+                  value={isPatientSelected}
+                />
+              </TableCell>
+              <TableCell>
+                <Avatar img={patient.avatar} className='mr-2' />
+                {patient.firstName} {patient.lastName}
+              </TableCell>
+              <TableCell>{patient.gender}</TableCell>
+              <TableCell>{patient.diagnosis}</TableCell>
+              <TableCell>{patient.phone}</TableCell>
+              <TableCell>{patient.address}</TableCell>
+              <TableCell>{patient.blood}</TableCell>
+              <TableCell>{patient.dob}</TableCell>
+              <TableCell align='right'>
+                <Dropdown as={ButtonGroup}>
+                  <Dropdown.Toggle
+                    as={MoreHorizontalIcon}
+                    variant='link'
+                    className='cursor-pointer'
+                  />
 
-                      <Dropdown.Menu>
-                        <Dropdown.Item
-                          href={`/doctor/management/patients/${1}/board`}
-                        >
-                          View
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          href={`/doctor/management/patients/${1}/edit`}
-                        >
-                          Edit
-                        </Dropdown.Item>
-                        <Dropdown.Item>Delete</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </Table>
-        </div>
-      </HorizontalScrollbar>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      href={`/doctor/management/patients/${1}/board`}
+                    >
+                      View
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      href={`/doctor/management/patients/${1}/edit`}
+                    >
+                      Edit
+                    </Dropdown.Item>
+                    <Dropdown.Item>Delete</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </Table>
     </Card>
   );
 };

@@ -1,65 +1,26 @@
-import _ from 'lodash';
 import { colors, createMuiTheme } from '@material-ui/core';
 
-const baseOptions = {
-  direction: 'ltr',
-  overrides: {
-    MuiLinearProgress: {
-      root: {
-        borderRadius: 3,
-        overflow: 'hidden',
-      },
+let theme = createMuiTheme({
+  palette: {
+    action: {
+      active: '#007bff',
     },
-    MuiListItemIcon: {
-      root: {
-        minWidth: 32,
-      },
+    background: {
+      default: colors.common.white,
+      dark: '#f4f6f8',
+      paper: colors.common.white,
     },
-    MuiChip: {
-      root: {
-        backgroundColor: 'rgba(0,0,0,0.075)',
-      },
+    primary: {
+      main: '#007bff',
     },
-  },
-};
-
-const themeOption = [
-  {
-    name: 'LIGHT',
-    overrides: {
-      MuiInputBase: {
-        input: {
-          '&::placeholder': {
-            opacity: 1,
-            color: colors.blueGrey[600],
-          },
-        },
-      },
+    secondary: {
+      main: '#6c757d',
     },
-    palette: {
-      type: 'light',
-      action: {
-        active: colors.blueGrey[600],
-      },
-      background: {
-        default: colors.common.white,
-        dark: '#f4f6f8',
-        paper: colors.common.white,
-      },
-      primary: {
-        main: '#007bff',
-      },
-      secondary: {
-        main: '#6c757d',
-      },
-      text: {
-        primary: '#007bff',
-        secondary: '#6c757d',
-      },
+    text: {
+      primary: '#000',
+      secondary: '#6c757d',
     },
   },
-];
-
-let theme = createMuiTheme(_.merge({}, baseOptions, themeOption));
+});
 
 export default theme;

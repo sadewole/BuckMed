@@ -1,8 +1,8 @@
 import 'nprogress/nprogress.css';
 import 'aos/dist/aos.css';
 import 'src/static/style/App.css';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';

@@ -90,9 +90,9 @@ export default function AddReceiptModal({ showModal, setShowModal, bill }) {
               <div className='row'>
                 <h4 className='col-4'>Address:</h4>
                 <h4 className='col-8'>
-                  <span>9/12 Agege</span>
-                  <span>Ipaja</span>
-                  <span>Ajah Island</span>
+                  <span>9/12 Agege </span>
+                  <span>Ipaja </span>
+                  <span>Ajah Island </span>
                   <span> Abeokuta</span>
                 </h4>
               </div>

@@ -2,9 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Card } from 'react-bootstrap';
-// import GenericMoreButton from 'src/components/GenericMoreButton';
 import Chart from './Chart';
 
 const Performance = ({ className, ...rest }) => {
@@ -42,14 +41,14 @@ const Performance = ({ className, ...rest }) => {
         <Card.Title>Performance Over Time</Card.Title>
       </Card.Header>
       <Card.Body>
-        <HorizontalScrollbar>
+        <PerfectScrollbar>
           <Card style={{ height: 375, minWidth: 500 }}>
             <Chart
               data={performance.thisYear.data}
               labels={performance.thisYear.labels}
             />
           </Card>
-        </HorizontalScrollbar>
+        </PerfectScrollbar>
       </Card.Body>
     </Card>
   );

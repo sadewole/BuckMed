@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
-import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 import { InlineIcon } from '@iconify/react';
 import plusCircle from '@iconify/icons-fa-solid/plus-circle';
 import editIcon from '@iconify/icons-fa-solid/edit';
@@ -23,6 +22,20 @@ const Prescription = ({ drugs }) => {
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
 
+  const [paginate, setPaginate] = useState({
+    page: 0,
+    rowsPerPage: 10,
+    rowsPerPageOptions: [5, 10, 25],
+  });
+
+  const handlePageChange = (event, newPage) => {
+    setPaginate({ ...paginate, page: newPage });
+  };
+
+  const handleLimitChange = (event) => {
+    setPaginate({ ...paginate, rowsPerPage: parseInt(event.target.value) });
+  };
+
   return (
     <>
       <Button variant='primary' onClick={handleShowModal} className='my-3'>
@@ -30,41 +43,43 @@ const Prescription = ({ drugs }) => {
         Add Drug Precription
       </Button>
       <Card>
-        <HorizontalScrollbar>
-          <div style={{ minWidth: '700px' }}>
-            <Table header={header}>
-              {drugs.length > 0 ? (
-                drugs.map((drug) => {
-                  return (
-                    <TableRow key={drug.id}>
-                      <TableCell>{drug.drug_name}</TableCell>
-                      <TableCell>{drug.drug_quality}</TableCell>
-                      <TableCell>{drug.dosage}</TableCell>
-                      <TableCell>{drug.start_date}</TableCell>
-                      <TableCell>{drug.period}</TableCell>
-                      <TableCell>{drug.note}</TableCell>
-                      <TableCell align='right'>
-                        <InlineIcon icon={editIcon} className='mr-1' />
-                        <InlineIcon icon={trashIcon} className='mr-1' />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              ) : (
-                <TableRow>
-                  {/** Empty item */}
-                  <TableCell
-                    colSpan='100%'
-                    align='center'
-                    style={{ color: 'darkgray', padding: '30px' }}
-                  >
-                    Create new item
+        <Table
+          header={header}
+          data={drugs}
+          paginate={paginate}
+          handlePageChange={handlePageChange}
+          handleLimitChange={handleLimitChange}
+        >
+          {drugs.length > 0 ? (
+            drugs.map((drug) => {
+              return (
+                <TableRow key={drug.id}>
+                  <TableCell>{drug.drug_name}</TableCell>
+                  <TableCell>{drug.drug_quality}</TableCell>
+                  <TableCell>{drug.dosage}</TableCell>
+                  <TableCell>{drug.start_date}</TableCell>
+                  <TableCell>{drug.period}</TableCell>
+                  <TableCell>{drug.note}</TableCell>
+                  <TableCell align='right'>
+                    <InlineIcon icon={editIcon} className='mr-1' />
+                    <InlineIcon icon={trashIcon} className='mr-1' />
                   </TableCell>
                 </TableRow>
-              )}
-            </Table>
-          </div>
-        </HorizontalScrollbar>
+              );
+            })
+          ) : (
+            <TableRow>
+              {/** Empty item */}
+              <TableCell
+                colSpan='100%'
+                align='center'
+                style={{ color: 'darkgray', padding: '30px' }}
+              >
+                Create new item
+              </TableCell>
+            </TableRow>
+          )}
+        </Table>
       </Card>
 
       <PrescriptionModal showModal={showModal} setShowModal={setShowModal} />
