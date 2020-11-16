@@ -6,11 +6,11 @@ import editIcon from '@iconify/icons-fa-solid/edit';
 import trashIcon from '@iconify/icons-fa-solid/trash-alt';
 import Table from 'src/components/CustomTable';
 import { TableRow, TableCell } from '@material-ui/core';
-import { PrescriptionModal } from './Modals/PrescriptionModal';
+import { PrescriptionModal } from './Modal';
 
 const header = [
   'Drug Name',
-  'Drug quality',
+  'Drug type',
   'Dosage',
   'Start date',
   'Period',
@@ -55,7 +55,7 @@ const Prescription = ({ drugs }) => {
               return (
                 <TableRow key={drug.id}>
                   <TableCell>{drug.drug_name}</TableCell>
-                  <TableCell>{drug.drug_quality}</TableCell>
+                  <TableCell>{drug.drug_type}</TableCell>
                   <TableCell>{drug.dosage}</TableCell>
                   <TableCell>{drug.start_date}</TableCell>
                   <TableCell>{drug.period}</TableCell>

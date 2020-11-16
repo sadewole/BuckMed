@@ -8,7 +8,6 @@ import {
   MoreHorizontal as MoreHorizontalIcon,
 } from 'react-feather';
 import Table from 'src/components/CustomTable';
-import Checkbox from 'src/components/Checkbox';
 
 const tabs = [
   {
@@ -22,10 +21,6 @@ const tabs = [
   {
     value: 'isProspect',
     label: 'InPatients',
-  },
-  {
-    value: 'isReturning',
-    label: 'Returning',
   },
 ];
 
@@ -260,20 +255,12 @@ const Results = ({ className, patients }) => {
         handleLimitChange={handleLimitChange}
         paginate={paginate}
         minWidth='1100px'
-        checkbox
       >
         {paginatedPatients.map((patient) => {
           const isPatientSelected = selectedPatients.includes(patient.id);
 
           return (
             <TableRow hover key={patient.id} selected={isPatientSelected}>
-              <TableCell padding='checkbox'>
-                <Checkbox
-                  checked={isPatientSelected}
-                  onChange={(event) => handleSelected(event, patient.id)}
-                  value={isPatientSelected}
-                />
-              </TableCell>
               <TableCell>
                 <Avatar img={patient.avatar} className='mr-2' />
                 {patient.firstName} {patient.lastName}

@@ -4,12 +4,11 @@ import { Redirect, useLocation, useParams } from 'react-router-dom';
 import { useTheme, useMediaQuery, makeStyles, Box } from '@material-ui/core';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
-import { Board } from './Patials/Board';
-import { Forms } from './Patials/Forms';
+import Forms from './Patials/Forms';
+import Board from './Patials/Boards';
 import Prescription from './Patials/Prescription';
-import { Treatment } from './Patials/Treatment';
-import Billing from './Patials/Billing';
-import { Timeline } from './Patials/Timeline';
+import Billing from './Patials/Billings';
+import Timeline from './Patials/Timeline';
 
 const useStyle = makeStyles(() => ({
   layoutFixed: {
@@ -75,8 +74,6 @@ const PatientDetails = () => {
         return <Forms />;
       case 'prescription':
         return <Prescription />;
-      case 'treament_plan':
-        return <Treatment />;
       case 'billing':
         return <Billing />;
       default:

@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import Header from './Billings/Header';
-import {
-  Box,
-  Container,
-  Divider,
-  Tab,
-  Tabs,
-} from '@material-ui/core';
-import General from './Billings/General';
+import Header from './Header';
+import { Box, Container, Divider, Tab, Tabs } from '@material-ui/core';
+import General from './General';
 
 const Billing = () => {
   const [currentTab, setCurrentTab] = useState('general');

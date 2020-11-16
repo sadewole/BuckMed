@@ -29,11 +29,6 @@ const labels = [
     color: colors.red[600],
   },
   {
-    id: 'treament_plan',
-    name: 'Treatment Plan',
-    color: colors.yellow[600],
-  },
-  {
     id: 'billing',
     name: 'Billing',
     color: colors.lightGreen[600],

@@ -8,7 +8,7 @@ import DollarIcon from '@iconify/icons-fa-solid/dollar-sign';
 import CoinsIcon from '@iconify/icons-fa-solid/coins';
 import PlusCircleIcon from '@iconify/icons-fa-solid/plus-circle';
 import { currencyFormatter } from 'src/utils/formatter';
-import AddReceiptModal from '../Modals/AddReceiptModal';
+import AddReceiptModal from './Modals/AddReceiptModal';
 
 const useStyles = makeStyles({
   root: {},

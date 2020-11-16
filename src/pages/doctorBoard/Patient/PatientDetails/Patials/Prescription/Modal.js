@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Button, Form, FormControl, Row, Col } from 'react-bootstrap';
+import { dosageList, medicationTypeList, frequencyList } from './exports';
 
 export const PrescriptionModal = ({ showModal, setShowModal }) => {
   const handleCloseModal = () => setShowModal(false);
@@ -25,18 +26,14 @@ export const PrescriptionModal = ({ showModal, setShowModal }) => {
             </Col>
             <Col md='4'>
               <Form.Group>
-                <Form.Label>Drug Quality</Form.Label>
+                <Form.Label>Type</Form.Label>
                 <FormControl as='select'>
                   <option value=''></option>
-                  <option value='400mg'>400 micro g</option>
-                  <option value='fctb200mg'>f.c.tb 200mg</option>
-                  <option value='tb100mg'>tb 100mg</option>
-                  <option value='tb50mg'>tb 50mg</option>
-                  <option value='tb30mg'>tb 30mg</option>
-                  <option value='tb25mg'>tb 25mg</option>
-                  <option value='tb20mg'>tb 20mg</option>
-                  <option value='tb5mg'>tb 5mg</option>
-                  <option value='vial80mg'>vial 80mg</option>
+                  {medicationTypeList.map((list, index) => (
+                    <option key={index} value={list.name}>
+                      {list.name}
+                    </option>
+                  ))}
                 </FormControl>
               </Form.Group>
             </Col>
@@ -45,10 +42,11 @@ export const PrescriptionModal = ({ showModal, setShowModal }) => {
                 <Form.Label>Dosage</Form.Label>
                 <FormControl as='select'>
                   <option value=''></option>
-                  <option value='1tb'>1 tb</option>
-                  <option value='2tb'>2 tbs</option>
-                  <option value='3tb'>3 tbs</option>
-                  <option value='1vial'>1 vial</option>
+                  {dosageList.map((list, index) => (
+                    <option value={list.name} key={index}>
+                      {list.name}
+                    </option>
+                  ))}
                 </FormControl>
               </Form.Group>
             </Col>
@@ -59,7 +57,14 @@ export const PrescriptionModal = ({ showModal, setShowModal }) => {
                 <Form.Label>
                   Period <small>(days)</small>
                 </Form.Label>
-                <FormControl type='text' />
+                <FormControl as='select'>
+                  <option value=''></option>
+                  {frequencyList.map((list, index) => (
+                    <option value={list.name} key={index}>
+                      {list.name}
+                    </option>
+                  ))}
+                </FormControl>
               </Form.Group>
             </Col>
             <Col md='6'>
@@ -76,10 +81,10 @@ export const PrescriptionModal = ({ showModal, setShowModal }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant='secondary' onClick={handleCloseModal}>
+        <Button variant='primary-outlined' onClick={handleCloseModal}>
           Close
         </Button>
-        <Button variant='primary'>Understood</Button>
+        <Button variant='primary'>Submit</Button>
       </Modal.Footer>
     </Modal>
   );
