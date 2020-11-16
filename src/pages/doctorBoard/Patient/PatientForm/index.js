@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouteMatch } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { InlineIcon } from '@iconify/react';
 import plusCircle from '@iconify/icons-fa-solid/plus-circle';
+import minusCircle from '@iconify/icons-fa-solid/minus-circle';
 import { Typography } from '@material-ui/core';
 import PatientBio from './Patials/PatientBio';
 import PatientMedic from './Patials/PatientMedic';
@@ -11,8 +13,19 @@ import Others from './Patials/Others';
 import MedicHistory from './Patials/MedicHistory';
 
 const NewPatient = () => {
+  const match = useRouteMatch({
+    path: '/doctor/management/patients/:patientId/edit',
+    exact: true,
+  });
+  const [title, setTitle] = useState('new patient');
   const [showHistory, setShowHistory] = useState(false);
   const [showMorePatient, setShowMorePatient] = useState(false);
+
+  useEffect(() => {
+    if (match) {
+      setTitle('Edit patient');
+    }
+  }, [match]);
 
   return (
     <Page
@@ -24,7 +37,7 @@ const NewPatient = () => {
       }}
     >
       <Container fluid>
-        <Header />
+        <Header title={title} />
         <Form className='my-5'>
           <PatientBio />
           <PatientMedic />
@@ -33,7 +46,7 @@ const NewPatient = () => {
               More Patient Info
             </Typography>
             <InlineIcon
-              icon={plusCircle}
+              icon={!showMorePatient ? plusCircle : minusCircle}
               className='fa-2x text-primary cursor-pointer'
               onClick={() => setShowMorePatient(!showMorePatient)}
             />
@@ -44,7 +57,7 @@ const NewPatient = () => {
               Medical History
             </Typography>
             <InlineIcon
-              icon={plusCircle}
+              icon={!showHistory ? plusCircle : minusCircle}
               className='fa-2x text-primary cursor-pointer'
               onClick={() => setShowHistory(!showHistory)}
             />

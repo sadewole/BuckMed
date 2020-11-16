@@ -3,34 +3,43 @@ import { NavLink, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ListGroupItem, ButtonGroup } from 'react-bootstrap';
-import { Icon } from '@iconify/react';
-import Tag from '@iconify/icons-fa-solid/tag';
+import { Icon as IconGroup } from '@iconify/react';
+import ChartLineIcon from '@iconify/icons-fa-solid/chart-line';
+import HistoryIcon from '@iconify/icons-fa-solid/history';
+import FormIcon from '@iconify/icons-fa-solid/align-left';
+import PrescriptionIcon from '@iconify/icons-fa-solid/prescription';
+import TagIcon from '@iconify/icons-fa-solid/tags';
 import { colors } from '@material-ui/core';
 
 const labels = [
   {
     id: 'board',
     name: 'Dashboard',
+    icon: ChartLineIcon,
     color: colors.blue[600],
   },
   {
     id: 'timeline',
     name: 'Timeline',
+    icon: HistoryIcon,
     color: colors.deepOrange[600],
   },
   {
     id: 'forms',
     name: 'Forms',
+    icon: FormIcon,
     color: colors.amber[600],
   },
   {
     id: 'prescription',
     name: 'Prescription',
+    icon: PrescriptionIcon,
     color: colors.red[600],
   },
   {
     id: 'billing',
     name: 'Billing',
+    icon: TagIcon,
     color: colors.lightGreen[600],
   },
 ];
@@ -39,16 +48,16 @@ const Sidebar = ({ show }) => {
   const { patientId } = useParams();
   return (
     <Drawer className={show ? 'show' : undefined}>
-      {labels.map((label) => (
-        <ListGroupItem key={label.id} style={{ paddingLeft: 0, border: 0 }}>
-          <NavLink to={`/doctor/management/patients/${patientId}/${label.id}`}>
+      {labels.map(({ id, name, icon: Icon, color }) => (
+        <ListGroupItem key={id} style={{ paddingLeft: 0, border: 0 }}>
+          <NavLink to={`/doctor/management/patients/${patientId}/${id}`}>
             <ButtonGroup className='sidenavItem'>
-              <Icon
-                icon={Tag}
-                style={{ color: label.color }}
+              <IconGroup
+                icon={Icon}
+                style={{ color: color }}
                 className='mr-2'
               />
-              {label.name}
+              {name}
             </ButtonGroup>
           </NavLink>
         </ListGroupItem>

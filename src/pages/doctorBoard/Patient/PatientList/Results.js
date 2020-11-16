@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, FormControl, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { Tabs, Tab, Paper, TableRow, TableCell } from '@material-ui/core';
@@ -281,12 +282,14 @@ const Results = ({ className, patients }) => {
 
                   <Dropdown.Menu>
                     <Dropdown.Item
-                      href={`/doctor/management/patients/${1}/board`}
+                      as={RouterLink}
+                      to={`/doctor/management/patients/${1}/board`}
                     >
                       View
                     </Dropdown.Item>
                     <Dropdown.Item
-                      href={`/doctor/management/patients/${1}/edit`}
+                      as={RouterLink}
+                      to={`/doctor/management/patients/${1}/edit`}
                     >
                       Edit
                     </Dropdown.Item>

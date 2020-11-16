@@ -81,7 +81,7 @@ export const PrescriptionModal = ({ showModal, setShowModal }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant='primary-outlined' onClick={handleCloseModal}>
+        <Button variant='outline-primary' onClick={handleCloseModal}>
           Close
         </Button>
         <Button variant='primary'>Submit</Button>
