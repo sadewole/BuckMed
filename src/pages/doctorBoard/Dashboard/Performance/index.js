@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Card } from 'react-bootstrap';
+import { Card, CardHeader, CardContent } from '@material-ui/core';
 import Chart from './Chart';
 
 const Performance = ({ className, ...rest }) => {
@@ -37,10 +37,8 @@ const Performance = ({ className, ...rest }) => {
 
   return (
     <Card>
-      <Card.Header>
-        <Card.Title>Performance Over Time</Card.Title>
-      </Card.Header>
-      <Card.Body>
+      <CardHeader title='Performance Over Time' />
+      <CardContent>
         <PerfectScrollbar>
           <Card style={{ height: 375, minWidth: 500 }}>
             <Chart
@@ -49,14 +47,10 @@ const Performance = ({ className, ...rest }) => {
             />
           </Card>
         </PerfectScrollbar>
-      </Card.Body>
+      </CardContent>
     </Card>
   );
 };
-
-const Divider = styled.hr`
-  margin: 10px 0;
-`;
 
 Performance.propTypes = {
   className: PropTypes.string,
