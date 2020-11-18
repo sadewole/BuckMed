@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import clsx from 'clsx';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import doctorIcon from '@iconify/icons-fa-solid/user-md';
 import pieChartIcon from '@iconify/icons-fa-solid/chart-pie';
 import messageCircleIcon from '@iconify/icons-fa-solid/comment';
@@ -227,7 +228,7 @@ const NavIndex = ({ show }) => {
         </Card>
         <Divider />
       </div>
-      <Scrollbar className='flex-grow-1'>
+      <PerfectScrollbar className='flex-grow-1'>
         <Card className='p-2 borderless'>
           {sections.map((section) => (
             <ListGroup key={section.subheader} className='my-2'>
@@ -249,7 +250,7 @@ const NavIndex = ({ show }) => {
             </Link>
           </Card>
         </Card>
-      </Scrollbar>
+      </PerfectScrollbar>
     </Card>
   );
 
@@ -260,23 +261,6 @@ const NavIndex = ({ show }) => {
 
 const Divider = styled.hr`
   margin: 10px 0;
-`;
-
-const Scrollbar = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    outline: 1px solid slategrey;
-    background-color: darkgray;
-  }
 `;
 
 const LeftSideBar = styled.aside`

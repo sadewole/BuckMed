@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Row, Col, Container } from 'react-bootstrap';
 import Header from './Header';
-import GenderChart from './GenderChart';
+import Gender from './Gender';
 import Performance from './Performance';
 import SubHeader from './SubHeader';
 
@@ -12,14 +12,14 @@ const Dashboard = () => {
       <SubHeader />
       <Container fluid>
         <Row>
-          <Col xs={12} lg={3}>
-            <GenderChart />
+          <Col xs={12} lg={4}>
+            <Gender />
           </Col>
-          <Col xs={12} lg={9}>
+          <Col xs={12} lg={8}>
             <Performance />
           </Col>
         </Row>
-        <Row>
+        <Row className='my-2'>
           <Col md={6} sm={12}></Col>
           <Col md={6} sm={12}></Col>
         </Row>

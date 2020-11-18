@@ -6,9 +6,10 @@ import DoctorLayout from 'src/layouts/DoctorLayout';
 import AuthGuard from 'src/components/AuthGuard';
 import GuestGuard from 'src/components/GuestGuard';
 import HomeView from 'src/pages/home';
+import LoadingScreen from 'src/components/LoadingScreen';
 
 export const renderRoutes = (routes = []) => (
-  <Suspense fallback={<h2>Loading...</h2>}>
+  <Suspense fallback={<LoadingScreen />}>
     <Switch>
       {routes.map((route, i) => {
         const Guard = route.guard || Fragment;
@@ -113,8 +114,33 @@ const routes = [
       },
       {
         exact: true,
+        path: '/doctor/management/finances/:id',
+        component: lazy(() => import('src/pages/errors/PageInView')),
+      },
+      {
+        exact: true,
         path: '/doctor/management/records',
         component: lazy(() => import('src/pages/doctorBoard/LabRecord')),
+      },
+      {
+        exact: true,
+        path: '/doctor/management/records/:id',
+        component: lazy(() => import('src/pages/errors/PageInView')),
+      },
+      {
+        exact: true,
+        path: '/doctor/chat',
+        component: lazy(() => import('src/pages/errors/PageInView')),
+      },
+      {
+        exact: true,
+        path: '/doctor/account',
+        component: lazy(() => import('src/pages/errors/PageInView')),
+      },
+      {
+        exact: true,
+        path: '/pricing',
+        component: lazy(() => import('src/pages/errors/PageInView')),
       },
       {
         exact: true,

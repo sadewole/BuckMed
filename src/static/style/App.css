@@ -12,6 +12,10 @@ body {
 }
 
 /* miseac */
+.MuiDialog-paperWidthSm {
+  min-width: 700px;
+}
+
 .MuiTab-root {
   font-size: large !important;
 }

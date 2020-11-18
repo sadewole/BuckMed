@@ -4,14 +4,12 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Card, FormControl, Button } from 'react-bootstrap';
 import Avatar from 'src/components/Avatar';
-import HorizontalScrollbar from 'src/components/HorizontalScrollbar';
 import {
   Search as SearchIcon,
   MoreHorizontal as MoreHorizontalIcon,
 } from 'react-feather';
-import Table from 'src/components/Table';
-import TableCell from 'src/components/TableCell';
-import TableRow from 'src/components/TableRow';
+import Table from 'src/components/CustomTable';
+import { TableRow, TableCell } from '@material-ui/core';
 import Checkbox from 'src/components/Checkbox';
 
 const sortOptions = [
@@ -96,10 +94,14 @@ const applySort = (doctors, sort) => {
 
 const Results = ({ className, doctors, ...rest }) => {
   const [selectedDoctors, setSelectedDoctors] = useState([]);
-  const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState(sortOptions[0].value);
+
+  const [paginate, setPaginate] = useState({
+    page: 0,
+    rowsPerPage: 10,
+    rowsPerPageOptions: [5, 10, 25],
+  });
 
   const header = ['Name', 'Gender', 'Specialiazation', 'Email', 'Address', ''];
 
@@ -124,25 +126,20 @@ const Results = ({ className, doctors, ...rest }) => {
   };
 
   const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+    setPaginate({ ...paginate, page: newPage });
   };
 
   const handleLimitChange = (event) => {
-    setLimit(parseInt(event.target.value));
-  };
-
-  const rowSelection = {
-    selectedSome:
-      selectedDoctors.length > 0 && selectedDoctors.length < doctors.length,
-    selectedAllData: selectedDoctors.length === doctors.length,
-    onSelect: (e) =>
-      setSelectedDoctors(e ? doctors.map((doctor) => doctor.id) : []),
+    setPaginate({ ...paginate, rowsPerPage: parseInt(event.target.value) });
   };
 
   const filteredDoctors = applyFilters(doctors, query);
   const sortedDoctors = applySort(filteredDoctors, sort);
-  const paginatedDoctors = applyPagination(sortedDoctors, page, limit);
-  const enableBulkOperations = selectedDoctors.length > 0;
+  const paginatedDoctors = applyPagination(
+    sortedDoctors,
+    paginate.page,
+    paginate.rowsPerPage
+  );
 
   return (
     <Card className='overflow-hidden' style={{ borderRadius: '.5rem' }}>
@@ -182,47 +179,53 @@ const Results = ({ className, doctors, ...rest }) => {
           ))}
         </FormControl>
       </div>
-      <HorizontalScrollbar>
-        <div style={{ minWidth: '700px' }}>
-          <Table header={header} checkbox rowSelection={rowSelection}>
-            {sortedDoctors.map((doctor) => {
-              const isDoctorSelected = selectedDoctors.includes(doctor.id);
+      <Table
+        header={header}
+        checkbox
+        selectedData={selectedDoctors}
+        data={sortedDoctors}
+        onSelect={(e) =>
+          setSelectedDoctors(e ? doctors.map((doctor) => doctor.id) : [])
+        }
+        handlePageChange={handlePageChange}
+        handleLimitChange={handleLimitChange}
+        paginate={paginate}
+        minWidth='1100px'
+      >
+        {paginatedDoctors.map((doctor) => {
+          const isDoctorSelected = selectedDoctors.includes(doctor.id);
 
-              return (
-                <TableRow hover key={doctor.id} selected={isDoctorSelected}>
-                  <TableCell padding='checkbox'>
-                    <Checkbox
-                      checked={isDoctorSelected}
-                      onChange={(event) =>
-                        handleSelectOneDoctor(event, doctor.id)
-                      }
-                      value={isDoctorSelected}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Avatar img={doctor.avatar} className='mr-2' />
-                    {doctor.firstName} {doctor.lastName}
-                  </TableCell>
-                  <TableCell>{doctor.gender}</TableCell>
-                  <TableCell>{doctor.specialization}</TableCell>
-                  <TableCell>{doctor.email}</TableCell>
-                  <TableCell>{doctor.address}</TableCell>
-                  <TableCell align='right'>
-                    <Link to='/doctor/management/all'>
-                      <Button variant='primary' className='mr-2'>
-                        Appointment
-                      </Button>
-                    </Link>
-                    <Link to='/doctor/management/all'>
-                      <MoreHorizontalIcon fontSize='small' />
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </Table>
-        </div>
-      </HorizontalScrollbar>
+          return (
+            <TableRow hover key={doctor.id} selected={isDoctorSelected}>
+              <TableCell padding='checkbox'>
+                <Checkbox
+                  checked={isDoctorSelected}
+                  onChange={(event) => handleSelectOneDoctor(event, doctor.id)}
+                  value={isDoctorSelected}
+                />
+              </TableCell>
+              <TableCell>
+                <Avatar img={doctor.avatar} className='mr-2' />
+                {doctor.firstName} {doctor.lastName}
+              </TableCell>
+              <TableCell>{doctor.gender}</TableCell>
+              <TableCell>{doctor.specialization}</TableCell>
+              <TableCell>{doctor.email}</TableCell>
+              <TableCell>{doctor.address}</TableCell>
+              <TableCell align='right'>
+                <Link to='/doctor/management/all'>
+                  <Button variant='primary' className='mr-2'>
+                    Appointment
+                  </Button>
+                </Link>
+                <Link to='/doctor/management/all'>
+                  <MoreHorizontalIcon fontSize='small' />
+                </Link>
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </Table>
     </Card>
   );
 };

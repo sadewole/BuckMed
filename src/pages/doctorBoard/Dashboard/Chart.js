@@ -1,6 +1,6 @@
 import React from 'react';
-import GenderChart from './GenderChart';
-import ActivityChart from './Partials/ActivityChart';
+import GenderChart from './Misc/GenderChart';
+import ActivityChart from './Misc/ActivityChart';
 
 const Chart = () => {
   return (
