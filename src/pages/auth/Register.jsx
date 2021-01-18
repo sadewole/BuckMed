@@ -43,7 +43,7 @@ const Register = () => {
           Register
         </Button>
       </Form>
-      <div>
+      <div className="mt-3">
         <p>
           Already have an account? <Link to='/login'>Login</Link>
         </p>

@@ -1,4 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react';
+import {NavLink} from 'react-router-dom'
 import { Nav, Navbar } from 'react-bootstrap';
 import Logo from './Logo';
 
@@ -34,10 +35,10 @@ const NavBar = () => {
       <Navbar.Toggle aria-controls='basic-navbar-nav' />
       <Navbar.Collapse id='basic-navbar-nav'>
         <Nav className='ml-auto align-items-center'>
-          <Nav.Link href='/'>Home</Nav.Link>
-          <Nav.Link href='/#about'>About</Nav.Link>
-          <Nav.Link href='/contact'>Contact</Nav.Link>
-          <Nav.Link href='/login'>
+          <Nav.Link to='/' as={NavLink} activeClassName="text-primary" >Home</Nav.Link>
+          <Nav.Link href='/#about' >About</Nav.Link>
+          <Nav.Link to='/contact' as={NavLink} >Contact</Nav.Link>
+          <Nav.Link to='/login' as={NavLink}  >
             <button className='btn  btn-outline-primary  btn-transparent-blue'>
               Login
             </button>

@@ -406,6 +406,7 @@ a:hover {
   -ms-flex: 1;
   flex: 1;
   padding: 5px 10px;
+  overflow: hidden;
 }
 
 .info-box .info-box-text {
@@ -425,7 +426,8 @@ a:hover {
   -ms-flex-pack: center;
   justify-content: center;
   text-align: center;
-  width: 70px;
+  min-width: 50px;
+  width: 50px;
 }
 
 .info-box .info-box-number {

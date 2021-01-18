@@ -17,7 +17,7 @@ const NewPatient = () => {
     path: '/doctor/management/patients/:patientId/edit',
     exact: true,
   });
-  const [title, setTitle] = useState('new patient');
+  const [title, setTitle] = useState('New patient');
   const [showHistory, setShowHistory] = useState(false);
   const [showMorePatient, setShowMorePatient] = useState(false);
 
@@ -29,7 +29,7 @@ const NewPatient = () => {
 
   return (
     <Page
-      title='New Patient'
+      title={title}
       style={{
         minHeight: '100%',
         paddingTop: '1em',

@@ -41,9 +41,9 @@ const Login = () => {
           Login
         </Button>
       </Form>
-      <div>
+      <div className="mt-3">
         <p>
-          Already have an account? <Link to='/register'>Register</Link>
+          Don't have an account? <Link to='/register'>Register</Link>
         </p>
       </div>
     </div>

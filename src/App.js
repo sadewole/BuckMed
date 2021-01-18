@@ -4,6 +4,7 @@ import { ThemeProvider } from '@material-ui/core';
 import routes, { renderRoutes } from './routes';
 import AOS from 'aos';
 import theme from 'src/theme';
+import ScrollReset from './components/ScrollReset';
 
 function App() {
   useEffect(() => {
@@ -17,7 +18,10 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router>{renderRoutes(routes)}</Router>
+      <Router>
+        <ScrollReset />
+        {renderRoutes(routes)}
+      </Router>
     </ThemeProvider>
   );
 }

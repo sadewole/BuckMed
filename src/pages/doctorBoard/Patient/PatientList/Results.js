@@ -183,6 +183,9 @@ const Results = ({ className, patients }) => {
 
   const handleLimitChange = (event) => {
     setPaginate({ ...paginate, rowsPerPage: parseInt(event.target.value) });
+    if (event.target.value >= patients.length) {
+      setPaginate({ ...paginate, page: 0 });
+    }
   };
 
   const filteredPatients = applyFilters(patients, query, filters);
