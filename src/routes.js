@@ -67,20 +67,20 @@ const routes = [
       {
         exact: true,
         path: '/doctor/dashboard',
-        component: lazy(() => import('src/pages/doctorBoard/Dashboard')),
+        component: lazy(() => import('src/pages/management/Dashboard')),
       },
       {
         exact: true,
         path: '/doctor/appointment',
         component: lazy(() =>
-          import('src/pages/doctorBoard/Appointment/Calendar')
+          import('src/pages/management/Appointment/Calendar')
         ),
       },
       {
         exact: true,
         path: '/doctor/management/patients',
         component: lazy(() =>
-          import('src/pages/doctorBoard/Patient/PatientList')
+          import('src/pages/management/Patient/PatientList')
         ),
       },
       {
@@ -90,27 +90,27 @@ const routes = [
           '/doctor/management/patients/:patientId/edit',
         ],
         component: lazy(() =>
-          import('src/pages/doctorBoard/Patient/PatientForm')
+          import('src/pages/management/Patient/PatientForm')
         ),
       },
       {
         exact: true,
         path: '/doctor/management/patients/:patientId/:label?',
         component: lazy(() =>
-          import('src/pages/doctorBoard/Patient/PatientDetails')
+          import('src/pages/management/Patient/PatientDetails')
         ),
       },
       {
         exact: true,
         path: '/doctor/management/all',
         component: lazy(() =>
-          import('src/pages/doctorBoard/Doctor/DoctorListView')
+          import('src/pages/management/Doctor/DoctorListView')
         ),
       },
       {
         exact: true,
         path: '/doctor/management/finances',
-        component: lazy(() => import('src/pages/doctorBoard/Finance')),
+        component: lazy(() => import('src/pages/management/Finance')),
       },
       {
         exact: true,
@@ -120,7 +120,7 @@ const routes = [
       {
         exact: true,
         path: '/doctor/management/records',
-        component: lazy(() => import('src/pages/doctorBoard/LabRecord')),
+        component: lazy(() => import('src/pages/management/LabRecord')),
       },
       {
         exact: true,
