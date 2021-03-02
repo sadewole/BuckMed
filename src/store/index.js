@@ -1,15 +1,18 @@
-import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import rootReducer from './reducers';
+import {
+  useDispatch as useReduxDispatch,
+  useSelector as useReduxSelector,
+} from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { ENABLE_REDUX_DEV_TOOLS } from 'src/constants';
+import rootReducer from './rootReducer';
 
-const middleware = [thunk];
+const store = configureStore({
+  reducer: rootReducer,
+  devTools: ENABLE_REDUX_DEV_TOOLS,
+});
 
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+export const useSelector = useReduxSelector;
 
-const initState = {};
+export const useDispatch = () => useReduxDispatch();
 
-export default createStore(
-  rootReducer,
-  initState,
-  composeEnhancer(applyMiddleware(...middleware))
-);
+export default store;
