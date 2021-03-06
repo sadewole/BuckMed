@@ -1,17 +1,29 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import axios from 'src/utils/axios';
-import axios from 'axios';
-import { isError } from 'lodash';
+import { server } from 'src/constants';
+import moment from 'moment';
 
 const initialState = {
   user: null,
+};
+
+const setUserStorage = (data) => {
+  if (data) {
+    let session_expiry = moment().add(1, 'days').valueOf();
+    const buckmed_store = JSON.stringify({
+      session: data.token,
+      session_expiry,
+    });
+    localStorage.setItem('buckmed_store', buckmed_store);
+  } else {
+    localStorage.removeItem('buckmed_store');
+  }
 };
 
 const slice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    patientLogin(state, action) {
+    user(state, action) {
       state.user = action.payload;
     },
   },
@@ -21,41 +33,75 @@ export const reducer = slice.reducer;
 
 export const patientLogin = (data) => async (dispatch) => {
   try {
-    const response = await axios.post('login', data);
+    const response = await fetch(`${server}auth/login`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-    console.log(response.data);
-    dispatch('patientLogin', response.data);
-    console.log(data);
+    const responseJSON = await response.json();
+
+    console.log(responseJSON);
+
+    if (responseJSON.success === true) {
+      setUserStorage(data);
+      dispatch(slice.actions.user(data.user));
+    } else {
+      throw new Error(responseJSON.message);
+    }
+
+    return responseJSON;
   } catch (err) {
-    console.log(err.message);
+    return err;
   }
 };
 
-export const patientRegister = (data) => (dispatch) => {
-  console.log(data);
-  //   try {
-  //     const body = JSON.stringify(data);
-  //     // const response = await axios.post(
-  //     //   'https://hospital-manage-project.herokuapp.com/api/patient/auth/signup/',
-  //     //   body
-  //     // );
-  //     console.log('got here');
-  //     console.log(response);
-  //     // dispatch('patientRegister', response.data);
-  //     return response;
-  //   } catch (err) {
-  //     console.log(err);
-  //     return err;
-  //   }
-
-  fetch(
-    'https://hospital-manage-project.herokuapp.com/api/patient/auth/signup/',
-    {
+export const staffLogin = (data) => async (dispatch) => {
+  try {
+    const response = await fetch(`${server}employee/login`, {
       method: 'POST',
       body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const responseJSON = await response.json();
+
+    if (responseJSON.success === true) {
+      setUserStorage(data);
+      dispatch(slice.actions.user(data.user));
+    } else {
+      throw new Error(responseJSON.message);
     }
-  )
-    .then((res) => res.json())
-    .then((data) => console.log(data))
-    .catch((err) => console.log(err));
+
+    return responseJSON;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const patientRegister = (data) => async (dispatch) => {
+  try {
+    const response = await fetch(`${server}auth/signup`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const responseJSON = await response.json();
+
+    if (responseJSON.success === true) {
+      setUserStorage(data);
+      dispatch(slice.actions.user(data.user));
+    }
+
+    return responseJSON;
+  } catch (err) {
+    return err;
+  }
 };

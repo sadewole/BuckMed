@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { Button, Form, FormLabel, FormControl } from 'react-bootstrap';
+import { Button, Form, FormLabel, FormControl, Alert } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
@@ -102,9 +102,13 @@ const Register = () => {
           const { submit, ...rest } = values;
           dispatch(patientRegister(rest))
             .then((res) => {
-              console.log(res);
-              setStatus({ success: true });
-              // resetForm();
+              if (res.success === true) {
+                console.log(res);
+                setStatus({ success: true });
+                // resetForm();
+              } else {
+                throw new Error(res);
+              }
             })
             .catch((err) => {
               console.log(err);
@@ -118,6 +122,7 @@ const Register = () => {
           handleSubmit,
           handleBlur,
           handleChange,
+          setErrors,
           isSubmitting,
           touched,
           values,
@@ -174,6 +179,15 @@ const Register = () => {
                 </Form.Group>
               );
             })}
+            {errors.submit && (
+              <Alert
+                variant='danger'
+                onClose={() => setErrors({ submit: null })}
+                dismissible
+              >
+                {errors.submit}
+              </Alert>
+            )}
             <Button
               variant='outline-primary'
               className='btn-block btn-transparent-blue'

@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const axiosInstance = axios.create({
   // withCredentials: true,
-  baseURL: 'https://hospital-manage-project.herokuapp.com/api/',
-  headers: { 'Content-Type': 'application/json' },
+  //   baseURL: 'https://hospital-manage-project.herokuapp.com/api/',
+  //   headers: { 'Content-Type': 'application/json' },
 });
 
 axiosInstance.interceptors.response.use(
