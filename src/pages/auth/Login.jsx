@@ -54,6 +54,7 @@ const Login = () => {
             .email('Must be a valid email')
             .max(255)
             .required('Email is required'),
+          password: Yup.string().required('Password is required'),
         })}
         onSubmit={(values, { ...formiks }) => {
           const { submit, ...rest } = values;

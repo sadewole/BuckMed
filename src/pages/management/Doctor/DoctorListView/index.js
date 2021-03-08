@@ -1,32 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { Container, Card } from 'react-bootstrap';
-import axios from 'src/utils/axios';
 import Page from 'src/components/Page';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
 import Header from './Header';
 import Results from './Results';
-
-import 'src/__mocks__/doctors';
+import { useDispatch, useSelector } from 'src/store';
+import { fetchEmployee } from 'src/slices/user';
 
 const DoctorListView = () => {
-  const isMountedRef = useIsMountedRef();
-  const [doctors, setDoctors] = useState([]);
-
-  const getDoctors = useCallback(async () => {
-    try {
-      const response = await axios.get('/api/doctors');
-
-      if (isMountedRef.current) {
-        setDoctors(response.data.doctors);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMountedRef]);
+  const dispatch = useDispatch();
+  const { allEmployee } = useSelector((state) => state.user);
 
   useEffect(() => {
-    getDoctors();
-  }, [getDoctors]);
+    dispatch(fetchEmployee());
+  }, [dispatch]);
 
   return (
     <Page
@@ -40,7 +26,7 @@ const DoctorListView = () => {
       <Container fluid>
         <Header />
         <Card className='mt-3' style={{ borderRadius: '1rem' }}>
-          <Results doctors={doctors} />
+          <Results doctors={allEmployee} />
         </Card>
       </Container>
     </Page>

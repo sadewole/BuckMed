@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { SnackbarProvider } from 'notistack';
 import { ThemeProvider } from '@material-ui/core';
 import routes, { renderRoutes } from './routes';
 import AOS from 'aos';
@@ -18,10 +19,16 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router>
-        <ScrollReset />
-        {renderRoutes(routes)}
-      </Router>
+      <SnackbarProvider
+        dense
+        maxSnack={3}
+        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+      >
+        <Router>
+          <ScrollReset />
+          {renderRoutes(routes)}
+        </Router>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }

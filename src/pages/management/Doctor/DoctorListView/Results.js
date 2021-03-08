@@ -195,39 +195,45 @@ const Results = ({ className, doctors, ...rest }) => {
         paginate={paginate}
         minWidth='1100px'
       >
-        {paginatedDoctors.map((doctor) => {
-          const isDoctorSelected = selectedDoctors.includes(doctor.id);
+        {paginatedDoctors
+          .filter((doctor) => doctor.employeeDetails !== null)
+          .map((doctor) => {
+            const isDoctorSelected = selectedDoctors.includes(doctor.id);
 
-          return (
-            <TableRow hover key={doctor.id} selected={isDoctorSelected}>
-              <TableCell padding='checkbox'>
-                <Checkbox
-                  checked={isDoctorSelected}
-                  onChange={(event) => handleSelectOneDoctor(event, doctor.id)}
-                  value={isDoctorSelected}
-                />
-              </TableCell>
-              <TableCell>
-                <Avatar img={doctor.avatar} className='mr-2' />
-                {doctor.firstName} {doctor.lastName}
-              </TableCell>
-              <TableCell>{doctor.gender}</TableCell>
-              <TableCell>{doctor.specialization}</TableCell>
-              <TableCell>{doctor.email}</TableCell>
-              <TableCell>{doctor.address}</TableCell>
-              <TableCell align='right'>
-                <Link to='/doctor/management/all'>
-                  <Button variant='primary' className='mr-2'>
-                    Appointment
-                  </Button>
-                </Link>
-                <Link to='/doctor/management/all'>
-                  <MoreHorizontalIcon fontSize='small' />
-                </Link>
-              </TableCell>
-            </TableRow>
-          );
-        })}
+            return (
+              <TableRow hover key={doctor.id} selected={isDoctorSelected}>
+                <TableCell padding='checkbox'>
+                  <Checkbox
+                    checked={isDoctorSelected}
+                    onChange={(event) =>
+                      handleSelectOneDoctor(event, doctor.id)
+                    }
+                    value={isDoctorSelected}
+                  />
+                </TableCell>
+                <TableCell>
+                  {doctor.employeeDetails.firstname}{' '}
+                  {doctor.employeeDetails.lastname}
+                </TableCell>
+                <TableCell className='text-capitalize'>
+                  {doctor.employeeDetails.gender}
+                </TableCell>
+                <TableCell>{doctor.specialty}</TableCell>
+                <TableCell>{doctor.email}</TableCell>
+                <TableCell>{doctor.employeeDetails.address}</TableCell>
+                <TableCell align='right'>
+                  <Link to='/doctor/management/all'>
+                    <Button variant='primary' className='mr-2'>
+                      Appointment
+                    </Button>
+                  </Link>
+                  <Link to='/doctor/management/all'>
+                    <MoreHorizontalIcon fontSize='small' />
+                  </Link>
+                </TableCell>
+              </TableRow>
+            );
+          })}
       </Table>
     </Card>
   );

@@ -4,6 +4,9 @@ import moment from 'moment';
 
 const initialState = {
   user: null,
+  token: JSON.parse(localStorage.getItem('buckmed_store')).session,
+  isAuthentiated: false,
+  isInitialised: false,
 };
 
 const setUserStorage = (data) => {
@@ -24,7 +27,13 @@ const slice = createSlice({
   initialState,
   reducers: {
     user(state, action) {
-      state.user = action.payload;
+      state.user = action.payload.user;
+      state.isAuthentiated = true;
+      state.token = action.payload.token;
+    },
+    logout(state) {
+      state.isAuthenticated = false;
+      state.user = null;
     },
   },
 });
@@ -43,11 +52,9 @@ export const patientLogin = (data) => async (dispatch) => {
 
     const responseJSON = await response.json();
 
-    console.log(responseJSON);
-
     if (responseJSON.success === true) {
-      setUserStorage(data);
-      dispatch(slice.actions.user(data.user));
+      setUserStorage(responseJSON.data);
+      dispatch(slice.actions.user(responseJSON.data));
     } else {
       throw new Error(responseJSON.message);
     }
@@ -71,8 +78,8 @@ export const staffLogin = (data) => async (dispatch) => {
     const responseJSON = await response.json();
 
     if (responseJSON.success === true) {
-      setUserStorage(data);
-      dispatch(slice.actions.user(data.user));
+      setUserStorage(responseJSON.data);
+      dispatch(slice.actions.user(responseJSON.data));
     } else {
       throw new Error(responseJSON.message);
     }
@@ -96,8 +103,8 @@ export const patientRegister = (data) => async (dispatch) => {
     const responseJSON = await response.json();
 
     if (responseJSON.success === true) {
-      setUserStorage(data);
-      dispatch(slice.actions.user(data.user));
+      setUserStorage(responseJSON.data);
+      dispatch(slice.actions.user(responseJSON.data));
     }
 
     return responseJSON;

@@ -7,8 +7,8 @@ import { useDispatch } from 'src/store';
 import { patientRegister } from 'src/slices/auth';
 
 const textInputs = [
-  { name: 'firstName', label: 'First Name', type: 'text' },
-  { name: 'lastName', label: 'Last Name', type: 'text' },
+  { name: 'firstName', label: 'First name', type: 'text' },
+  { name: 'lastName', label: 'Last name', type: 'text' },
   { name: 'email', label: 'Email', type: 'email' },
   { name: 'password', label: 'Password', type: 'password' },
   { name: 'dateOfBirth', label: 'Date of birth', type: 'date' },
@@ -69,6 +69,11 @@ const validate = Yup.object().shape({
   password: Yup.string()
     .min(5, 'Must be atleast 5 characters long')
     .required('Password is required'),
+  occupation: Yup.string().required('Occupation is required'),
+  height: Yup.string().required('Height is required'),
+  weight: Yup.string().required('Weight is required'),
+  bloodGroup: Yup.string().required('Blood Group is required'),
+  genotype: Yup.string().required('Genotype is required'),
 });
 
 const Register = () => {
@@ -107,11 +112,10 @@ const Register = () => {
                 setStatus({ success: true });
                 // resetForm();
               } else {
-                throw new Error(res);
+                throw new Error(res.message);
               }
             })
             .catch((err) => {
-              console.log(err);
               setErrors({ submit: err.message });
             })
             .finally(() => setSubmitting(false));
@@ -181,6 +185,7 @@ const Register = () => {
             })}
             {errors.submit && (
               <Alert
+                className='w-100'
                 variant='danger'
                 onClose={() => setErrors({ submit: null })}
                 dismissible
