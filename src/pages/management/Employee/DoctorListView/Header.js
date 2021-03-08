@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Row } from 'react-bootstrap';
 import { InlineIcon } from '@iconify/react';
 import plusCircle from '@iconify/icons-fa-solid/plus-circle';
-import CreateDoctor from '../Partials/CreateDoctor';
+import CreateDoctor from '../Partials/CreateEmployee';
 
 const Header = ({ className, ...rest }) => {
   const [show, setShow] = useState(false);

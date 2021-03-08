@@ -29,7 +29,6 @@ export const fetchEmployee = () => (dispatch, getState) => {
   })
     .then((res) => res.json())
     .then(({ data }) => {
-      console.log(data);
       dispatch(slice.actions.employee(data));
     })
     .catch((err) => err);
@@ -47,8 +46,6 @@ export const createEmployee = (data) => async (dispatch, getState) => {
     });
 
     const responseJSON = await response.json();
-
-    console.log(responseJSON);
 
     if (responseJSON.success === true) {
       dispatch(slice.actions.addEmployee(responseJSON.data));

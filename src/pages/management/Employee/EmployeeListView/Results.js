@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Card, FormControl, Button } from 'react-bootstrap';
-import Avatar from 'src/components/Avatar';
 import {
   Search as SearchIcon,
   MoreHorizontal as MoreHorizontalIcon,
@@ -12,91 +10,38 @@ import Table from 'src/components/CustomTable';
 import { TableRow, TableCell } from '@material-ui/core';
 import Checkbox from 'src/components/Checkbox';
 
-const sortOptions = [
-  {
-    value: 'updatedAt|desc',
-    label: 'Last update (newest first)',
-  },
-  {
-    value: 'updatedAt|asc',
-    label: 'Last update (oldest first)',
-  },
-  {
-    value: 'orders|desc',
-    label: 'Total orders (high to low)',
-  },
-  {
-    value: 'orders|asc',
-    label: 'Total orders (low to high)',
-  },
-];
+const applyFilters = (doctors, query) => {
+  return doctors
+    .filter((doctor) => doctor.specialty !== null)
+    .filter((doctor) => {
+      let matches = true;
 
-const applyFilters = (doctors, query, filters) => {
-  return doctors.filter((doctor) => {
-    let matches = true;
+      if (query) {
+        const properties = ['email', 'specialty'];
+        let containsQuery = false;
 
-    if (query) {
-      const properties = ['email', 'firstName', 'lastName'];
-      let containsQuery = false;
+        properties.forEach((property) => {
+          if (doctor[property].toLowerCase().includes(query.toLowerCase())) {
+            containsQuery = true;
+          }
+        });
 
-      properties.forEach((property) => {
-        if (doctor[property].toLowerCase().includes(query.toLowerCase())) {
-          containsQuery = true;
+        if (!containsQuery) {
+          matches = false;
         }
-      });
-
-      if (!containsQuery) {
-        matches = false;
       }
-    }
 
-    return matches;
-  });
+      return matches;
+    });
 };
 
 const applyPagination = (doctors, page, limit) => {
   return doctors.slice(page * limit, page * limit + limit);
 };
 
-const descendingComparator = (a, b, orderBy) => {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-
-  return 0;
-};
-
-const getComparator = (order, orderBy) => {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-};
-
-const applySort = (doctors, sort) => {
-  const [orderBy, order] = sort.split('|');
-  const comparator = getComparator(order, orderBy);
-  const stabilizedThis = doctors.map((el, index) => [el, index]);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-
-    if (order !== 0) return order;
-
-    return a[1] - b[1];
-  });
-
-  return stabilizedThis.map((el) => el[0]);
-};
-
 const Results = ({ className, doctors, ...rest }) => {
   const [selectedDoctors, setSelectedDoctors] = useState([]);
   const [query, setQuery] = useState('');
-  const [sort, setSort] = useState(sortOptions[0].value);
-
   const [paginate, setPaginate] = useState({
     page: 0,
     rowsPerPage: 10,
@@ -108,11 +53,6 @@ const Results = ({ className, doctors, ...rest }) => {
   const handleQueryChange = (event) => {
     event.persist();
     setQuery(event.target.value);
-  };
-
-  const handleSortChange = (event) => {
-    event.persist();
-    setSort(event.target.value);
   };
 
   const handleSelectOneDoctor = (event, doctorId) => {
@@ -137,9 +77,8 @@ const Results = ({ className, doctors, ...rest }) => {
   };
 
   const filteredDoctors = applyFilters(doctors, query);
-  const sortedDoctors = applySort(filteredDoctors, sort);
   const paginatedDoctors = applyPagination(
-    sortedDoctors,
+    filteredDoctors,
     paginate.page,
     paginate.rowsPerPage
   );
@@ -158,35 +97,17 @@ const Results = ({ className, doctors, ...rest }) => {
           <FormControl
             className='borderless unfocus'
             onChange={handleQueryChange}
-            placeholder='Search doctors'
+            placeholder='Search employee'
             value={query}
             variant='outlined'
           />
         </Card>
-
-        <FormControl
-          label='Sort By'
-          name='sort'
-          onChange={handleSortChange}
-          value={sort}
-          variant='outlined'
-          style={{ maxWidth: '300px' }}
-          as='select'
-          custom
-          className='m-1'
-        >
-          {sortOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </FormControl>
       </div>
       <Table
         header={header}
         checkbox
         selectedData={selectedDoctors}
-        data={sortedDoctors}
+        data={filteredDoctors}
         onSelect={(e) =>
           setSelectedDoctors(e ? doctors.map((doctor) => doctor.id) : [])
         }

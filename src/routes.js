@@ -104,7 +104,7 @@ const routes = [
         exact: true,
         path: '/doctor/management/all',
         component: lazy(() =>
-          import('src/pages/management/Doctor/DoctorListView')
+          import('src/pages/management/Employee/EmployeeListView')
         ),
       },
       {
