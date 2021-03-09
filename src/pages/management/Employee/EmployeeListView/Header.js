@@ -11,12 +11,12 @@ const Header = ({ className, ...rest }) => {
     <Fragment>
       <Row className='justify-content-between m-3' {...rest}>
         <Row>
-          <h3 className='text-primary'> All Doctors</h3>
+          <h3 className='text-primary'> All Employees</h3>
         </Row>
         <Row>
           <Button variant='primary' onClick={() => setShow(!show)}>
             <InlineIcon icon={plusCircle} className='mr-1' />
-            New Doctor
+            New Employee
           </Button>
         </Row>
       </Row>

@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, FormControl, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { Tabs, Tab, Paper, TableRow, TableCell } from '@material-ui/core';
-import Avatar from 'src/components/Avatar';
+import moment from 'moment';
 import {
   Search as SearchIcon,
   MoreHorizontal as MoreHorizontalIcon,
@@ -22,25 +22,6 @@ const tabs = [
   {
     value: 'isProspect',
     label: 'InPatients',
-  },
-];
-
-const sortOptions = [
-  {
-    value: 'updatedAt|desc',
-    label: 'Last update (newest first)',
-  },
-  {
-    value: 'updatedAt|asc',
-    label: 'Last update (oldest first)',
-  },
-  {
-    value: 'orders|desc',
-    label: 'Total orders (high to low)',
-  },
-  {
-    value: 'orders|asc',
-    label: 'Total orders (low to high)',
   },
 ];
 
@@ -79,44 +60,10 @@ const applyPagination = (patients, page, limit) => {
   return patients.slice(page * limit, page * limit + limit);
 };
 
-const descendingComparator = (a, b, orderBy) => {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-
-  return 0;
-};
-
-const getComparator = (order, orderBy) => {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-};
-
-const applySort = (patients, sort) => {
-  const [orderBy, order] = sort.split('|');
-  const comparator = getComparator(order, orderBy);
-  const stabilizedThis = patients.map((el, index) => [el, index]);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-
-    return a[1] - b[1];
-  });
-
-  return stabilizedThis.map((el) => el[0]);
-};
-
 const Results = ({ className, patients }) => {
   const [currentTab, setCurrentTab] = useState('all');
   const [selectedPatients, setSelectedPatients] = useState([]);
   const [query, setQuery] = useState('');
-  const [sort, setSort] = useState(sortOptions[0].value);
   const [filters, setFilters] = useState({
     hasAcceptedMarketing: null,
     isProspect: null,
@@ -132,10 +79,9 @@ const Results = ({ className, patients }) => {
   const header = [
     'Name',
     'Gender',
-    'Diagnosis',
     'Phone',
-    'Address',
-    'Blood',
+    'Genotype',
+    'Blood Group',
     'Date of Birth',
     '',
   ];
@@ -162,11 +108,6 @@ const Results = ({ className, patients }) => {
     setQuery(event.target.value);
   };
 
-  const handleSortChange = (event) => {
-    event.persist();
-    setSort(event.target.value);
-  };
-
   const handleSelected = (event, patientId) => {
     if (!selectedPatients.includes(patientId)) {
       setSelectedPatients((prevSelected) => [...prevSelected, patientId]);
@@ -189,9 +130,8 @@ const Results = ({ className, patients }) => {
   };
 
   const filteredPatients = applyFilters(patients, query, filters);
-  const sortedPatients = applySort(filteredPatients, sort);
   const paginatedPatients = applyPagination(
-    sortedPatients,
+    filteredPatients,
     paginate.page,
     paginate.rowsPerPage
   );
@@ -229,29 +169,11 @@ const Results = ({ className, patients }) => {
             variant='outlined'
           />
         </Card>
-
-        <FormControl
-          label='Sort By'
-          name='sort'
-          onChange={handleSortChange}
-          value={sort}
-          variant='outlined'
-          style={{ maxWidth: '300px' }}
-          as='select'
-          custom
-          className='m-1'
-        >
-          {sortOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </FormControl>
       </div>
       <Table
         header={header}
         selectedData={selectedPatients}
-        data={sortedPatients}
+        data={filteredPatients}
         onSelect={(e) =>
           setSelectedPatients(e ? patients.map((patient) => patient.id) : [])
         }
@@ -266,15 +188,15 @@ const Results = ({ className, patients }) => {
           return (
             <TableRow hover key={patient.id} selected={isPatientSelected}>
               <TableCell>
-                <Avatar img={patient.avatar} className='mr-2' />
                 {patient.firstName} {patient.lastName}
               </TableCell>
               <TableCell>{patient.gender}</TableCell>
-              <TableCell>{patient.diagnosis}</TableCell>
-              <TableCell>{patient.phone}</TableCell>
-              <TableCell>{patient.address}</TableCell>
-              <TableCell>{patient.blood}</TableCell>
-              <TableCell>{patient.dob}</TableCell>
+              <TableCell>{patient.phoneNumber}</TableCell>
+              <TableCell>{patient.genotype}</TableCell>
+              <TableCell>{patient.bloodGroup}</TableCell>
+              <TableCell>
+                {moment(patient.dateOfBirth).format('DD MMM, YYYY')}
+              </TableCell>
               <TableCell align='right'>
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle
@@ -286,13 +208,13 @@ const Results = ({ className, patients }) => {
                   <Dropdown.Menu>
                     <Dropdown.Item
                       as={RouterLink}
-                      to={`/doctor/management/patients/${1}/board`}
+                      to={`/doctor/management/patients/${patient.id}/board`}
                     >
                       View
                     </Dropdown.Item>
                     <Dropdown.Item
                       as={RouterLink}
-                      to={`/doctor/management/patients/${1}/edit`}
+                      to={`/doctor/management/patients/${patient.id}/edit`}
                     >
                       Edit
                     </Dropdown.Item>
