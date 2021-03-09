@@ -1,14 +1,16 @@
 import React, { useLayoutEffect, useEffect, useRef, useState } from 'react';
 import Page from 'src/components/Page';
-import { Redirect, useLocation, useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import { useTheme, useMediaQuery, makeStyles, Box } from '@material-ui/core';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
-import Forms from './Patials/Forms';
-import Board from './Patials/Boards';
+import Visits from './Patials/Visits';
+import Board from './Patials/Board';
 import Prescription from './Patials/Prescription';
 import Billing from './Patials/Billings';
 import Timeline from './Patials/Timeline';
+import { useDispatch, useSelector } from 'src/store';
+import { fetchPatient } from 'src/slices/patient';
 
 const useStyle = makeStyles(() => ({
   layoutFixed: {
@@ -34,9 +36,11 @@ const useStyle = makeStyles(() => ({
 }));
 
 const PatientDetails = () => {
+  const dispatch = useDispatch();
+  const { patient } = useSelector((state) => state.patient);
   const [show, setShow] = useState(false);
   const classes = useStyle();
-  const { label } = useParams();
+  const { label, patientId } = useParams();
   const theme = useTheme();
   const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -64,14 +68,20 @@ const PatientDetails = () => {
     }
   }, [mobileDevice]);
 
+  useEffect(() => {
+    dispatch(fetchPatient(patientId));
+  }, [dispatch, patientId]);
+
+  console.log(patient);
+
   const View = () => {
     switch (label) {
       case 'board':
         return <Board />;
       case 'timeline':
         return <Timeline />;
-      case 'forms':
-        return <Forms />;
+      case 'visits':
+        return <Visits />;
       case 'prescription':
         return <Prescription />;
       case 'billing':
@@ -83,7 +93,7 @@ const PatientDetails = () => {
 
   return (
     <Page title='Patient Details' className='h-100 hidden'>
-      <Topbar show={show} handlePush={handlePushMenu} />
+      <Topbar show={show} handlePush={handlePushMenu} patient={patient} />
       <div className='d-flex'>
         <div
           className={classes.layoutFixed}

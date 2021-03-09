@@ -1,4 +1,6 @@
 import React, { useState, Fragment } from 'react';
+import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   Modal,
   ModalBody,
@@ -11,83 +13,40 @@ import {
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'src/store';
-import { createEmployee } from 'src/slices/user';
+import { createPatientAdmission } from 'src/slices/patient';
 import { useSnackbar } from 'notistack';
 
 const textInputs = [
-  { name: 'firstname', label: 'First Name', type: 'text' },
-  { name: 'lastname', label: 'Last Name', type: 'text' },
-  { name: 'email', label: 'Email', type: 'email' },
-  { name: 'password', label: 'Password', type: 'password' },
-  {
-    name: 'specialty',
-    label: 'Specialty',
-    type: 'select',
-    options: [
-      { value: '', text: '' },
-      { value: 'doctor', text: 'Doctor' },
-      { value: 'nurse', text: 'Nurse' },
-      { value: 'lab technician', text: 'Lab Technician' },
-      { value: 'radiologist', text: 'Radiologist' },
-    ],
-  },
-  { name: 'dateOfBirth', label: 'Date of birth', type: 'date' },
-  { name: 'phoneNumber', label: 'Phone no.', type: 'text' },
-  {
-    name: 'gender',
-    label: 'Gender',
-    type: 'select',
-    options: [
-      { value: '', text: '' },
-      { value: 'male', text: 'Male' },
-      { value: 'female', text: 'Female' },
-    ],
-  },
-  { name: 'address', label: 'Address', type: 'textarea' },
+  { name: 'admittedOn', label: 'Admitted date', type: 'date' },
+  { name: 'dischargedOn', label: 'Discharged date', type: 'date' },
+  { name: 'roomNumber', label: 'Room number', type: 'text' },
+  { name: 'bedNumber', label: 'Bed number', type: 'text' },
 ];
 
 const validate = Yup.object().shape({
-  phoneNumber: Yup.string()
-    .matches(
-      /^\(?([0-9]{3})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/,
-      'Must be a valid phone number'
-    )
-    .required('Phone number is required'),
-  email: Yup.string()
-    .email('Must be a valid email')
-    .max(255)
-    .required('Email is required'),
-  firstname: Yup.string().max(255).required('First Name is required'),
-  lastname: Yup.string().max(255).required('Last Name is required'),
-  dateOfBirth: Yup.string().required('Date of birth is required'),
-  gender: Yup.string().required('Gender is required'),
-  password: Yup.string()
-    .min(5, 'Must be atleast 5 characters long')
-    .required('Password is required'),
-  specialty: Yup.string().required('Specialty is required'),
-  address: Yup.string().required('Address is required'),
+  admittedOn: Yup.string().required('Admitted date is required'),
+  dischargedOn: Yup.string().required('Discharged date is required'),
+  roomNumber: Yup.string().required('Room number is required'),
+  bedNumber: Yup.string().required('Bed number is required'),
 });
 
-const CreateDoctor = ({ show, setShow }) => {
+const NewAdmission = ({ setShow, show }) => {
+  const params = useParams();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [inputs, setInputs] = useState({
-    email: '',
-    password: '',
-    firstname: '',
-    lastname: '',
-    specialty: '',
-    dateOfBirth: '',
-    gender: '',
-    phoneNumber: '',
-    address: '',
+    patientId: params.patientId,
+    admittedOn: '',
+    dischargedOn: '',
+    roomNumber: '',
+    bedNumber: '',
     submit: null,
   });
 
   return (
-    <Modal size='lg' show={show} onHide={() => setShow(false)}>
+    <Modal show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
-        <ModalTitle>Create Employee</ModalTitle>
+        <ModalTitle>Create Patient Admission</ModalTitle>
       </Modal.Header>
       <ModalBody>
         <Formik
@@ -99,7 +58,7 @@ const CreateDoctor = ({ show, setShow }) => {
           ) => {
             const { submit, ...rest } = values;
 
-            dispatch(createEmployee(rest))
+            dispatch(createPatientAdmission(rest))
               .then((res) => {
                 if (res.success === true) {
                   setStatus({ success: true });
@@ -128,10 +87,10 @@ const CreateDoctor = ({ show, setShow }) => {
             touched,
             values,
           }) => (
-            <Form noValidate onSubmit={handleSubmit} className='row p-3'>
+            <Form noValidate onSubmit={handleSubmit} className='p-3'>
               {textInputs.map((input, index) => {
                 return (
-                  <Form.Group key={index} className='col-12 col-sm-6'>
+                  <Form.Group key={index}>
                     <Form.Label>{input.label}</Form.Label>
                     {['text', 'email', 'password', 'date'].includes(
                       input.type
@@ -217,7 +176,7 @@ const CreateDoctor = ({ show, setShow }) => {
                 className='btn-block btn-transparent-blue'
                 disabled={isSubmitting}
               >
-                Create Employee
+                Create Admission
               </Button>
             </Form>
           )}
@@ -227,4 +186,9 @@ const CreateDoctor = ({ show, setShow }) => {
   );
 };
 
-export default CreateDoctor;
+NewAdmission.propTypes = {
+  show: PropTypes.bool.isRequired,
+  setShow: PropTypes.func.isRequired,
+};
+
+export default NewAdmission;

@@ -123,7 +123,7 @@ const sections = [
       },
       {
         title: 'Pricing',
-        href: '/pricing',
+        href: '/doctor/pricing',
         icon: priceTagIcon,
       },
     ],

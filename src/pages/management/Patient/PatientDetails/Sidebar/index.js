@@ -25,8 +25,8 @@ const labels = [
     color: colors.deepOrange[600],
   },
   {
-    id: 'forms',
-    name: 'Forms',
+    id: 'visits',
+    name: 'Visits',
     icon: FormIcon,
     color: colors.amber[600],
   },

@@ -139,7 +139,7 @@ const routes = [
       },
       {
         exact: true,
-        path: '/pricing',
+        path: '/doctor/pricing',
         component: lazy(() => import('src/pages/errors/PageInView')),
       },
       {

@@ -21,7 +21,7 @@ const useStyle = makeStyles(() => ({
   },
 }));
 
-const Topbar = ({ user, show, handlePush, ...rest }) => {
+const Topbar = ({ user, show, handlePush, patient, ...rest }) => {
   const classes = useStyle();
 
   return (
@@ -34,8 +34,14 @@ const Topbar = ({ user, show, handlePush, ...rest }) => {
           <Icon icon={BarIcon} />
         </li>
         <li className='nav-item'>
-          <Avatar rounded name='Sabriana James' size='small' />
-          <span className='mx-2'>Sabriana James</span>
+          <Avatar
+            rounded
+            name={`${patient.firstName} ${patient.lastName}`}
+            size='small'
+          />
+          <span className='mx-2'>
+            {patient.firstName} {patient.lastName}
+          </span>
         </li>
         <li className='nav-item'>
           <NavLink to={`/doctor/management/patients/${1}/edit`}>Edit</NavLink>
