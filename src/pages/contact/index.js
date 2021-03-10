@@ -61,7 +61,7 @@ const Contact = () => {
               </span>
               <div className='media-body'>
                 <h3>Email:</h3>
-                <p>support@colorlib.com</p>
+                <p>support@buckmed.com</p>
                 <p>Send us your query anytime!</p>
               </div>
             </div>

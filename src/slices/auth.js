@@ -26,7 +26,7 @@ const setAccessStorage = (data) => {
   }
 };
 
-const isValidToken = (accessToken) => {
+export const isValidToken = (accessToken) => {
   if (!accessToken) {
     return false;
   }
@@ -146,23 +146,31 @@ export const fetchUser = () => (dispatch) => {
     const { session } = JSON.parse(buckmed_store);
 
     if (session && isValidToken(session)) {
-      fetch(`${server}verify/token`, {
-        headers: {
-          Authorization: `Bearer ${session}`,
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then(({ data }) => {
-          return dispatch(
-            slice.actions.fetchUser({
-              user: data.user,
-              role: data.role,
-              isAuthenticated: true,
-            })
-          );
+      const decoded = jwtDecode(session);
+      return dispatch(
+        slice.actions.fetchUser({
+          user: decoded.user,
+          role: decoded.role,
+          isAuthenticated: true,
         })
-        .catch((err) => err);
+      );
+      // fetch(`${server}verify/token`, {
+      //   headers: {
+      //     Authorization: `Bearer ${session}`,
+      //     'Content-Type': 'application/json',
+      //   },
+      // })
+      //   .then((res) => res.json())
+      //   .then(({ data }) => {
+      //     return dispatch(
+      //       slice.actions.fetchUser({
+      //         user: data.user,
+      //         role: data.role,
+      //         isAuthenticated: true,
+      //       })
+      //     );
+      //   })
+      //   .catch((err) => err);
     }
     return dispatch(
       slice.actions.fetchUser({
