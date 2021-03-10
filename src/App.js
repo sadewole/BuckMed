@@ -5,17 +5,28 @@ import { ThemeProvider } from '@material-ui/core';
 import routes, { renderRoutes } from './routes';
 import AOS from 'aos';
 import theme from 'src/theme';
-import ScrollReset from './components/ScrollReset';
+import ScrollReset from 'src/components/ScrollReset';
+import LoadingScreen from 'src/components/LoadingScreen';
+import { fetchUser } from 'src/slices/auth';
+import { useDispatch, useSelector } from 'src/store';
 
 function App() {
+  const dispatch = useDispatch();
+  const { isInitialised } = useSelector((state) => state.auth);
   useEffect(() => {
+    dispatch(fetchUser());
+
     AOS.init({
       delay: 200,
       duration: 1200,
       once: false,
     });
     AOS.refresh();
-  }, []);
+  }, [dispatch]);
+
+  if (!isInitialised) {
+    return <LoadingScreen />;
+  }
 
   return (
     <ThemeProvider theme={theme}>

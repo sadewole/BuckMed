@@ -1,20 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { server } from 'src/constants';
-import moment from 'moment';
+import jwtDecode from 'jwt-decode';
+
+let buckmed_store = localStorage.getItem('buckmed_store');
+let token;
+if (buckmed_store) {
+  token = JSON.parse(buckmed_store).session;
+}
 
 const initialState = {
   user: null,
-  token: JSON.parse(localStorage.getItem('buckmed_store')).session,
-  isAuthentiated: false,
+  token,
+  isAuthenticated: false,
   isInitialised: false,
 };
 
-const setUserStorage = (data) => {
+const setAccessStorage = (data) => {
   if (data) {
-    let session_expiry = moment().add(1, 'days').valueOf();
     const buckmed_store = JSON.stringify({
       session: data.token,
-      session_expiry,
     });
     localStorage.setItem('buckmed_store', buckmed_store);
   } else {
@@ -22,18 +26,37 @@ const setUserStorage = (data) => {
   }
 };
 
+const isValidToken = (accessToken) => {
+  if (!accessToken) {
+    return false;
+  }
+
+  const decoded = jwtDecode(accessToken);
+  const currentTime = Date.now() / 1000;
+
+  return decoded.exp > currentTime;
+};
+
 const slice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    user(state, action) {
-      state.user = action.payload.user;
-      state.isAuthentiated = true;
-      state.token = action.payload.token;
+    fetchUser(state, action) {
+      const { user, isAuthenticated } = action.payload;
+      state.user = user;
+      state.isAuthenticated = isAuthenticated;
+      state.isInitialised = true;
     },
-    logout(state) {
+    signedUser(state, action) {
+      const { user, token } = action.payload;
+      state.user = user;
+      state.isAuthenticated = true;
+      state.token = token;
+    },
+    resetAuth(state) {
       state.isAuthenticated = false;
       state.user = null;
+      state.token = null;
     },
   },
 });
@@ -52,9 +75,11 @@ export const patientLogin = (data) => async (dispatch) => {
 
     const responseJSON = await response.json();
 
+    console.log(responseJSON);
+
     if (responseJSON.success === true) {
-      setUserStorage(responseJSON.data);
-      dispatch(slice.actions.user(responseJSON.data));
+      setAccessStorage(responseJSON.data);
+      dispatch(slice.actions.signedUser(responseJSON.data));
     } else {
       throw new Error(responseJSON.message);
     }
@@ -77,9 +102,11 @@ export const staffLogin = (data) => async (dispatch) => {
 
     const responseJSON = await response.json();
 
+    console.log(responseJSON);
+
     if (responseJSON.success === true) {
-      setUserStorage(responseJSON.data);
-      dispatch(slice.actions.user(responseJSON.data));
+      setAccessStorage(responseJSON.data);
+      dispatch(slice.actions.signedUser(responseJSON.data));
     } else {
       throw new Error(responseJSON.message);
     }
@@ -103,12 +130,51 @@ export const patientRegister = (data) => async (dispatch) => {
     const responseJSON = await response.json();
 
     if (responseJSON.success === true) {
-      setUserStorage(responseJSON.data);
-      dispatch(slice.actions.user(responseJSON.data));
+      setAccessStorage(responseJSON.data);
+      dispatch(slice.actions.signedUser(responseJSON.data));
     }
 
     return responseJSON;
   } catch (err) {
     return err;
   }
+};
+
+export const fetchUser = () => (dispatch) => {
+  const buckmed_store = localStorage.getItem('buckmed_store');
+  if (buckmed_store) {
+    const { session } = JSON.parse(buckmed_store);
+
+    if (session && isValidToken(session)) {
+      fetch(`${server}verify/token`, {
+        headers: {
+          Authorization: `Bearer ${session}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then(({ data }) => {
+          return dispatch(
+            slice.actions.fetchUser({
+              user: data.user,
+              role: data.role,
+              isAuthenticated: true,
+            })
+          );
+        })
+        .catch((err) => err);
+    }
+    return dispatch(
+      slice.actions.fetchUser({
+        user: null,
+        isAuthenticated: false,
+      })
+    );
+  }
+  return dispatch(
+    slice.actions.fetchUser({
+      user: null,
+      isAuthenticated: false,
+    })
+  );
 };
