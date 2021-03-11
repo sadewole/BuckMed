@@ -3,6 +3,7 @@ import 'aos/dist/aos.css';
 import 'src/static/style/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+// import 'src/utils/axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';

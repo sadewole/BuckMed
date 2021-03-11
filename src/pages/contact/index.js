@@ -1,10 +1,10 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import { Form, FormGroup } from 'react-bootstrap';
 
 const Contact = () => {
   return (
     <Fragment>
-      <div className='container mx-auto'>
+      <div className='container mx-auto py-5'>
         <div className='row'>
           <div className='col-12'>
             <h1 className='contact-title'>Get in Touch</h1>
@@ -61,7 +61,7 @@ const Contact = () => {
               </span>
               <div className='media-body'>
                 <h3>Email:</h3>
-                <p>support@colorlib.com</p>
+                <p>support@buckmed.com</p>
                 <p>Send us your query anytime!</p>
               </div>
             </div>
