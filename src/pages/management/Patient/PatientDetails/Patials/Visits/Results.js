@@ -1,21 +1,31 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Card, FormControl, Button } from 'react-bootstrap';
-import {
-  Search as SearchIcon,
-  MoreHorizontal as MoreHorizontalIcon,
-} from 'react-feather';
+import { Card } from 'react-bootstrap';
+import { IconButton } from '@material-ui/core';
+import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 import Table from 'src/components/CustomTable';
 import { TableRow, TableCell } from '@material-ui/core';
-import Checkbox from 'src/components/Checkbox';
+import { dateFormatter } from 'src/utils/formatter';
+import { deletePatientAdmissionRecord } from 'src/slices/patient';
+import { useDispatch } from 'src/store';
+import NewAdmission from './Partials/NewAdmission';
 
 const applyPagination = (datas, page, limit) => {
   return datas.slice(page * limit, page * limit + limit);
 };
 
-const Results = ({ className, datas, ...rest }) => {
-  const [selectedDatas, setSelectedDatas] = useState([]);
+const Results = ({
+  className,
+  datas,
+  show,
+  setShow,
+  action,
+  setAction,
+  selectedContent,
+  setSelectedContent,
+  ...rest
+}) => {
+  const dispatch = useDispatch();
   const [paginate, setPaginate] = useState({
     page: 0,
     rowsPerPage: 10,
@@ -27,18 +37,8 @@ const Results = ({ className, datas, ...rest }) => {
     'Discharged date',
     'Room no.',
     'Bed no.',
-    '',
+    'Actions',
   ];
-
-  const handleSelectOneData = (event, dataId) => {
-    if (!selectedDatas.includes(dataId)) {
-      setSelectedDatas((prevSelected) => [...prevSelected, dataId]);
-    } else {
-      setSelectedDatas((prevSelected) =>
-        prevSelected.filter((id) => id !== dataId)
-      );
-    }
-  };
 
   const handlePageChange = (event, newPage) => {
     setPaginate({ ...paginate, page: newPage });
@@ -57,59 +57,69 @@ const Results = ({ className, datas, ...rest }) => {
     paginate.rowsPerPage
   );
 
+  const handleEdit = (content) => {
+    setAction('Edit');
+    setShow(true);
+    setSelectedContent(content);
+  };
+
   return (
     <Card className='overflow-hidden' style={{ borderRadius: '.5rem' }}>
       <Table
         header={header}
-        checkbox
-        selectedData={selectedDatas}
-        data={datas}
-        onSelect={(e) =>
-          setSelectedDatas(e ? datas.map((data) => data.id) : [])
-        }
         handlePageChange={handlePageChange}
         handleLimitChange={handleLimitChange}
         paginate={paginate}
         minWidth='500px'
       >
-        {paginatedDatas
-          .filter((data) => data.employeeDetails !== null)
-          .map((data) => {
-            const isDataSelected = selectedDatas.includes(data.id);
-
+        {paginatedDatas.length ? (
+          paginatedDatas.map((data, index) => {
             return (
-              <TableRow hover key={data.id} selected={isDataSelected}>
-                <TableCell padding='checkbox'>
-                  <Checkbox
-                    checked={isDataSelected}
-                    onChange={(event) => handleSelectOneData(event, data.id)}
-                    value={isDataSelected}
-                  />
-                </TableCell>
+              <TableRow hover key={index}>
+                <TableCell>{dateFormatter(data.admittedOn)}</TableCell>
+                <TableCell>{dateFormatter(data.dischargedOn)}</TableCell>
+                <TableCell>{data.roomNumber}</TableCell>
+                <TableCell>{data.bedNumber}</TableCell>
                 <TableCell>
-                  {data.employeeDetails.firstname}{' '}
-                  {data.employeeDetails.lastname}
-                </TableCell>
-                <TableCell className='text-capitalize'>
-                  {data.employeeDetails.gender}
-                </TableCell>
-                <TableCell>{data.specialty}</TableCell>
-                <TableCell>{data.email}</TableCell>
-                <TableCell>{data.employeeDetails.address}</TableCell>
-                <TableCell align='right'>
-                  <Link to='/data/management/all'>
-                    <Button variant='primary' className='mr-2'>
-                      Appointment
-                    </Button>
-                  </Link>
-                  <Link to='/data/management/all'>
-                    <MoreHorizontalIcon fontSize='small' />
-                  </Link>
+                  <div className='d-flex align-items-center justify-content-center'>
+                    <IconButton
+                      aria-label='edit'
+                      onClick={() => handleEdit(data)}
+                    >
+                      <EditIcon fontSize='small' />
+                    </IconButton>
+                    <IconButton
+                      aria-label='delete'
+                      onClick={() =>
+                        dispatch(deletePatientAdmissionRecord(data.id))
+                      }
+                    >
+                      <DeleteIcon fontSize='small' style={{ color: 'red' }} />
+                    </IconButton>
+                  </div>
                 </TableCell>
               </TableRow>
             );
-          })}
+          })
+        ) : (
+          <TableRow>
+            {/** Empty item */}
+            <TableCell
+              colSpan='100%'
+              align='center'
+              style={{ color: 'darkgray', padding: '30px' }}
+            >
+              No record
+            </TableCell>
+          </TableRow>
+        )}
       </Table>
+      <NewAdmission
+        show={show}
+        setShow={setShow}
+        selectedContent={selectedContent}
+        action={action}
+      />
     </Card>
   );
 };
@@ -117,6 +127,12 @@ const Results = ({ className, datas, ...rest }) => {
 Results.propTypes = {
   className: PropTypes.string,
   datas: PropTypes.array.isRequired,
+  show: PropTypes.bool,
+  setShow: PropTypes.func,
+  action: PropTypes.string,
+  setAction: PropTypes.func,
+  selectedContent: PropTypes.object,
+  setSelectedContent: PropTypes.func,
 };
 
 Results.defaultProps = {

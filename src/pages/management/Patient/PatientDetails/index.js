@@ -72,8 +72,6 @@ const PatientDetails = () => {
     dispatch(fetchPatient(patientId));
   }, [dispatch, patientId]);
 
-  console.log(patient);
-
   const View = () => {
     switch (label) {
       case 'board':

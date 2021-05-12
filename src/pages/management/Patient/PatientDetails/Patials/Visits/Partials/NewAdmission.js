@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -13,7 +13,10 @@ import {
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'src/store';
-import { createPatientAdmission } from 'src/slices/patient';
+import {
+  createPatientAdmission,
+  updatePatientAdmissionRecord,
+} from 'src/slices/patient';
 import { useSnackbar } from 'notistack';
 
 const textInputs = [
@@ -30,7 +33,7 @@ const validate = Yup.object().shape({
   bedNumber: Yup.string().required('Bed number is required'),
 });
 
-const NewAdmission = ({ setShow, show }) => {
+const NewAdmission = ({ setShow, show, action, selectedContent }) => {
   const params = useParams();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -43,10 +46,47 @@ const NewAdmission = ({ setShow, show }) => {
     submit: null,
   });
 
+  // handle update form
+  const updateForm = useCallback(
+    (content) =>
+      setInputs({
+        patientId: params.patientId,
+        admittedOn: content.admittedOn,
+        dischargedOn: content.dischargedOn,
+        roomNumber: content.roomNumber,
+        bedNumber: content.bedNumber,
+        submit: null,
+      }),
+    [params.patientId]
+  );
+
+  const cleanForm = useCallback(
+    () =>
+      setInputs({
+        patientId: params.patientId,
+        admittedOn: '',
+        dischargedOn: '',
+        roomNumber: '',
+        bedNumber: '',
+        submit: null,
+      }),
+    [params.patientId]
+  );
+
+  useEffect(() => {
+    console.log(selectedContent);
+    if (action === 'Edit' && selectedContent.hasOwnProperty('id')) {
+      console.log('selectedContent', selectedContent);
+      updateForm(selectedContent);
+    } else {
+      cleanForm();
+    }
+  }, [action, cleanForm, selectedContent, updateForm]);
+
   return (
     <Modal show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
-        <ModalTitle>Create Patient Admission</ModalTitle>
+        <ModalTitle>{`${action} Patient Admission`}</ModalTitle>
       </Modal.Header>
       <ModalBody>
         <Formik
@@ -58,7 +98,15 @@ const NewAdmission = ({ setShow, show }) => {
           ) => {
             const { submit, ...rest } = values;
 
-            dispatch(createPatientAdmission(rest))
+            let actionDispatch;
+
+            if (action === 'Edit') {
+              actionDispatch = dispatch(updatePatientAdmissionRecord(rest));
+            } else {
+              actionDispatch = dispatch(createPatientAdmission(rest));
+            }
+
+            actionDispatch
               .then((res) => {
                 if (res.success === true) {
                   setStatus({ success: true });
@@ -176,7 +224,7 @@ const NewAdmission = ({ setShow, show }) => {
                 className='btn-block btn-transparent-blue'
                 disabled={isSubmitting}
               >
-                Create Admission
+                {`${action} Admission`}
               </Button>
             </Form>
           )}
@@ -186,9 +234,14 @@ const NewAdmission = ({ setShow, show }) => {
   );
 };
 
+NewAdmission.defaultProps = {
+  selectedContent: {},
+};
+
 NewAdmission.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
+  selectedContent: PropTypes.object,
 };
 
 export default NewAdmission;

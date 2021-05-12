@@ -20,6 +20,25 @@ const slice = createSlice({
     admissionRecord(state, action) {
       state.admissionRecord = [...state.admissionRecord, action.payload];
     },
+    fetchAdmissionRecords(state, action) {
+      state.admissionRecord = action.payload;
+    },
+    updateAdmissionRecord(state, action) {
+      let payload = action.payload;
+      let findIndex = state.admissionRecord.findIndex(
+        (record) => record.id === payload.id
+      );
+      state.admissionRecord = state.admissionRecord.splice(
+        findIndex,
+        1,
+        action.payload
+      );
+    },
+    deleteAdmissionRecord(state, action) {
+      state.admissionRecord = state.admissionRecord.filter(
+        (record) => record.id !== action.payload
+      );
+    },
   },
 });
 
@@ -77,3 +96,77 @@ export const createPatientAdmission = (data) => async (dispatch, getState) => {
     return err;
   }
 };
+
+export const fetchPatientAdmissionRecords =
+  (id) => async (dispatch, getState) => {
+    try {
+      const response = await fetch(`${server}patient/admit/${id}`, {
+        headers: {
+          Authorization: `Bearer ${getState().auth.token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const responseJSON = await response.json();
+
+      if (responseJSON.success === true) {
+        dispatch(slice.actions.fetchAdmissionRecords(responseJSON.data));
+      } else {
+        throw new Error(responseJSON.message);
+      }
+
+      return responseJSON;
+    } catch (err) {
+      return err;
+    }
+  };
+
+export const updatePatientAdmissionRecord =
+  (id, data) => async (dispatch, getState) => {
+    try {
+      const response = await fetch(`${server}patient/admit/${id}/update`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+        headers: {
+          Authorization: `Bearer ${getState().auth.token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const responseJSON = await response.json();
+
+      if (responseJSON.success === true) {
+        dispatch(slice.actions.updateAdmissionRecord(responseJSON.data));
+      } else {
+        throw new Error(responseJSON.message);
+      }
+
+      return responseJSON;
+    } catch (err) {
+      return err;
+    }
+  };
+
+export const deletePatientAdmissionRecord =
+  (id) => async (dispatch, getState) => {
+    try {
+      const response = await fetch(`${server}patient/admit/${id}/delete`, {
+        headers: {
+          Authorization: `Bearer ${getState().auth.token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const responseJSON = await response.json();
+
+      if (responseJSON.success === true) {
+        dispatch(slice.actions.deleteAdmissionRecord(id));
+      } else {
+        throw new Error(responseJSON.message);
+      }
+
+      return responseJSON;
+    } catch (err) {
+      return err;
+    }
+  };
