@@ -101,7 +101,9 @@ const NewAdmission = ({ setShow, show, action, selectedContent }) => {
             let actionDispatch;
 
             if (action === 'Edit') {
-              actionDispatch = dispatch(updatePatientAdmissionRecord(rest));
+              actionDispatch = dispatch(
+                updatePatientAdmissionRecord(rest.patientId, rest)
+              );
             } else {
               actionDispatch = dispatch(createPatientAdmission(rest));
             }

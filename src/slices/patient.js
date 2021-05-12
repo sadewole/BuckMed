@@ -151,6 +151,7 @@ export const deletePatientAdmissionRecord =
   (id) => async (dispatch, getState) => {
     try {
       const response = await fetch(`${server}patient/admit/${id}/delete`, {
+        method: 'DELETE',
         headers: {
           Authorization: `Bearer ${getState().auth.token}`,
           'Content-Type': 'application/json',

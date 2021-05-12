@@ -8,6 +8,7 @@ import { TableRow, TableCell } from '@material-ui/core';
 import { dateFormatter } from 'src/utils/formatter';
 import { deletePatientAdmissionRecord } from 'src/slices/patient';
 import { useDispatch } from 'src/store';
+import { useSnackbar } from 'notistack';
 import NewAdmission from './Partials/NewAdmission';
 
 const applyPagination = (datas, page, limit) => {
@@ -26,6 +27,7 @@ const Results = ({
   ...rest
 }) => {
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const [paginate, setPaginate] = useState({
     page: 0,
     rowsPerPage: 10,
@@ -63,6 +65,16 @@ const Results = ({
     setSelectedContent(content);
   };
 
+  const handleDelete = (id) => {
+    dispatch(deletePatientAdmissionRecord(id)).then((res) => {
+      if (res.success === true) {
+        enqueueSnackbar(res.message, {
+          variant: 'success',
+        });
+      }
+    });
+  };
+
   return (
     <Card className='overflow-hidden' style={{ borderRadius: '.5rem' }}>
       <Table
@@ -90,9 +102,7 @@ const Results = ({
                     </IconButton>
                     <IconButton
                       aria-label='delete'
-                      onClick={() =>
-                        dispatch(deletePatientAdmissionRecord(data.id))
-                      }
+                      onClick={() => handleDelete(data.id)}
                     >
                       <DeleteIcon fontSize='small' style={{ color: 'red' }} />
                     </IconButton>
