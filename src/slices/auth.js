@@ -171,7 +171,14 @@ export const fetchUser = () => async (dispatch) => {
         })
       );
     }
+    return dispatch(
+      slice.actions.fetchUser({
+        user: null,
+        isAuthenticated: false,
+      })
+    );
   } catch (err) {
+    console.log(err);
     return dispatch(
       slice.actions.fetchUser({
         user: null,
