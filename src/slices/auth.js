@@ -187,3 +187,8 @@ export const fetchUser = () => async (dispatch) => {
     );
   }
 };
+
+export const logout = () => (dispatch) => {
+  setAccessStorage(null);
+  dispatch(slice.actions.resetAuth());
+};
