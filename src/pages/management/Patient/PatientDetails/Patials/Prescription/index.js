@@ -6,7 +6,7 @@ import plusCircle from '@iconify/icons-fa-solid/plus-circle';
 import editIcon from '@iconify/icons-fa-solid/edit';
 import trashIcon from '@iconify/icons-fa-solid/trash-alt';
 import Table from 'src/components/CustomTable';
-import { TableRow, TableCell } from '@material-ui/core';
+import { TableRow, TableCell, IconButton } from '@material-ui/core';
 import { PrescriptionModal } from './Modal';
 import { fetchPatientPrescriptionRecords } from 'src/slices/patient';
 import { useDispatch, useSelector } from 'src/store';
@@ -53,6 +53,12 @@ const Prescription = () => {
     setPaginate({ ...paginate, rowsPerPage: parseInt(event.target.value) });
   };
 
+  const handleEdit = (content) => {
+    setAction('Edit');
+    setShowModal(true);
+    setSelectedContent(content);
+  };
+
   return (
     <>
       <Button variant='primary' onClick={handleShowModal} className='my-3'>
@@ -78,8 +84,12 @@ const Prescription = () => {
                   <TableCell>{drug.period}</TableCell>
                   <TableCell>{drug.note}</TableCell>
                   <TableCell align='right'>
-                    <InlineIcon icon={editIcon} className='mr-1' />
-                    <InlineIcon icon={trashIcon} className='mr-1' />
+                    <IconButton onClick={() => handleEdit(drug)}>
+                      <InlineIcon icon={editIcon} className='mr-1' />
+                    </IconButton>
+                    <IconButton style={{ color: 'red' }}>
+                      <InlineIcon icon={trashIcon} className='mr-1' />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               );

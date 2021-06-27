@@ -16,6 +16,7 @@ import {
 } from 'src/slices/patient';
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'src/store';
+import moment from 'moment';
 
 export const PrescriptionModal = ({
   showModal,
@@ -31,6 +32,7 @@ export const PrescriptionModal = ({
     drugName: '',
     dosage: '',
     patientId: params.patientId,
+    recordId: '',
     drugType: '',
     startDate: '',
     period: '',
@@ -113,6 +115,7 @@ export const PrescriptionModal = ({
         drugName: '',
         dosage: '',
         patientId: params.patientId,
+        recordId: '',
         drugType: '',
         startDate: '',
         period: '',
@@ -124,13 +127,16 @@ export const PrescriptionModal = ({
 
   // handle update form
   const updateForm = useCallback((content) => {
-    console.log(content);
-    //   setInputs((prevState) => ({
-    //   ...prevState,
-    //   recordId: content.id,
-    //   roomNumber: content.roomNumber,
-    //   bedNumber: content.bedNumber,
-    // }))
+    setInputs((prevState) => ({
+      ...prevState,
+      recordId: content.id,
+      drugName: content.drugName,
+      drugType: content.drugType,
+      dosage: content.dosage,
+      startDate: moment(content.startDate).format('YYYY-MM-DD'),
+      period: content.period,
+      note: content.note,
+    }));
   }, []);
 
   useEffect(() => {
@@ -147,8 +153,6 @@ export const PrescriptionModal = ({
       return;
     }
 
-    console.log(rest);
-
     let actionDispatch;
 
     if (action === 'Edit') {
@@ -162,7 +166,6 @@ export const PrescriptionModal = ({
     setSubmitting(true);
     actionDispatch
       .then((res) => {
-        console.log(res);
         if (res.success === true) {
           handleCloseModal();
           enqueueSnackbar(res.message, {
@@ -173,7 +176,6 @@ export const PrescriptionModal = ({
         }
       })
       .catch((err) => {
-        console.log(err);
         setInputs((prevState) => ({
           ...prevState,
           errors: { ...prevState.errors, submit: err.message },
