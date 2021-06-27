@@ -9,16 +9,14 @@ import { fetchPatientAdmissionRecords } from 'src/slices/patient';
 const Visits = () => {
   const [show, setShow] = useState(false);
   const [selectedContent, setSelectedContent] = useState({});
-  const [action, setAction] = useState();
+  const [action, setAction] = useState('Create');
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.patient);
+  const { admissionRecord } = useSelector((state) => state.patient);
   const { patientId } = useParams();
 
   useEffect(() => {
     dispatch(fetchPatientAdmissionRecords(patientId));
   }, [dispatch, patientId]);
-
-  let datas = data.admissionRecord === null ? [] : [data.admissionRecord];
 
   return (
     <Container>
@@ -30,7 +28,7 @@ const Visits = () => {
       />
       <div className='mt-3' style={{ borderRadius: '1rem' }}>
         <Results
-          datas={datas}
+          datas={admissionRecord}
           show={show}
           setShow={setShow}
           action={action}

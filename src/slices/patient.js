@@ -5,6 +5,7 @@ const initialState = {
   allPatient: [],
   patient: {},
   admissionRecord: [],
+  prescriptionRecord: [],
 };
 
 const slice = createSlice({
@@ -40,6 +41,9 @@ const slice = createSlice({
       );
     },
   },
+  createPatientPrescription(state, action) {
+    state.prescriptionRecord = [...state.prescriptionRecord, action.payload];
+  },
 });
 
 export const reducer = slice.reducer;
@@ -72,6 +76,7 @@ export const fetchPatient = (id) => (dispatch, getState) => {
     .catch((err) => err);
 };
 
+/** start ==> Admission record  */
 export const createPatientAdmission = (data) => async (dispatch, getState) => {
   try {
     const response = await fetch(`${server}patient/admit`, {
@@ -171,3 +176,90 @@ export const deletePatientAdmissionRecord =
       return err;
     }
   };
+
+/** end ==> Admission record  */
+
+/** start ==> prescription record  */
+export const createPatientPrescription =
+  (data) => async (dispatch, getState) => {
+    try {
+      const response = await fetch(`${server}employee/prescription/create`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          Authorization: `Bearer ${getState().auth.token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const responseJSON = await response.json();
+
+      if (responseJSON.success === true) {
+        dispatch(slice.actions.createPatientPrescription(responseJSON.data));
+      } else {
+        throw new Error(responseJSON.message);
+      }
+
+      return responseJSON;
+    } catch (err) {
+      return err;
+    }
+  };
+
+export const fetchPatientPrescriptionRecords =
+  (patientId) => async (dispatch, getState) => {
+    try {
+      const response = await fetch(
+        `${server}employee/prescription/${patientId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${getState().auth.token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const responseJSON = await response.json();
+
+      if (responseJSON.success === true) {
+        dispatch(slice.actions.fetchPrescriptionRecords(responseJSON.data));
+      } else {
+        throw new Error(responseJSON.message);
+      }
+
+      return responseJSON;
+    } catch (err) {
+      return err;
+    }
+  };
+
+export const updatePatientPrescriptionRecord =
+  (id, data) => async (dispatch, getState) => {
+    try {
+      const response = await fetch(
+        `${server}employee/prescription/update/${id}`,
+        {
+          method: 'PUT',
+          body: JSON.stringify(data),
+          headers: {
+            Authorization: `Bearer ${getState().auth.token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const responseJSON = await response.json();
+
+      if (responseJSON.success === true) {
+        dispatch(slice.actions.updatePrescriptionRecord(responseJSON.data));
+      } else {
+        throw new Error(responseJSON.message);
+      }
+
+      return responseJSON;
+    } catch (err) {
+      return err;
+    }
+  };
+
+/** end ==> Admission record  */

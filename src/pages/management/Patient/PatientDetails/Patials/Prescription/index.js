@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap';
 import { InlineIcon } from '@iconify/react';
 import plusCircle from '@iconify/icons-fa-solid/plus-circle';
@@ -7,6 +8,8 @@ import trashIcon from '@iconify/icons-fa-solid/trash-alt';
 import Table from 'src/components/CustomTable';
 import { TableRow, TableCell } from '@material-ui/core';
 import { PrescriptionModal } from './Modal';
+import { fetchPatientPrescriptionRecords } from 'src/slices/patient';
+import { useDispatch, useSelector } from 'src/store';
 
 const header = [
   'Drug Name',
@@ -18,9 +21,22 @@ const header = [
   'Actions',
 ];
 
-const Prescription = ({ drugs }) => {
+const Prescription = () => {
+  const dispatch = useDispatch();
+  const { prescriptionRecord } = useSelector((state) => state.patient);
   const [showModal, setShowModal] = useState(false);
-  const handleShowModal = () => setShowModal(true);
+  const [selectedContent, setSelectedContent] = useState({});
+  const [action, setAction] = useState('Create');
+
+  const handleShowModal = () => {
+    setAction('Create');
+    setShowModal(true);
+  };
+  const { patientId } = useParams();
+
+  useEffect(() => {
+    dispatch(fetchPatientPrescriptionRecords(patientId));
+  }, [dispatch, patientId]);
 
   const [paginate, setPaginate] = useState({
     page: 0,
@@ -36,6 +52,8 @@ const Prescription = ({ drugs }) => {
     setPaginate({ ...paginate, rowsPerPage: parseInt(event.target.value) });
   };
 
+  console.log(prescriptionRecord);
+
   return (
     <>
       <Button variant='primary' onClick={handleShowModal} className='my-3'>
@@ -45,13 +63,13 @@ const Prescription = ({ drugs }) => {
       <Card>
         <Table
           header={header}
-          data={drugs}
+          data={prescriptionRecord}
           paginate={paginate}
           handlePageChange={handlePageChange}
           handleLimitChange={handleLimitChange}
         >
-          {drugs.length > 0 ? (
-            drugs.map((drug) => {
+          {prescriptionRecord.length > 0 ? (
+            prescriptionRecord.map((drug) => {
               return (
                 <TableRow key={drug.id}>
                   <TableCell>{drug.drug_name}</TableCell>
@@ -82,13 +100,15 @@ const Prescription = ({ drugs }) => {
         </Table>
       </Card>
 
-      <PrescriptionModal showModal={showModal} setShowModal={setShowModal} />
+      <PrescriptionModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        action={action}
+        setAction={setAction}
+        selectedContent={selectedContent}
+      />
     </>
   );
-};
-
-Prescription.defaultProps = {
-  drugs: [],
 };
 
 export default Prescription;

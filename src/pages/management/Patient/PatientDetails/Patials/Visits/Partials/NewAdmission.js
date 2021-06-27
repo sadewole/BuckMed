@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -10,14 +10,13 @@ import {
   Button,
   Alert,
 } from 'react-bootstrap';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { useDispatch } from 'src/store';
 import {
   createPatientAdmission,
   updatePatientAdmissionRecord,
 } from 'src/slices/patient';
 import { useSnackbar } from 'notistack';
+import moment from 'moment';
 
 const textInputs = [
   { name: 'admittedOn', label: 'Admitted date', type: 'date' },
@@ -26,211 +25,211 @@ const textInputs = [
   { name: 'bedNumber', label: 'Bed number', type: 'text' },
 ];
 
-const validate = Yup.object().shape({
-  admittedOn: Yup.string().required('Admitted date is required'),
-  dischargedOn: Yup.string().required('Discharged date is required'),
-  roomNumber: Yup.string().required('Room number is required'),
-  bedNumber: Yup.string().required('Bed number is required'),
-});
-
-const NewAdmission = ({ setShow, show, action, selectedContent }) => {
+const NewAdmission = ({
+  setShow,
+  show,
+  action,
+  selectedContent,
+  setAction,
+}) => {
   const params = useParams();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [inputs, setInputs] = useState({
     patientId: params.patientId,
+    recordId: '',
     admittedOn: '',
     dischargedOn: '',
     roomNumber: '',
     bedNumber: '',
+    errors: {},
     submit: null,
   });
+  const [submitting, setSubmitting] = useState(false);
+
+  // Validation
+  const validate = (values) => {
+    let errors = {};
+    let matches = false;
+
+    if (values.admittedOn === '') {
+      errors.admittedOn = 'Admitted date is required';
+      matches = true;
+    }
+
+    if (values.dischargedOn === '') {
+      errors.dischargedOn = 'Discharged date is required';
+      matches = true;
+    }
+
+    if (values.roomNumber === '') {
+      errors.roomNumber = 'Room number is required';
+      matches = true;
+    }
+
+    if (values.bedNumber === '') {
+      errors.bedNumber = 'Bed number is required';
+      matches = true;
+    }
+
+    setInputs((prevState) => ({
+      ...prevState,
+      errors: { ...prevState.errors, ...errors },
+    }));
+
+    return matches;
+  };
+
+  const handleCloseModal = () => {
+    setShow(false);
+    setAction();
+    cleanForm();
+  };
 
   // handle update form
   const updateForm = useCallback(
     (content) =>
-      setInputs({
-        patientId: params.patientId,
-        admittedOn: content.admittedOn,
-        dischargedOn: content.dischargedOn,
+      setInputs((prevState) => ({
+        ...prevState,
+        recordId: content.id,
+        admittedOn: moment(content.admittedOn).format('YYYY-MM-DD'),
+        dischargedOn: moment(content.dischargedOn).format('YYYY-MM-DD'),
         roomNumber: content.roomNumber,
         bedNumber: content.bedNumber,
-        submit: null,
-      }),
-    [params.patientId]
+      })),
+    []
   );
 
   const cleanForm = useCallback(
     () =>
       setInputs({
         patientId: params.patientId,
+        recordId: '',
         admittedOn: '',
         dischargedOn: '',
         roomNumber: '',
         bedNumber: '',
+        errors: {},
         submit: null,
       }),
     [params.patientId]
   );
 
   useEffect(() => {
-    console.log(selectedContent);
-    if (action === 'Edit' && selectedContent.hasOwnProperty('id')) {
-      console.log('selectedContent', selectedContent);
+    if (action === 'Edit') {
       updateForm(selectedContent);
-    } else {
-      cleanForm();
     }
-  }, [action, cleanForm, selectedContent, updateForm]);
+  }, [action, selectedContent, updateForm]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setInputs((prevState) => ({
+      ...prevState,
+      [name]: value,
+      errors: { [name]: '' },
+    }));
+  };
+
+  // handle input onBlur / onFocus
+  const handleBlur = (e) => {
+    const value = { [e.target.name]: e.target.value };
+    validate(value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { submit, ...rest } = inputs;
+
+    if (validate(rest)) {
+      return;
+    }
+
+    console.log(rest);
+
+    let actionDispatch;
+
+    if (action === 'Edit') {
+      actionDispatch = dispatch(
+        updatePatientAdmissionRecord(rest.recordId, rest)
+      );
+    } else {
+      actionDispatch = dispatch(createPatientAdmission(rest));
+    }
+
+    setSubmitting(true);
+    actionDispatch
+      .then((res) => {
+        if (res.success === true) {
+          handleCloseModal();
+          enqueueSnackbar(res.message, {
+            variant: 'success',
+          });
+        } else {
+          throw new Error(res.message);
+        }
+      })
+      .catch((err) => {
+        setInputs((prevState) => ({
+          ...prevState,
+          errors: { ...prevState.errors, submit: err.message },
+        }));
+      })
+      .finally(() => setSubmitting(false));
+  };
 
   return (
-    <Modal show={show} onHide={() => setShow(false)}>
+    <Modal show={show} onHide={handleCloseModal}>
       <Modal.Header closeButton>
         <ModalTitle>{`${action} Patient Admission`}</ModalTitle>
       </Modal.Header>
       <ModalBody>
-        <Formik
-          initialValues={inputs}
-          validationSchema={validate}
-          onSubmit={(
-            values,
-            { resetForm, setErrors, setStatus, setSubmitting }
-          ) => {
-            const { submit, ...rest } = values;
-
-            let actionDispatch;
-
-            if (action === 'Edit') {
-              actionDispatch = dispatch(
-                updatePatientAdmissionRecord(rest.patientId, rest)
-              );
-            } else {
-              actionDispatch = dispatch(createPatientAdmission(rest));
-            }
-
-            actionDispatch
-              .then((res) => {
-                if (res.success === true) {
-                  setStatus({ success: true });
-                  resetForm();
-
-                  enqueueSnackbar(res.message, {
-                    variant: 'success',
-                  });
-                } else {
-                  throw new Error(res.message);
-                }
-              })
-              .catch((err) => {
-                setErrors({ submit: err.message });
-              })
-              .finally(() => setSubmitting(false));
-          }}
-        >
-          {({
-            errors,
-            handleSubmit,
-            handleBlur,
-            handleChange,
-            isSubmitting,
-            setErrors,
-            touched,
-            values,
-          }) => (
-            <Form noValidate onSubmit={handleSubmit} className='p-3'>
-              {textInputs.map((input, index) => {
-                return (
-                  <Form.Group key={index}>
-                    <Form.Label>{input.label}</Form.Label>
-                    {['text', 'email', 'password', 'date'].includes(
-                      input.type
-                    ) ? (
-                      <Fragment>
-                        <FormControl
-                          name={input.name}
-                          type={input.type}
-                          value={values[input.name]}
-                          className={
-                            Boolean(touched[input.name] && errors[input.name])
-                              ? 'border-danger border'
-                              : ''
-                          }
-                          placeholder={input.label}
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                        />
-                        <p className='text-danger m-1'>
-                          {touched[input.name] && errors[input.name]}
-                        </p>
-                      </Fragment>
-                    ) : input.type === 'select' ? (
-                      <Fragment>
-                        <FormControl
-                          as='select'
-                          name={input.name}
-                          value={values[input.name]}
-                          onBlur={handleBlur}
-                          className={
-                            Boolean(touched[input.name] && errors[input.name])
-                              ? 'border-danger border'
-                              : ''
-                          }
-                          onChange={handleChange}
-                        >
-                          {input.options.map((option) => (
-                            <option value={option.value} key={option.value}>
-                              {option.text}
-                            </option>
-                          ))}
-                        </FormControl>
-                        <p className='text-danger m-1'>
-                          {touched[input.name] && errors[input.name]}
-                        </p>
-                      </Fragment>
-                    ) : (
-                      <Fragment>
-                        <FormControl
-                          as='textarea'
-                          name={input.name}
-                          value={values[input.name]}
-                          onBlur={handleBlur}
-                          className={
-                            Boolean(touched[input.name] && errors[input.name])
-                              ? 'border-danger border'
-                              : ''
-                          }
-                          onChange={handleChange}
-                          row={3}
-                        />
-                        <p className='text-danger m-1'>
-                          {touched[input.name] && errors[input.name]}
-                        </p>
-                      </Fragment>
-                    )}
-                  </Form.Group>
-                );
-              })}
-              {errors.submit && (
-                <Alert
-                  className='w-100'
-                  variant='danger'
-                  onClose={() => setErrors({ submit: null })}
-                  dismissible
-                >
-                  {errors.submit}
-                </Alert>
-              )}
-              <Button
-                type='submit'
-                variant='outline-primary'
-                className='btn-block btn-transparent-blue'
-                disabled={isSubmitting}
-              >
-                {`${action} Admission`}
-              </Button>
-            </Form>
+        <Form noValidate onSubmit={handleSubmit} className='p-3'>
+          {textInputs.map((input, index) => {
+            return (
+              <Form.Group key={index}>
+                <Form.Label>{input.label}</Form.Label>
+                <FormControl
+                  name={input.name}
+                  type={input.type}
+                  value={inputs[input.name]}
+                  className={
+                    Boolean(inputs.errors[input.name])
+                      ? 'border-danger border'
+                      : ''
+                  }
+                  placeholder={input.label}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                />
+                <p className='text-danger m-1'>{inputs.errors[input.name]}</p>
+              </Form.Group>
+            );
+          })}
+          {inputs['errors'].submit && (
+            <Alert
+              className='w-100'
+              variant='danger'
+              onClose={() =>
+                setInputs((prevState) => ({
+                  ...prevState,
+                  errors: { ...prevState.errors, submit: null },
+                }))
+              }
+              dismissible
+            >
+              {inputs['errors'].submit}
+            </Alert>
           )}
-        </Formik>
+          <Button
+            type='submit'
+            variant='outline-primary'
+            className='btn-block btn-transparent-blue'
+            disabled={submitting}
+          >
+            {`${action} Admission`}
+          </Button>
+        </Form>
       </ModalBody>
     </Modal>
   );

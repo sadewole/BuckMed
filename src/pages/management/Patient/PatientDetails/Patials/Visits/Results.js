@@ -129,6 +129,7 @@ const Results = ({
         setShow={setShow}
         selectedContent={selectedContent}
         action={action}
+        setAction={setAction}
       />
     </Card>
   );
