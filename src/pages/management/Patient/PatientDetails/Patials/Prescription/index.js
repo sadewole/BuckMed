@@ -10,6 +10,7 @@ import { TableRow, TableCell } from '@material-ui/core';
 import { PrescriptionModal } from './Modal';
 import { fetchPatientPrescriptionRecords } from 'src/slices/patient';
 import { useDispatch, useSelector } from 'src/store';
+import { dateFormatter } from 'src/utils/formatter';
 
 const header = [
   'Drug Name',
@@ -52,8 +53,6 @@ const Prescription = () => {
     setPaginate({ ...paginate, rowsPerPage: parseInt(event.target.value) });
   };
 
-  console.log(prescriptionRecord);
-
   return (
     <>
       <Button variant='primary' onClick={handleShowModal} className='my-3'>
@@ -72,10 +71,10 @@ const Prescription = () => {
             prescriptionRecord.map((drug) => {
               return (
                 <TableRow key={drug.id}>
-                  <TableCell>{drug.drug_name}</TableCell>
-                  <TableCell>{drug.drug_type}</TableCell>
+                  <TableCell>{drug.drugName}</TableCell>
+                  <TableCell>{drug.drugType}</TableCell>
                   <TableCell>{drug.dosage}</TableCell>
-                  <TableCell>{drug.start_date}</TableCell>
+                  <TableCell>{dateFormatter(drug.startDate)}</TableCell>
                   <TableCell>{drug.period}</TableCell>
                   <TableCell>{drug.note}</TableCell>
                   <TableCell align='right'>

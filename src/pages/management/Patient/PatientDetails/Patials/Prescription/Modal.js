@@ -1,6 +1,14 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Modal, Button, Form, FormControl, Row, Col } from 'react-bootstrap';
+import {
+  Modal,
+  Button,
+  Form,
+  FormControl,
+  Row,
+  Col,
+  Alert,
+} from 'react-bootstrap';
 import { dosageList, medicationTypeList, frequencyList } from './exports';
 import {
   createPatientPrescription,
@@ -29,6 +37,7 @@ export const PrescriptionModal = ({
     note: '',
     errors: {},
   });
+  const [isFieldError, setIsFieldError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const handleCloseModal = () => {
@@ -76,6 +85,8 @@ export const PrescriptionModal = ({
       ...prevState,
       errors: { ...prevState.errors, ...errors },
     }));
+
+    setIsFieldError(matches);
 
     return matches;
   };
@@ -130,7 +141,7 @@ export const PrescriptionModal = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { submit, ...rest } = inputs;
+    const { errors, ...rest } = inputs;
 
     if (validate(rest)) {
       return;
@@ -151,6 +162,7 @@ export const PrescriptionModal = ({
     setSubmitting(true);
     actionDispatch
       .then((res) => {
+        console.log(res);
         if (res.success === true) {
           handleCloseModal();
           enqueueSnackbar(res.message, {
@@ -161,6 +173,7 @@ export const PrescriptionModal = ({
         }
       })
       .catch((err) => {
+        console.log(err);
         setInputs((prevState) => ({
           ...prevState,
           errors: { ...prevState.errors, submit: err.message },
@@ -188,8 +201,14 @@ export const PrescriptionModal = ({
                 <FormControl
                   type='text'
                   name='drugName'
+                  value={inputs.drugName}
                   onBlur={handleBlur}
                   onChange={handleChange}
+                  className={
+                    Boolean(inputs.errors['drugName'])
+                      ? 'border-danger border'
+                      : ''
+                  }
                 />
               </Form.Group>
             </Col>
@@ -199,6 +218,12 @@ export const PrescriptionModal = ({
                 <FormControl
                   as='select'
                   name='drugType'
+                  value={inputs.drugType}
+                  className={
+                    Boolean(inputs.errors['drugType'])
+                      ? 'border-danger border'
+                      : ''
+                  }
                   onBlur={handleBlur}
                   onChange={handleChange}
                 >
@@ -217,8 +242,14 @@ export const PrescriptionModal = ({
                 <FormControl
                   as='select'
                   name='dosage'
+                  value={inputs.dosage}
                   onBlur={handleBlur}
                   onChange={handleChange}
+                  className={
+                    Boolean(inputs.errors['dosage'])
+                      ? 'border-danger border'
+                      : ''
+                  }
                 >
                   <option value=''></option>
                   {dosageList.map((list, index) => (
@@ -239,8 +270,14 @@ export const PrescriptionModal = ({
                 <FormControl
                   as='select'
                   name='period'
+                  value={inputs.period}
                   onBlur={handleBlur}
                   onChange={handleChange}
+                  className={
+                    Boolean(inputs.errors['period'])
+                      ? 'border-danger border'
+                      : ''
+                  }
                 >
                   <option value=''></option>
                   {frequencyList.map((list, index) => (
@@ -257,26 +294,59 @@ export const PrescriptionModal = ({
                 <FormControl
                   type='date'
                   name='startDate'
+                  value={inputs.startDate}
                   onBlur={handleBlur}
                   onChange={handleChange}
+                  className={
+                    Boolean(inputs.errors['startDate'])
+                      ? 'border-danger border'
+                      : ''
+                  }
                 />
               </Form.Group>
             </Col>
           </Row>
           <Form.Group>
             <Form.Label>Note</Form.Label>
-            <FormControl as='textarea' />
+            <FormControl
+              as='textarea'
+              name='note'
+              value={inputs.note}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              className={
+                Boolean(inputs.errors['note']) ? 'border-danger border' : ''
+              }
+            />
           </Form.Group>
+          {isFieldError && (
+            <p className='text-danger m-1'>Missing field is required</p>
+          )}
+          {inputs['errors'].submit && (
+            <Alert
+              className='w-100'
+              variant='danger'
+              onClose={() =>
+                setInputs((prevState) => ({
+                  ...prevState,
+                  errors: { ...prevState.errors, submit: null },
+                }))
+              }
+              dismissible
+            >
+              {inputs['errors'].submit}
+            </Alert>
+          )}
+          <Button
+            type='submit'
+            variant='outline-primary'
+            className='btn-block btn-transparent-blue'
+            disabled={submitting}
+          >
+            {action === 'Edit' ? 'Edit & Save' : 'Submit'}
+          </Button>
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant='outline-secondary' onClick={handleCloseModal}>
-          Close
-        </Button>
-        <Button variant='primary' type='submit' disabled={submitting}>
-          {action === 'Edit' ? 'Edit & Save' : 'Submit'}
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

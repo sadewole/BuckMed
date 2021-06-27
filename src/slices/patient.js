@@ -40,9 +40,23 @@ const slice = createSlice({
         (record) => record.id !== action.payload
       );
     },
-  },
-  createPatientPrescription(state, action) {
-    state.prescriptionRecord = [...state.prescriptionRecord, action.payload];
+    fetchPrescriptionRecords(state, action) {
+      state.prescriptionRecord = action.payload;
+    },
+    createPatientPrescription(state, action) {
+      state.prescriptionRecord = [...state.prescriptionRecord, action.payload];
+    },
+    updatePrescriptionRecord(state, action) {
+      let payload = action.payload;
+      let findIndex = state.prescriptionRecord.findIndex(
+        (record) => record.id === payload.id
+      );
+      state.prescriptionRecord = state.prescriptionRecord.splice(
+        findIndex,
+        1,
+        action.payload
+      );
+    },
   },
 });
 
@@ -209,6 +223,7 @@ export const createPatientPrescription =
 export const fetchPatientPrescriptionRecords =
   (patientId) => async (dispatch, getState) => {
     try {
+      console.log(patientId);
       const response = await fetch(
         `${server}employee/prescription/${patientId}`,
         {
