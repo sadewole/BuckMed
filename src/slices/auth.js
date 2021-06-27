@@ -10,6 +10,7 @@ if (buckmed_store) {
 
 const initialState = {
   user: null,
+  role: null,
   token,
   isAuthenticated: false,
   isInitialised: false,
@@ -42,20 +43,23 @@ const slice = createSlice({
   initialState,
   reducers: {
     fetchUser(state, action) {
-      const { user, isAuthenticated } = action.payload;
+      const { user, role, isAuthenticated } = action.payload;
       state.user = user;
+      state.role = role;
       state.isAuthenticated = isAuthenticated;
       state.isInitialised = true;
     },
     signedUser(state, action) {
-      const { user, token } = action.payload;
+      const { user, token, role } = action.payload;
       state.user = user;
+      state.role = role;
       state.isAuthenticated = true;
       state.token = token;
     },
     resetAuth(state) {
       state.isAuthenticated = false;
       state.user = null;
+      state.role = null;
       state.token = null;
     },
   },
@@ -74,8 +78,6 @@ export const patientLogin = (data) => async (dispatch) => {
     });
 
     const responseJSON = await response.json();
-
-    console.log(responseJSON);
 
     if (responseJSON.success === true) {
       setAccessStorage(responseJSON.data);
@@ -101,8 +103,6 @@ export const staffLogin = (data) => async (dispatch) => {
     });
 
     const responseJSON = await response.json();
-
-    console.log(responseJSON);
 
     if (responseJSON.success === true) {
       setAccessStorage(responseJSON.data);
@@ -140,37 +140,36 @@ export const patientRegister = (data) => async (dispatch) => {
   }
 };
 
-export const fetchUser = () => (dispatch) => {
+export const fetchUser = () => async (dispatch) => {
   const buckmed_store = localStorage.getItem('buckmed_store');
-  if (buckmed_store) {
-    const { session } = JSON.parse(buckmed_store);
+  try {
+    if (buckmed_store) {
+      const { session } = JSON.parse(buckmed_store);
 
-    if (session && isValidToken(session)) {
-      const decoded = jwtDecode(session);
+      if (session && isValidToken(session)) {
+        const response = await fetch(`${server}verify/token`, {
+          headers: {
+            Authorization: `Bearer ${session}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const { data } = await response.json();
+
+        return dispatch(
+          slice.actions.fetchUser({
+            user: data.user,
+            role: data.role,
+            isAuthenticated: true,
+          })
+        );
+      }
       return dispatch(
         slice.actions.fetchUser({
-          user: decoded.user,
-          role: decoded.role,
-          isAuthenticated: true,
+          user: null,
+          isAuthenticated: false,
         })
       );
-      // fetch(`${server}verify/token`, {
-      //   headers: {
-      //     Authorization: `Bearer ${session}`,
-      //     'Content-Type': 'application/json',
-      //   },
-      // })
-      //   .then((res) => res.json())
-      //   .then(({ data }) => {
-      //     return dispatch(
-      //       slice.actions.fetchUser({
-      //         user: data.user,
-      //         role: data.role,
-      //         isAuthenticated: true,
-      //       })
-      //     );
-      //   })
-      //   .catch((err) => err);
     }
     return dispatch(
       slice.actions.fetchUser({
@@ -178,11 +177,18 @@ export const fetchUser = () => (dispatch) => {
         isAuthenticated: false,
       })
     );
+  } catch (err) {
+    console.log(err);
+    return dispatch(
+      slice.actions.fetchUser({
+        user: null,
+        isAuthenticated: false,
+      })
+    );
   }
-  return dispatch(
-    slice.actions.fetchUser({
-      user: null,
-      isAuthenticated: false,
-    })
-  );
+};
+
+export const logout = () => (dispatch) => {
+  setAccessStorage(null);
+  dispatch(slice.actions.resetAuth());
 };

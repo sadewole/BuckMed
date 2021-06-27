@@ -1,15 +1,18 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Avatar from 'src/components/Avatar';
 import styled from 'styled-components';
 import SideBar from './sidebar';
 import { useTheme, useMediaQuery } from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
+import useAuth from 'src/hooks/useAuth';
 
 const Base = ({ children }) => {
   const [show, setShow] = useState(false);
   const theme = useTheme();
   const mobileDevice = useMediaQuery(theme.breakpoints.down('md'));
-
+  const { role, user } = useAuth();
+  console.log(user);
   let layoutFixed = useRef();
   let contentWrapper = useRef();
   let mainNavbar = useRef();
@@ -38,6 +41,10 @@ const Base = ({ children }) => {
       layoutFixed.current.style.display = 'none';
     }
   }, [mobileDevice]);
+
+  if (role && role === 'patient') {
+    return <Redirect to='/patient' />;
+  }
 
   return (
     <MainBase>

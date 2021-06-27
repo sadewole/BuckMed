@@ -4,9 +4,12 @@ import PropTypes from 'prop-types';
 import useAuth from '../hooks/useAuth';
 
 const GuestGuard = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, role } = useAuth();
 
   if (isAuthenticated) {
+    if (role === 'patient') {
+      return <Redirect to='/patient' />;
+    }
     return <Redirect to='/doctor' />;
   }
 

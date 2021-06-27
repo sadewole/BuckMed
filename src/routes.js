@@ -3,6 +3,7 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 import MainLayout from 'src/layouts/MainLayout';
 import AuthLayout from 'src/layouts/AuthLayout';
 import DoctorLayout from 'src/layouts/DoctorLayout';
+import PatientLayout from 'src/layouts/PatientLayout';
 import AuthGuard from 'src/components/AuthGuard';
 import GuestGuard from 'src/components/GuestGuard';
 import HomeView from 'src/pages/home';
@@ -58,6 +59,23 @@ const routes = [
     layout: AuthLayout,
     path: '/register',
     component: lazy(() => import('src/pages/auth/Register')),
+  },
+  {
+    path: '/patient',
+    guard: AuthGuard,
+    layout: PatientLayout,
+    routes: [
+      {
+        exact: true,
+        path: '/patient/dashboard',
+        component: lazy(() => import('src/pages/errors/PageInView')),
+      },
+      {
+        exact: true,
+        path: '/patient',
+        component: () => <Redirect to='/patient/dashboard' />,
+      },
+    ],
   },
   {
     path: '/doctor',
