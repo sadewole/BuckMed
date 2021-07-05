@@ -6,6 +6,7 @@ const initialState = {
   patient: {},
   admissionRecord: [],
   prescriptionRecord: [],
+  timelineRecord: [],
 };
 
 const slice = createSlice({
@@ -49,6 +50,12 @@ const slice = createSlice({
         (record) => record.id === payload.id
       );
       state.prescriptionRecord.splice(findIndex, 1, payload);
+    },
+    fetchTimelineRecord(state, action) {
+      state.timelineRecord = action.payload;
+    },
+    createTimelineRecord(state, action) {
+      state.timelineRecord = [...state.timelineRecord, action.payload];
     },
   },
 });
@@ -270,3 +277,51 @@ export const updatePatientPrescriptionRecord =
   };
 
 /** end ==> Admission record  */
+
+// Timeline
+
+export const createTimelineRecord = (data) => async (dispatch, getState) => {
+  try {
+    const response = await fetch(`${server}employee/timeline/create`, {
+      method: 'POST',
+      body: data,
+      headers: {
+        Authorization: `Bearer ${getState().auth.token}`,
+      },
+    });
+
+    const responseJSON = await response.json();
+    if (responseJSON.success === true) {
+      dispatch(slice.actions.createTimelineRecord(responseJSON.data));
+    } else {
+      throw new Error(responseJSON.message);
+    }
+
+    return responseJSON;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const fetchTimelineRecord = (id) => async (dispatch, getState) => {
+  try {
+    const response = await fetch(`${server}employee/timeline/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getState().auth.token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const responseJSON = await response.json();
+    if (responseJSON.success === true) {
+      dispatch(slice.actions.fetchTimelineRecord(responseJSON.data));
+    } else {
+      throw new Error(responseJSON.message);
+    }
+
+    return responseJSON;
+  } catch (err) {
+    return err;
+  }
+};

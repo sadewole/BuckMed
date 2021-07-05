@@ -1,31 +1,25 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Modal,
-  Button,
-  Form,
-  FormControl,
-  Row,
-  Col,
-  Alert,
-} from 'react-bootstrap';
-import { dosageList, medicationTypeList, frequencyList } from './exports';
-import {
-  createPatientPrescription,
-  updatePatientPrescriptionRecord,
-} from 'src/slices/patient';
+import { Modal, Button, Form, FormControl, Alert } from 'react-bootstrap';
+import { createTimelineRecord } from 'src/slices/patient';
 
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'src/store';
-import moment from 'moment';
-import Formik from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-const AddTimeline = ({ showModal }) => {
-  const handleCloseModal = () => {};
+const AddTimeline = ({ openModal, setOpenModal }) => {
+  const params = useParams();
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const [docFile, setDocFile] = useState();
+  const handleCloseModal = () => {
+    setOpenModal(!openModal);
+  };
+
   return (
     <Modal
-      show={showModal}
+      show={openModal}
       onHide={handleCloseModal}
       backdrop='static'
       keyboard={false}
@@ -36,19 +30,36 @@ const AddTimeline = ({ showModal }) => {
       <Modal.Body>
         <Formik
           initialValues={{
-            patientId: 'string',
+            patientId: params.patientId,
             title: '',
             description: '',
             date: '',
-            document: '',
             submit: null,
           }}
           validationSchema={Yup.object().shape({
             title: Yup.string().required('Title is required'),
             date: Yup.string().required('Date is required'),
           })}
-          onSubmit={(values, { ...formiks }) => {
-            const { submit, ...rest } = values;
+          onSubmit={(values, { setSubmitting, setErrors, resetForm }) => {
+            const formData = new FormData();
+            formData.append('patientId', values.patientId);
+            formData.append('title', values.title);
+            formData.append('description', values.description);
+            formData.append('date', values.date);
+            formData.append('document', docFile);
+
+            dispatch(createTimelineRecord(formData))
+              .then((res) => {
+                if (res.success === true) {
+                  handleCloseModal();
+                  resetForm();
+                  enqueueSnackbar('Created successfully', {
+                    variant: 'success',
+                  });
+                }
+              })
+              .catch(console.log)
+              .finally(() => setSubmitting(false));
           }}
         >
           {({
@@ -61,7 +72,11 @@ const AddTimeline = ({ showModal }) => {
             touched,
             values,
           }) => (
-            <Form noValidate onSubmit={handleSubmit}>
+            <Form
+              noValidate
+              onSubmit={handleSubmit}
+              encType='multipart/form-data'
+            >
               <Form.Group>
                 <Form.Label>Title</Form.Label>
                 <FormControl
@@ -76,12 +91,13 @@ const AddTimeline = ({ showModal }) => {
                       : ''
                   }
                 />
+                <p className='text-danger m-1'>{errors.title}</p>
               </Form.Group>
               <Form.Group>
                 <Form.Label>Date</Form.Label>
                 <FormControl
                   type='date'
-                  name='title'
+                  name='date'
                   value={values.date}
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -91,6 +107,7 @@ const AddTimeline = ({ showModal }) => {
                       : ''
                   }
                 />
+                <p className='text-danger m-1'>{errors.date}</p>
               </Form.Group>
               <Form.Group>
                 <Form.Label>Description</Form.Label>
@@ -106,10 +123,7 @@ const AddTimeline = ({ showModal }) => {
                 <Form.Label>Document</Form.Label>
                 <FormControl
                   type='file'
-                  name='document'
-                  value={values.document}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e) => setDocFile(e.target.files[0])}
                 />
               </Form.Group>
               {errors.submit && (
@@ -126,6 +140,7 @@ const AddTimeline = ({ showModal }) => {
                 type='submit'
                 variant='outline-primary'
                 className='btn-block btn-transparent-blue'
+                disabled={isSubmitting}
               >
                 Submit
               </Button>
