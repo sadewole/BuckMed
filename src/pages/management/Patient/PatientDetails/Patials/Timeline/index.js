@@ -11,12 +11,14 @@ import {
 } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import AddTimeline from './AddTimeline';
-import { fetchTimelineRecord } from 'src/slices/patient';
+import { fetchTimelineRecord, deleteTimelineRecord } from 'src/slices/patient';
 import { useDispatch, useSelector } from 'src/store';
+import { useSnackbar } from 'notistack';
 
 const TimeLine = () => {
   const dispatch = useDispatch();
   const params = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   const { timelineRecord } = useSelector((state) => state.patient);
   const [openModal, setOpenModal] = useState(false);
 
@@ -26,8 +28,18 @@ const TimeLine = () => {
 
   console.log(timelineRecord);
 
+  const handleDeleteRecord = (id) => {
+    dispatch(deleteTimelineRecord(id)).then((res) => {
+      if (res.success === true) {
+        enqueueSnackbar('Deleted successfully', {
+          variant: 'success',
+        });
+      }
+    });
+  };
+
   return (
-    <div>
+    <div className='mb-5'>
       <div className='w-100 d-flex align-items-center justify-content-between mb-3'>
         <h2>Medical Timelines</h2>
 
@@ -42,7 +54,11 @@ const TimeLine = () => {
                   <ListItemText primary={record.title} />
                   <ListItemSecondaryAction>
                     <Button>Download PDF</Button>
-                    <IconButton edge='end' aria-label='delete'>
+                    <IconButton
+                      edge='end'
+                      aria-label='delete'
+                      onClick={() => handleDeleteRecord(record.id)}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </ListItemSecondaryAction>

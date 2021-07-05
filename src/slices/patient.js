@@ -57,6 +57,11 @@ const slice = createSlice({
     createTimelineRecord(state, action) {
       state.timelineRecord = [...state.timelineRecord, action.payload];
     },
+    deleteTimelineRecord(state, action) {
+      state.timelineRecord = state.timelineRecord.filter(
+        (record) => record.id !== action.payload
+      );
+    },
   },
 });
 
@@ -316,6 +321,29 @@ export const fetchTimelineRecord = (id) => async (dispatch, getState) => {
     const responseJSON = await response.json();
     if (responseJSON.success === true) {
       dispatch(slice.actions.fetchTimelineRecord(responseJSON.data));
+    } else {
+      throw new Error(responseJSON.message);
+    }
+
+    return responseJSON;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const deleteTimelineRecord = (id) => async (dispatch, getState) => {
+  try {
+    const response = await fetch(`${server}employee/timeline/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${getState().auth.token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const responseJSON = await response.json();
+    if (responseJSON.success === true) {
+      dispatch(slice.actions.deleteTimelineRecord(id));
     } else {
       throw new Error(responseJSON.message);
     }
