@@ -3,10 +3,9 @@ import { useParams } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap';
 import { InlineIcon } from '@iconify/react';
 import plusCircle from '@iconify/icons-fa-solid/plus-circle';
-import editIcon from '@iconify/icons-fa-solid/edit';
-import trashIcon from '@iconify/icons-fa-solid/trash-alt';
 import Table from 'src/components/CustomTable';
 import { TableRow, TableCell, IconButton } from '@material-ui/core';
+import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 import { PrescriptionModal } from './Modal';
 import { fetchPatientPrescriptionRecords } from 'src/slices/patient';
 import { useDispatch, useSelector } from 'src/store';
@@ -72,24 +71,30 @@ const Prescription = () => {
           paginate={paginate}
           handlePageChange={handlePageChange}
           handleLimitChange={handleLimitChange}
+          minWidth='700px'
         >
           {prescriptionRecord.length > 0 ? (
             prescriptionRecord.map((drug) => {
               return (
-                <TableRow key={drug.id}>
+                <TableRow hover key={drug.id}>
                   <TableCell>{drug.drugName}</TableCell>
                   <TableCell>{drug.drugType}</TableCell>
                   <TableCell>{drug.dosage}</TableCell>
                   <TableCell>{dateFormatter(drug.startDate)}</TableCell>
                   <TableCell>{drug.period}</TableCell>
                   <TableCell>{drug.note}</TableCell>
-                  <TableCell align='right'>
-                    <IconButton onClick={() => handleEdit(drug)}>
-                      <InlineIcon icon={editIcon} className='mr-1' />
-                    </IconButton>
-                    <IconButton style={{ color: 'red' }}>
-                      <InlineIcon icon={trashIcon} className='mr-1' />
-                    </IconButton>
+                  <TableCell>
+                    <div className='d-flex align-items-center justify-content-center'>
+                      <IconButton
+                        aria-label='edit'
+                        onClick={() => handleEdit(drug)}
+                      >
+                        <EditIcon fontSize='small' />
+                      </IconButton>
+                      <IconButton aria-label='delete'>
+                        <DeleteIcon fontSize='small' style={{ color: 'red' }} />
+                      </IconButton>
+                    </div>
                   </TableCell>
                 </TableRow>
               );
