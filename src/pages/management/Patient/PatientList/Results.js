@@ -187,15 +187,52 @@ const Results = ({ className, patients }) => {
 
           return (
             <TableRow hover key={patient.id} selected={isPatientSelected}>
-              <TableCell>
-                {patient.firstName} {patient.lastName}
+              <TableCell className='position-relative'>
+                <RouterLink
+                  className='position-absolute top-0 left-0 w-100 h-100'
+                  to={`/doctor/management/patients/${patient.id}/board`}
+                />
+                <span>
+                  {' '}
+                  {patient.firstName} {patient.lastName}
+                </span>
               </TableCell>
-              <TableCell>{patient.gender}</TableCell>
-              <TableCell>{patient.phoneNumber}</TableCell>
-              <TableCell>{patient.genotype}</TableCell>
-              <TableCell>{patient.bloodGroup}</TableCell>
-              <TableCell>
-                {moment(patient.dateOfBirth).format('DD MMM, YYYY')}
+              <TableCell className='position-relative'>
+                <RouterLink
+                  className='position-absolute top-0 left-0 w-100 h-100'
+                  to={`/doctor/management/patients/${patient.id}/board`}
+                />
+                <span>{patient.gender}</span>
+              </TableCell>
+              <TableCell className='position-relative'>
+                <RouterLink
+                  className='position-absolute top-0 left-0 w-100 h-100'
+                  to={`/doctor/management/patients/${patient.id}/board`}
+                />
+                <span> {patient.phoneNumber}</span>
+              </TableCell>
+              <TableCell className='position-relative'>
+                <RouterLink
+                  className='position-absolute top-0 left-0 w-100 h-100'
+                  to={`/doctor/management/patients/${patient.id}/board`}
+                />
+                <span>{patient.genotype}</span>
+              </TableCell>
+              <TableCell className='position-relative'>
+                <RouterLink
+                  className='position-absolute top-0 left-0 w-100 h-100'
+                  to={`/doctor/management/patients/${patient.id}/board`}
+                />
+                <span>{patient.bloodGroup}</span>
+              </TableCell>
+              <TableCell className='position-relative'>
+                <RouterLink
+                  className='position-absolute top-0 left-0 w-100 h-100'
+                  to={`/doctor/management/patients/${patient.id}/board`}
+                />
+                <span>
+                  {moment(patient.dateOfBirth).format('DD MMM, YYYY')}
+                </span>
               </TableCell>
               <TableCell align='right'>
                 <Dropdown as={ButtonGroup}>
