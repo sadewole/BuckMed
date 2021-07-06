@@ -53,7 +53,14 @@ const TimeLine = () => {
                 <ListItem divider>
                   <ListItemText primary={record.title} />
                   <ListItemSecondaryAction>
-                    <Button>Download PDF</Button>
+                    <a
+                      href={record.document}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      download
+                    >
+                      <Button>Download PDF</Button>
+                    </a>
                     <IconButton
                       edge='end'
                       aria-label='delete'
