@@ -61,6 +61,18 @@ const routes = [
     component: lazy(() => import('src/pages/auth/Register')),
   },
   {
+    path: '/lab',
+    guard: AuthGuard,
+    layout: DoctorLayout,
+    routes: [
+      {
+        exact: true,
+        path: '/lab/report/:patientId/all',
+        component: lazy(() => import('src/pages/management/LabRecord/Records')),
+      },
+    ]
+  },
+  {
     path: '/patient',
     guard: AuthGuard,
     layout: PatientLayout,
