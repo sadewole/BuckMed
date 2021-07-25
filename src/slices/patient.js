@@ -7,6 +7,7 @@ const initialState = {
   admissionRecord: [],
   prescriptionRecord: [],
   timelineRecord: [],
+  labRecord: [],
 };
 
 const slice = createSlice({
