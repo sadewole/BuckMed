@@ -1,7 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Container, Card } from 'react-bootstrap';
+import Page from 'src/components/Page';
+import Results from './Results';
+import { useDispatch, useSelector } from 'src/store';
+import { fetchAllPatient} from 'src/slices/patient';
 
 const History = () => {
-  return <div>History Page</div>;
+  const dispatch = useDispatch();
+  const { allPatient } = useSelector((state) => state.patient);
+  
+  useEffect(() => {
+    dispatch(fetchAllPatient());
+  }, [dispatch]);
+
+  return (
+    <Page
+      style={{
+        minHeight: '100%',
+        paddingTop: '1em',
+        paddingBottom: '3em',
+      }}
+      title='Patients List'
+    >
+      <Container fluid>
+        <Card className='mt-3' style={{ borderRadius: '1rem' }}>
+          <Results patients={allPatient} />
+        </Card>
+      </Container>
+    </Page>
+  );
 };
 
 export default History;

@@ -7,6 +7,7 @@ const initialState = {
   admissionRecord: [],
   prescriptionRecord: [],
   timelineRecord: [],
+  labRecord: [],
 };
 
 const slice = createSlice({
@@ -62,6 +63,22 @@ const slice = createSlice({
         (record) => record.id !== action.payload
       );
     },
+    createLabRecord(state, action) {
+      state.labRecord = [ ...state.labRecord, action.payload];
+    },
+    fetchLabRecords(state, action) {
+      state.labRecord = action.payload;
+    },
+    updateLabRecord(state, action){
+      let payload = action.payload;
+      let findIndex = state.labRecord.findIndex(
+        (record) => record.id === payload.id
+      );
+      state.labRecord.splice(findIndex, 1, payload);
+    },
+    fetchSingleRecord(state, action) {
+      state.labRecord = action.payload
+    }
   },
 });
 
@@ -353,3 +370,106 @@ export const deleteTimelineRecord = (id) => async (dispatch, getState) => {
     return err;
   }
 };
+
+/** start ==> Lab record */ 
+
+export const createLabRecord = (data) => async(dispatch, getState) => {
+  try {
+    const response = await fetch(`${server}lab/report/create`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        Authorization: `Bearer ${getState().auth.token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const responseJSON = await response.json();
+
+    if (responseJSON.success === true) {
+      dispatch(slice.actions.labRecord(responseJSON.data));
+    } else {
+      throw new Error(responseJSON.message);
+    }
+
+    return responseJSON;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const updateLabRecord = (reportId, data) => async(dispatch, getState) => {
+  try {
+    const response = await fetch(
+      `${server}lab/report/edit/${reportId}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(data),
+        headers: {
+          Authorization: `Bearer ${getState().auth.token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const responseJSON = await response.json();
+
+    if (responseJSON.success === true) {
+      dispatch(slice.actions.updateLabRecord(responseJSON.data));
+    } else {
+      throw new Error(responseJSON.message);
+    }
+
+    return responseJSON;
+  } catch (err) {
+    return err;
+  }
+}
+
+export const fetchLabRecords = (patientId) => async(dispatch, getState) => {
+  try {
+    const response = await fetch(`${server}lab/report/${patientId}/all`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getState().auth.token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const responseJSON = await response.json();
+    if (responseJSON.success === true) {
+      dispatch(slice.actions.fetchLabRecords(responseJSON.data));
+    } else {
+      throw new Error(responseJSON.message);
+    }
+
+    return responseJSON;
+  } catch (err) {
+    return err;
+  }
+}
+
+export const fetchSingleLabRecord = (reportId) => async(dispatch, getState) => {
+  try {
+    const response = await fetch(`${server}lab/report/${reportId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getState().auth.token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const responseJSON = await response.json();
+    if (responseJSON.success === true) {
+      dispatch(slice.actions.fetchLabRecords(responseJSON.data));
+    } else {
+      throw new Error(responseJSON.message);
+    }
+
+    return responseJSON;
+  } catch (err) {
+    return err;
+  }
+}
+
+/* end ==> Lab record */
